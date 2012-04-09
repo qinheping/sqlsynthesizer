@@ -1,0 +1,120 @@
+
+
+%\documentclass{acm_proc_article-sp}
+\documentclass{sig-alternate}
+\usepackage{multirow}
+\usepackage{fancyheadings}
+\usepackage{algorithmic}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{xspace}
+\usepackage{pslatex}
+\usepackage{microtype}
+\usepackage{subfigure}
+\usepackage{indentfirst}
+\usepackage{listings, algorithm, algorithmic, graphicx, listing}
+\usepackage{relsize}
+
+%\usepackage{todonotes}
+\input{macros}
+
+% % Add line between figure and text
+ \makeatletter
+ \def\topfigrule{\kern3\p@ \hrule \kern -3.4\p@} % the \hrule is .4pt high
+ \def\botfigrule{\kern-3\p@ \hrule \kern 2.6\p@} % the \hrule is .4pt high
+ \def\dblfigrule{\kern3\p@ \hrule \kern -3.4\p@} % the \hrule is .4pt high
+ \makeatother
+ % If there is a line, you can get away with reducing the separation between
+ % figures and text.  Don't do this without the line, though.
+ \addtolength{\textfloatsep}{-.5\textfloatsep}
+ \addtolength{\dbltextfloatsep}{-.5\dbltextfloatsep}
+ \addtolength{\floatsep}{-.5\floatsep}
+ \addtolength{\dblfloatsep}{-.5\dblfloatsep}
+
+% Left and right curly braces in tt font
+\newcommand{\ttlcb}{\texttt{\char "7B}}
+\newcommand{\ttrcb}{\texttt{\char "7D}}
+
+\newcommand{\totaloc}{99458 }
+\newcommand{\subnum}{10 }
+\newcommand{\warnings}{22 }
+\newcommand{\bugs}{12 }
+\newcommand{\newbugs}{7 }
+\newcommand{\falses}{10 }
+\newcommand{\annotationnum}{7 }
+\newcommand{\filternum}{11 }
+
+% \newcommand{\smallstep}{\vspace{-2mm}}
+% \newcommand{\tinystep}{\vspace{-1mm}}
+\newcommand{\smallstep}{\relax}
+\newcommand{\tinystep}{\relax}
+
+
+\newenvironment{myindentpar}[1]%
+{\begin{list}{}%
+         {\setlength{\leftmargin}{#1}}%
+         \item[]%
+}
+{\end{list}}
+
+
+% Reduce indentation in lists.
+\setlength{\leftmargini}{.5\leftmargini}
+
+%% Bring items closer together in list environments
+%% This doesn't work with an optional argument to the list environment.
+% Prevent infinite loops
+\let\Itemize =\itemize    
+\let\Enumerate =\enumerate
+\let\Description =\description
+% Zero the vertical spacing parameters
+\def\Nospacing{\itemsep=0pt\topsep=0pt\partopsep=0pt\parskip=0pt\parsep=0pt}
+% Redefine the environments in terms of the original values
+\renewenvironment{itemize}{\Itemize\Nospacing}{\endlist}
+\renewenvironment{enumerate}{\Enumerate\Nospacing}{\endlist}
+\renewenvironment{description}{\Description\Nospacing}{\endlist}
+
+
+\begin{document}
+
+\title{Synthesizing SQL Queries from Input-Output Examples}
+%\subtitle{[Extended Abstract]
+%\titlenote{This work is sponsored by}
+
+
+\author{
+\alignauthor Sai Zhang \quad Yuyin Sun\\
+       %\affaddr{Department of Computer Science \& Engineering}\\
+       %\affaddr{1932 Wallamaloo Lane}\\
+       %\affaddr{University of Washington}\\
+       \email{\{szhang, sunyuyin\}@cs.washington.edu}
+}
+
+
+\maketitle
+
+
+\input{introduction}
+
+\input{related}
+
+\input{approach}
+
+\input{implementation}
+
+\input{evaluation}
+
+
+
+\vspace{2mm}
+
+%\noindent \textbf{Acknowledgement.} We would like
+%to thank Stephen Fink and Manu Sridharan for
+%answering our questions about WALA.
+%\vspace{-2mm}
+
+\bibliographystyle{abbrv}
+\small{
+\bibliography{sqlsynthesis}
+}
+\end{document}
