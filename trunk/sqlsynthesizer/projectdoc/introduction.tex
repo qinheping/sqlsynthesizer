@@ -1,8 +1,328 @@
 \section{Introduction}
 \label{sec:introduction}
 
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "guierror"
-%%% TeX-command-default: "PDF"
-%%% End: 
+
+The big data revolution over the past few years has resulted
+in significant advances in digitization of massive amounts
+of data and accessibility of computational devices to massive
+proportions of the population. A perennial challenge faced by many
+enterprise nowadays is the management
+of their increasing large and complex databases, which can contain
+hundreds and even thousands of tables. 
+
+The problem is exacerbated by the fact that many end-users
+have myriad diverse backgrounds including research scientists,
+business analysts, commodity traders, human resource managers,
+finance professionals, and marketing managers. Those end-users
+are not professional programmers, but they often need to
+query databases to obtain relevant data to support their business decisions.
+
+
+\subsection{Problem Statement}
+
+Although the relational database management system (RDBMS) and the
+de facto language (SQL) are perfectly adequate for many end-users'
+needs~\cite{Howe:2011}, the costs associated with deployment and
+use of database software and SQL are prohibitive. For example, as pointed out
+by~\cite{Gray:2005}, conventional RDBMS software remains underused
+in the long tail of science: the large number of users, such as the
+research scientists who are in relatively small labs and individual
+researchers, have limited IT funding, staff and infrastructure yet
+collectively produce the bulk of scientific knowledge. Similarly, other end-users
+such as business analysts who query databases frequently often
+do not have significant SQL expertise.
+
+For a large number of end-users, they use SQL queries in
+the following typical ways: they browse textbook or online resources to learn basic
+idioms of SQL. They try to write small examples and execute them
+on real databases to explore the data itself. They modify
+them to derive new queries by adding or removing snippets:
+predicates in the where clause,
+tables in the from clause, columns in the select clauses.
+However, such practice is inefficient and time-consuming.
+A key challenge is that many end-users can clearly understand
+their goals but often can not easily get a correct SQL query for
+their tasks, either due to the syntax complexity of the SQL language,
+or the structure complexity of the underlying database tables, or others.
+For most end-users, they need a ``computer'' to assist them to perform
+complex and critical tasks. A highly accessible tool
+that end-users can use to connect their intentions to executable
+SQL queries would be best.
+
+
+\begin{figure}[t]
+
+\textbf{The input Table1:}
+
+\begin{tabular}{|c|c|c|c|}
+\hline
+ Column1 & Column2& Column3& Column4\\
+ \hline
+ 101 &  2001 &  3020 &  01-01-11\\
+\hline
+ 101 &  2001 &  3002 &  02-01-11\\
+\hline
+ 101 &  2001 &  3001 &  03-01-11\\
+\hline
+ 102 &  2002 &  3002 &  01-01-11\\
+\hline
+\end{tabular}
+
+\vspace{2mm}
+
+\textbf{The input Table2:}
+
+\begin{tabular}{|c|c|c|}
+\hline
+ Column1 & Column2& Column3 \\
+ \hline
+ 20011 &  2001 &  200131\\
+\hline
+ 20012 &  2001 &  200132\\
+\hline
+ 20013 &  2001 &  200133\\
+\hline
+\end{tabular}
+
+\vspace{2mm}
+
+\textbf{The input Table3:}
+
+\begin{tabular}{|c|c|}
+\hline
+ Column1 & Column2\\
+ \hline
+ 20011 &  Site\\
+\hline
+ 20012 &  Site\\
+\hline
+ 20013 &  Site\\
+\hline
+\end{tabular}
+
+\vspace{3mm}
+
+\textbf{The output table:}
+
+\begin{tabular}{|c|c|c|c|}
+\hline
+ 101 & 201131 & 01-01-11 & Site\\
+ \hline
+ 101 & 201132 & 01-01-11 & Site\\
+ \hline
+ 101 & 201133 & 01-01-11 & Site\\
+ \hline
+\end{tabular}
+\Caption{{\label{fig:example} Input-output example tables from
+an online SQL help forum thread. Our approach is expected to
+automatically infer a SQL query as shown in Figure~\ref{fig:answer}
+that produces the output table for the three input tables.
+}} \vspace{2mm}
+\end{figure}
+
+\subsection{Motivating Example}
+
+We start out by describing a real-world example picked up from
+an online SQL help forum, that illustrates a typical scenario
+in writing SQL queries\footnote{\url{http://forums.tutorialized.com/sql-basics-113/join-problem-147856.html}}.
+
+The thread was started by a novice user, who needed help to write a
+SQL query to get result from three input tables. In the help thread, the
+novice user described his required query in a few paragraphs of
+English, but also include several small, representative input-output
+examples as shown in Figure~\ref{fig:example}, to better express
+his intention. 
+
+The desirable SQL query, as shown in Figure~\ref{fig:answer} is
+unintuitive to write. It first needs to join three input tables
+on columns \CodeIn{T1.Column2}, \CodeIn{T2.Column2},
+\CodeIn{T2.Column1}, and \CodeIn{T3.Column1},
+then filters out tuples whose \CodeIn{Table1.Column2} value
+is not '2001'. Further, it aggregates the results based on
+the value of \CodeIn{Table3.Column}, and returns the minimal
+values of columns \CodeIn{T1.Column1}, \CodeIn{T1.Column4}, and \CodeIn{T3.Column2}
+in each aggregated group as the results.
+
+Such help threads on online discussion forums are not rare, but the SQL
+queries needed to address them are non-trivial.
+
+
+\subsection{Existing Solutions}
+
+The state-of-the-art approaches in helping end-user writing SQL
+queries is far from satisfactory. This is largely because 
+a database management systems often come with tons
+of features, but end-users struggle to find the correct feature or
+succession of commands to use from a maze of features to accomplish
+their tasks.
+
+\textit{Graphical User Interface} (GUI) and \textit{general programming languages}
+are two state-of-the-art approaches to reduce end-users' burden.
+Many RDBMS come with a well-designed GUI.
+However, a GUI often do not permit users to personalize
+a database's functionality for user-specific tasks. On the other hand,
+as a GUI supports more and more customization features, users
+may struggle to discover those features, which can significantly
+degrade its usability. General programming languages, such as SQL
+or Java (with JDBC), serve as a fully expressive medium  for
+communicating a user's intention to a database. However, learning
+a practical programming language often requires a substantial amount
+of time and energy that a typical end-user would not prefer,
+and should not be expected, to invest. 
+
+
+
+\begin{figure}[t]
+\begin{CodeOut}
+\begin{alltt}
+\textbf{select min(T1.Column1), T2.Column3,
+       min(T1.Column4), min(T3.Column2)
+from Table1 T1, Table2 T2, Table3 T3
+where T1.Column2 = T2.Column2 and T2.Column1 = T3.Column1
+       and T2.Column2 = '2001'
+group by T2.Column3}
+\end{alltt}
+\end{CodeOut}
+\vspace{-5mm}
+\Caption{{\label{fig:answer} The expected SQL query inferred
+by our approach for the input-output examples in Figure~\ref{fig:example}.}}
+\end{figure}
+
+
+\subsection{Proposed Approach}
+
+After carefully studying how end-users were describing their encountered
+SQL query problems on online help forums, we observed that
+one of the most common ways for end-users to
+express their intents is using input-output examples. Although
+input-output examples may lead to underspecification, they
+serve as a good starting point and the natural interface
+that a tool can provide assistance.
+
+
+Inspired by this observation, in this work, we present an approach for synthesizing a SQL query
+from input-output examples. Our approach takes an example input
+table(s) and output table and automatically infers a SQL query that
+implements a transformation that satisfies the example. If the
+SQL query is applied to the
+example input, then it produces the example output, and if the
+SQL query is applied to other similar tables (potentially much larger),
+then SQL query produces a corresponding output.
+
+Our approach follows a general methodology for designing
+systems supporting programming by examples~\cite{Harris:2011}.
+It includes the following steps:
+(1) identify a language subset (of SQL) expressive enough to
+perform database query tasks 
+on which a large class of users are struggling. (2) design a
+programming language representation that can describe a large
+proportion of operations that users need to perform on
+relational database tables. (3) design an algorithm that
+can efficiently infers programs in the language from input-output
+examples. and (4) translate the program to the target
+language, i.e., SQL.
+
+
+\subsubsection{Goal}
+
+We plan to develop a  SQL query synthesis tool that is capable of
+synthesizing a wide range of SQL queries from input-output examples.
+The synthesizer aims to replace the role of the forum expert,
+which not only removes a human from the loop, but also enables
+end-users to solve their problems in a few seconds as opposed to a few days
+(while waiting for an expert's reply). 
+
+
+\subsubsection{Supported SQL Subset}
+
+The SQL specification contains over 1000 pages, and is impractical
+to be fully used in practice, not alone major RDBMS vendors also provide
+their own SQL dialects. In this work, we focus on a small subset
+of the standard SQL 93 language. Such subset \textit{only} performs database
+query operations but is expressive enough for most end-users' needs.
+
+During our study of help forums, we also carefully studied what would
+be the solution to users' desired query as they described to the experts
+on the other side of the help forums. It turns out that the most common
+desired queries can be composed by a handful of basic SQL constructs,
+which form the target language of this work.
+
+
+
+\subsubsection{Language Representation}
+
+To bridge the gap between example-based specification and the result
+SQL query, we need to identify an intermediate language representation
+that is expressive enough to describe various query tasks succinctly,
+while at the same time concise enough to be amenable for efficient
+inference. 
+
+It is worth noting that there is a tradeoff between the expressiveness
+of a search space, and the complexity of finding simple consistent hypotheses
+within that space. In general, the more expressive a search
+space, the harder the task of finding consistent hypotheses within
+that search space. However, it is also worth mentioning that the
+expressiveness-complexity tradeoff is not as simple as it seems, as
+an expressive language can sometimes make a simple theory fit the
+input-output examples, whereas restricting the expressiveness of the
+language representation means that any consistent theory must be very complex.
+
+Using an intermediate language representation, rather than directly
+translating examples to SQL syntax, for query synthesis has another benefit:
+many RDBMS vendors provide their own SQL dialects, thus, performing
+inference on the abstraction level of intermediate language and then
+later instantiating the intermediate result
+to a target SQL syntax offers more flexibility.
+
+
+\subsubsection{Inference Algorithm}
+
+
+We plan to take the recent advance in the research field of template-based
+program synthesis~\cite{Gulwani:2010:DPS}, and
+design an algorithm for synthesizing a desired SQL query
+from input-output examples.
+
+Concerning the outputs of the inference algorithm, we anticipate
+that an expressive language representation for inductive
+synthesis may result in a large number of programs (i.e., SQL
+queries here) that satisfied the provided examples. 
+We plan to address this problem by developing a ranking scheme that can be
+used to rank the possibly large number of output results
+that are consistent with a small number of input-output
+examples. Using a ranking scheme is inspired by the
+Occam’s razor principle, which states that a smaller and
+simpler explanation is usually the correct one.
+
+
+
+\subsubsection{User Interactive Model}
+
+End-users can use our approach to obtain SQL query to transform
+multiple, huge database tables by constructing small, representative
+input and output example tables. On some examples, we speculate
+that our approach
+may produce a SQL query that satisfies the input and output examples
+given by the user, but does not address the intention
+that the user wants. To address this issue, we adapt a simple
+interaction model from~\cite{Harris:2011} to ask users to investigate the results of
+an output SQL query and report any discrepancy. In this case,
+the user can refine the inferred SQL query by providing a more
+informative input-output example (or multiple input-output examples
+that together describe the required behavior) that demonstrate the behavior on
+which the originally-inferred SQL query behaves incorrectly.
+
+\subsection{Contributions}
+
+We plan to make the following contributions in this work:
+
+\begin{itemize}
+\item \textbf{Technique.} An approach to automatically synthesizing SQL
+queries from input-output examples.
+
+\item \textbf{Tool.} A practical tool to implement the proposed approach.
+
+\item \textbf{Evaluation.} An empirical evaluation of the tool implementation
+on SQL exercises in classic textbooks~\cite{cowbook}
+and real-world questions end-users asked on online SQL help forums.
+\end{itemize}
