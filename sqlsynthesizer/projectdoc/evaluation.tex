@@ -1,7 +1,59 @@
 
-\section{Evaluation}
+\section{Implementation and Evaluation}
 \label{sec:evaluation}
 
+We plan to implement the proposed approach in a programming
+tool, and evaluate its practicability.
+
+\subsection{Research Questions}
+
+We aim to investigate the following research questions:
+
+\begin{itemize}
+\item Is the supported SQL subset expressive enough to describe
+queries that real end-users require?
+
+\item Can our inference algorithm efficiently find a SQL query
+from input-output examples?
+
+\item Does the inferred SQL query correctly express end-users'
+intention and produce the expected output? If not, how many
+additional examples does a user need to provide before our
+approach infers a correctly-behaved SQL query?
+
+\end{itemize}
+
+\subsection{Evaluation Methodology}
+
+We plan to perform the evaluation as follows to answer the
+above research questions:
+
+\begin{itemize}
+\item \textbf{Subjects collection.} we have collected evaluation
+subjects from two major sources: exercises from classic
+database textbooks like~\cite{cowbook}, and real-world questions
+that end-user asked on well-known online help forums. Specifically,
+we aim to apply our implemented tool solve SQL query related questions
+after Chapter 3 (SQL DML) in~\cite{cowbook}. We have also collected
+19 end-user questions from online forums, and plan to apply our
+tool to solve them.
+
+\item{\textbf{Steps.}} For a given question, if that question
+has already been associated with input-output examples (e.g.,
+those from online forums), we directly apply our tool on the examples.
+Otherwise, we manually provide a few concise and representative
+examples for our tool.
+If for a given problem, our tool inferred
+a SQL query that does not behave as we expected when applied
+to other inputs, we will manually find an input on which the
+SQL query misbehaves and reapplied our tool to the new input. We
+repeat this process until our tool infers a desirable SQL query.
+\end{itemize}
+
+Finally, we hope to illustrate the expressiveness of the supported SQL
+subset language through experimenting on a diverse questions
+people raised on the help-thread requests and standard
+SQL questions a classic textbook would emphasize.
 
 %%% Local Variables: 
 %%% mode: latex
