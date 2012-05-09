@@ -15,7 +15,7 @@ have myriad diverse backgrounds including research scientists,
 business analysts, commodity traders, human resource managers,
 finance professionals, and marketing managers. Increasingly,
 those end-users who need to query databases to analyze the
-data are not are not professional programmers, but are experts in some
+data are not professional programmers, but are experts in some
 other domains. They need to ask a variety of questions on their
 data and use the answer to support their business decisions.
 
@@ -144,7 +144,7 @@ on columns \CodeIn{T1.Column2}, \CodeIn{T2.Column2},
 \CodeIn{T2.Column1}, and \CodeIn{T3.Column1},
 then filters out tuples whose \CodeIn{Table1.Column2} value
 is not '2001'. Further, it aggregates the results based on
-the value of \CodeIn{Table3.Column}, and returns the minimal
+the value of \CodeIn{Table2.Column3}, and returns the minimal
 values of columns \CodeIn{T1.Column1}, \CodeIn{T1.Column4}, and \CodeIn{T3.Column2}
 in each aggregated group as the results.
 
@@ -297,7 +297,10 @@ used to rank the possibly large number of output results
 that are consistent with a small number of input-output
 examples. Using a ranking scheme is inspired by the
 Occam’s razor principle, which states that a smaller and
-simpler explanation is usually the correct one.
+simpler explanation is usually the correct one. Besides
+selecting a smaller one, we could also compute the likelihood
+of each query being correct based on some statistics, and then
+pick the most likely one.
 
 
 

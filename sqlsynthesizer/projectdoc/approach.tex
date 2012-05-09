@@ -2,3 +2,42 @@
 \section{Approach}
 \label{sec:approach}
 
+Figure~\ref{fig:syntax} defines the syntax of the supported
+SQL language subset.
+
+\newcommand{\q}{\langle query\rangle}
+\newcommand{\db}{\langle db\rangle}
+\newcommand{\pat}{\langle pat\rangle}
+\newcommand{\bug}{\langle bug\rangle}
+\newcommand{\dist}{\langle distance\rangle}
+\newcommand{\sem}[1]{\llbracket #1\rrbracket}
+\newcommand{\lit}[1]{\texttt{#1}}
+
+\newcommand{\column}{\langle column\rangle}
+\newcommand{\dbtable}{\langle table\rangle}
+\newcommand{\cond}{\langle cond\rangle}
+\newcommand{\op}{\langle op\rangle}
+\newcommand{\e}{\langle expr\rangle}
+
+\begin{figure}[t]
+%\scriptsize{%
+\footnotesize%
+\begin{align*}
+\q ::= {} 
+	& \texttt{ SELECT } \column^+ \texttt{ FROM } \dbtable^+ \\
+        & \texttt{ WHERE } \cond^+ \\ 
+	&  \texttt{ GROUP BY } \column^+ \texttt{ HAVING } \cond^+\\
+\dbtable::= {} &\ atom \\
+\column ::= {} &\ \dbtable.atom\\
+\cond ::= {} &\ \ \cond \;\texttt{\&\&}\; \cond \\ 
+    & |\ \cond \;\texttt{||}\; \cond \\
+    & |\ \texttt{(}\;\cond\;\texttt{)} \\
+    & |\ \e \;\op\; \e \\
+\op ::= {} &\ \ \texttt{=} \;\;|\;\; \texttt{>}  \;\;|\;\; \texttt{<}\\
+\e ::= {} &\ \ const \;\;|\;\; \column  \;\; \\
+    & |\ sum(\column) \;\;|\ max(\column) \;\;|\ min(\column) 
+\end{align*}
+\normalsize%
+\caption{Syntax of the supported SQL language subset.}
+\label{fig:syntax}
+\end{figure}
