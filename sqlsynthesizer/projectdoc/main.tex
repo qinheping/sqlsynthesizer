@@ -74,6 +74,9 @@
 \renewenvironment{enumerate}{\Enumerate\Nospacing}{\endlist}
 \renewenvironment{description}{\Description\Nospacing}{\endlist}
 
+\newcommand{\todo}[1]{{TODO #1}}
+\newcommand{\sai}[1]{{\color{blue}\todo{for Sai: #1}}}
+\newcommand{\yuyin}[1]{{\color{red}\todo{for Yuyin: #1}}}
 
 \begin{document}
 
@@ -99,7 +102,7 @@
 
 \input{approach}
 
-%\input{implementation}
+\input{implementation}
 
 \input{evaluation}
 
