@@ -112,12 +112,20 @@ For example, from input-output examples, we can roughly know which
 possible constructions (select, join, group by, or ordered by) will
 be used. This step can reduce the overall search space.
 
+It the input contains multiple tables, it is unlikely that the inferred
+SQL query only selects data from 1 single table, rather, it is more
+likely that the intended SQL will utilize all given tables together.
+
+The bound of table number and the bound the conditions.
+
 \subsubsection{Query Completion}
 \label{sec:completion}
 
 After getting a rough idea of what the resulting SQL query would
 look like, this step completes the remaining uncertain parts by
 searching. Smarter search would be preferrable.
+
+How to make a reasonable guess of the remaining parts.
 
 \subsubsection{Candidate Ranking}
 \label{sec:ranking}
