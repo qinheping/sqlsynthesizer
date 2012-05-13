@@ -2,8 +2,6 @@
 \section{Approach}
 \label{sec:approach}
 
-Figure~\ref{fig:syntax} defines the syntax of the supported
-SQL language subset.
 
 \newcommand{\q}{\langle query\rangle}
 \newcommand{\db}{\langle db\rangle}
@@ -18,13 +16,14 @@ SQL language subset.
 \newcommand{\cond}{\langle cond\rangle}
 \newcommand{\op}{\langle op\rangle}
 \newcommand{\e}{\langle expr\rangle}
+\newcommand{\ce}{\langle cexpr\rangle}
 
 \begin{figure}[t]
 %\scriptsize{%
 \footnotesize%
 \begin{align*}
 \q ::= {} 
-	& \texttt{ SELECT } \column^+ \texttt{ FROM } \dbtable^+ \\
+	& \texttt{ SELECT } \e^+ \texttt{ FROM } \dbtable^+ \\
         & \texttt{ WHERE } \cond^+ \\ 
 	&  \texttt{ GROUP BY } \column^+ \texttt{ HAVING } \cond^+\\
 \dbtable::= {} &\ atom \\
@@ -32,12 +31,59 @@ SQL language subset.
 \cond ::= {} &\ \ \cond \;\texttt{\&\&}\; \cond \\ 
     & |\ \cond \;\texttt{||}\; \cond \\
     & |\ \texttt{(}\;\cond\;\texttt{)} \\
-    & |\ \e \;\op\; \e \\
+    & |\ \ce \;\op\; \ce \\
 \op ::= {} &\ \ \texttt{=} \;\;|\;\; \texttt{>}  \;\;|\;\; \texttt{<}\\
-\e ::= {} &\ \ const \;\;|\;\; \column  \;\; \\
+\ce ::= {} &\ \ const \;\;|\;\; \column  \;\; \\
+\e ::= {} & \ce \\
     & |\ sum(\column) \;\;|\ max(\column) \;\;|\ min(\column) 
 \end{align*}
 \normalsize%
 \caption{Syntax of the supported SQL language subset.}
 \label{fig:syntax}
 \end{figure}
+
+
+\subsection{Language}
+
+Figure~\ref{fig:syntax} defines the syntax of the supported
+SQL language subset.
+
+\sai{write more on this section. Why choose this language subset?}
+
+
+\subsection{Inference Algorithm}
+
+We describe an algorithm to infer good SQL queries from the given
+input-output examples. Our algorithm consists of three steps:
+table alignment (Section~\ref{sec:alignment}),
+query completion (Section~\ref{sec:completion}), and
+candidate ranking (Section~\ref{sec:ranking}).
+
+\yuyin{can you please wrote the following 3 subsections? I wrote
+down a few of my thoughts, which are only for reference. Feel free
+to ignore them, and express your own ideas. }
+
+\subsubsection{Table Alignment}
+\label{sec:alignment}
+
+Given an input-output example, this step infers a rough form of the
+result SQL query. We may define some high-level templates to match
+the given examples.
+
+For example, from input-output examples, we can roughly know which
+possible constructions (select, join, group by, or ordered by) will
+be used. This step can reduce the overall search space.
+
+\subsubsection{Query Completion}
+\label{sec:completion}
+
+After getting a rough idea of what the resulting SQL query would
+look like, this step completes the remaining uncertain parts by
+searching. Smarter search would be preferrable.
+
+\subsubsection{Candidate Ranking}
+\label{sec:ranking}
+
+If a list of multiple SQL queries satisfy the given input-output examples, how
+to present the most likely queries to the top?
+
