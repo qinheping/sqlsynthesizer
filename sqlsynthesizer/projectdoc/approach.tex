@@ -213,4 +213,108 @@ ranks the query based on the cost in an increasing order to ensure that a simple
 %If a list of multiple SQL queries satisfy the given input-output examples, how
 %to present the most likely queries to the top?
 
+\subsection{Example}
+\label{sec:ex}
 
+We next use a simple, running example as shown in Figure~\ref{fig:ex1} to
+show how our algorithm works.
+
+
+\begin{figure}[t]
+
+\textbf{The 1st input Table: Employee}
+
+\begin{tabular}{|c|c|}
+\hline
+ ID & Name \\
+ \hline
+ \hline
+ 1 &  Bob \\
+\hline
+ 2 &  Tom \\
+\hline
+ 3 &  John \\
+\hline
+\end{tabular}
+
+\vspace{2mm}
+
+\textbf{The 2nd input table: Salary}
+
+\begin{tabular}{|c|c|}
+\hline
+ ID & Salary \\
+ \hline
+ \hline
+ 1&  20 \\
+\hline
+ 2&  20\\
+\hline
+ 3&  50\\
+\hline
+\end{tabular}
+
+
+\vspace{3mm}
+
+\textbf{The output table:}
+
+\begin{tabular}{|c|c|c|}
+\hline
+ ID & Name & Salary \\
+\hline
+ \hline
+ 1 & Bob & 20 \\
+ \hline
+ 2 & Tom & 20 \\
+ \hline
+\end{tabular}
+\Caption{{\label{fig:example} A simple running example used
+for illustration in Section~\ref{sec:ex}.
+}} \vspace{2mm}
+\end{figure}
+
+\vspace{1mm}
+\noindent \textbf{Step 1.} After the first step (table alignment), our algorithm produces the following
+query skeleton:
+
+\CodeIn{select Employee.ID, Employee.Name, Salary.Salary}
+
+\CodeIn{from Employee, Salary}
+
+\CodeIn{where} \textit{$<$\textit{query\_condition}$>$}
+
+\vspace{1mm}
+In the above skeleton captures the basic structure of a SQL language, but
+lacks the \textit{query\_condition}, which needs to be completed by
+the second step.
+
+\vspace{1mm}
+
+ \noindent\textbf{Step 2.} Our query completion algorithm takes the query skeleton
+as input, and uses decision tree algorithm to infer the condition. As
+a result, it may output the following 2 SQL queries:
+
+\textbf{1.} \CodeIn{select Employee.ID, Employee.Name, Salary.Salary}
+
+\hspace{3mm}\CodeIn{from Employee, Salary}
+
+\hspace{3mm}\CodeIn{where} \textit{\textit{Name = 'Bob' or Name = 'Tom'}}
+
+
+\vspace{1mm}
+\textbf{2.} \CodeIn{select Employee.ID, Employee.Name, Salary.Salary}
+
+\hspace{3mm}\CodeIn{from Employee, Salary}
+
+\hspace{3mm}\CodeIn{where} \textit{\textit{Salary = 20}}
+
+Executing both queries on the input table would result in the given output.
+Thus, both queries are valid SQL statements.
+
+\vspace{1mm}
+
+ \noindent\textbf{Step 3.} The ranking algorithm computes a cost value for
+each query candidate above, and concludes that the second query is simpler
+than the first one. Therefore, it places the second query before the first one
+in the output, and shows to the user.
