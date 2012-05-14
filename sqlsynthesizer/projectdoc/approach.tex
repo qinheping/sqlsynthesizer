@@ -161,17 +161,18 @@ while the bound of possible number of join is $O(c_t^2)$ and the bound of the nu
 \subsubsection{Query Completion}
 \label{sec:completion}
 
-The SQL skeleton produced by the first step, though incomplete, serves as a good reference in
-inferring complete and valid SQL queries. This step fills in the
-remaining incomplete parts by heuristic searching.
+The SQL skeleton produced by the first step, though incomplete, serves as a good reference in inferring complete and valid SQL queries. This step fills in the remaining incomplete parts by heuristic searching.
 
-We use a decision-tree-based algorithm to figure out the desirable query condition.
-After each cut, the algorithm tries to ensure all output examples can be kept. To select which column
-is used, the algorithm computes the uncertainty on the rest of columns, and chooses the column with
-the least uncertainty.
+We use a decision-tree-based \cite{Quinlan:1993} algorithm to figure out the desirable query condition. All tuples which are contained with our output examples are treated like positive examples, while the rest of them are treated as negative ones. All fields of the table are treated like features. In order to deal with the case that two columns in the same table are compared, we add some new binary features (discriminative features) into it. This kind of features should be the answer for questions like \textsf{is T1.C1 greater than T1.C2}. If the answer to that question is true, the value of that feature is $1$ otherwise it's $0$. As a result, our features are the union of original feature and new discriminative features. 
 
-After enumerating all possible conditions, the algorithm constructs a valid SQL query
-and executes it on the input data, and eliminates those producing a different output result.
+It should be mentioned that usually the output examples are only small part of all candidates tuples, which means positive examples and negative examples are very imbalance. To handle this kind of class imbalance problem, we will use \cite{Chris:2003} instead of simple decision tree.
+
+ 
+%After each cut, the algorithm tries to ensure all output examples can be kept. To select which column
+%is used, the algorithm computes the uncertainty on the rest of columns, and chooses the column with
+%the least uncertainty.
+
+After enumerating all possible conditions, the algorithm constructs a valid SQL query and executes it on the input data, and eliminates those producing a different output result.
 
 %How to make a reasonable guess of the remaining parts.
 
