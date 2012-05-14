@@ -163,16 +163,35 @@ while the bound of possible number of join is $O(c_t^2)$ and the bound of the nu
 
 The SQL skeleton produced by the first step, though incomplete, serves as a good reference in inferring complete and valid SQL queries. This step fills in the remaining incomplete parts by heuristic searching.
 
-We use a decision-tree-based \cite{Quinlan:1993} algorithm to figure out the desirable query condition. All tuples which are contained with our output examples are treated like positive examples, while the rest of them are treated as negative ones. All fields of the table are treated like features. In order to deal with the case that two columns in the same table are compared, we add some new binary features (discriminative features) into it. This kind of features should be the answer for questions like \textsf{is T1.C1 greater than T1.C2}. If the answer to that question is true, the value of that feature is $1$ otherwise it's $0$. As a result, our features are the union of original feature and new discriminative features. 
+We use a decision-tree-based \cite{Quinlan:1993} algorithm to figure out the
+desirable query condition. All tuples appearing in our output examples are
+treated like positive samples, while the rest (i.e., the unselected tuples)
+are treated as negative ones. In addition, each column in a table is treated
+as an original binary feature, indicating whether values of that column will appear in the
+output result. As permitted by our supported language subset
+(Figure~\ref{fig:syntax}), a query condition can also contain predicate that
+ compare values from two different columns. To deal with such cases, we add
+a few new (discriminative ) binary features to the basic algorithm. For example,
+ when inferring a query like \textsf{select all tuples in table T1 where column
+ T1.C1 is greater than T1.C2}, for each tuple in table T1, the value of feature
+\textsf{is T1.C1 greater than T1.C2} is $1$ if that tuple is selected,
+and $0$ otherwise. 
 
-It should be mentioned that usually the output examples are only small part of all candidates tuples, which means positive examples and negative examples are very imbalance. To handle this kind of class imbalance problem, we will use \cite{Chris:2003} instead of simple decision tree.
+%. If the answer to that question is true, the value of that feature is $1$ otherwise it's $0$. As a result, our features are the union of original feature and new discriminative features. 
+
+Unlike the traditional decision tree learning in the machine learning community,
+the input-output example provided by our tool users are often small. Additionally,
+the tuples in the output table can be a small subset of the input tables.
+Therefore, when using a decision-tree-based algorithm to learn a good condition,
+It should be mentioned that usually the output examples are only small part of all candidates tuples, which means positive examples and negative examples are very imbalance. 
+To overcome this problem, our algorithm uses a more sophisticated, off-the-shelf algorithm\cite{Chris:2003} instead of the classic decision tree algorithm.
 
  
 %After each cut, the algorithm tries to ensure all output examples can be kept. To select which column
 %is used, the algorithm computes the uncertainty on the rest of columns, and chooses the column with
 %the least uncertainty.
 
-After enumerating all possible conditions, the algorithm constructs a valid SQL query and executes it on the input data, and eliminates those producing a different output result.
+After enumerating all possible conditions, the algorithm constructs a valid SQL query and executes it on the input data, and remove those producing a different output result.
 
 %How to make a reasonable guess of the remaining parts.
 
