@@ -6,5 +6,6 @@ package edu.washington.cs.sqlsynth;
 public class Main {
 	public static void main(String[] args) {
 		//fill in later
+		
 	}
 }
