@@ -114,7 +114,7 @@ as the major indicator to establish the input and output table relations. It use
 
 \begin{itemize}
 
-\item \textit{\textbf{Rule 1: Determining Table Set.}} If multiple tables are provided as input, it is very likely that all
+\item \textit{\textbf{Step 1: Determining Table Set.}} If multiple tables are provided as input, it is very likely that all
 provided tables will be used in constructing the desirable SQL query. Based on this observation, we assume that
 the minimum number of used tables is the number of all tables provided in the input example. By default, the
 table set $T$ used in SQL query contains all given tables. However, it is
@@ -125,7 +125,7 @@ output table, we view it as a strong indicator that this table will be joined mu
 set $T$ using an alias.
 
 
-\item \textit{\textbf{Rule 2: Determining Joining Columns. }} Given two arbitrary tables, there exist many
+\item \textit{\textbf{Step 2: Determining Joining Columns. }} Given two arbitrary tables, there exist many
 ways to join them. Enumerating all possible joining conditions would introduce a huge search space and thus
 become intractable. We observe that, in practice, two tables are often joined \textit{only} via the following
 three cases: first, tables are joined on their primary keys that have the same (or compatible) data types (i.e., it does not
@@ -136,7 +136,7 @@ overlapped data value in the given input can be used as a joining condition. In 
 two cases. For the third case, our algorithm scans the whole given input table to check the ``value similarity''
 between two arbitrary columns, and selects columns whose ``value similarity'' is above a fixed threshold as joining candidates.
 
-\item \textit{\textbf{Rule 3: Determining Output Columns.}} After determining the table set and joining columns,
+\item \textit{\textbf{Step 3: Determining Output Columns.}} After determining the table set and joining columns,
 the next step is to identify potential column names on which the result would be projected. If a
 column in the output table  does not appear in any input table's column list, this output column must
 be produced by aggregation. Our algorithm keeps track of these columns and appends a \CodeIn{group by} ... \CodeIn{having} ...
