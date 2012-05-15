@@ -6,8 +6,14 @@ import junit.framework.TestCase;
 
 public class TestTableInstanceReader extends TestCase {
 
-	public void testParseSimpleFile() {
-		TableInstanceReader reader = new TableInstanceReader("./dat/id_name_salary");
+	public void testIDNameSalary() {
+		showTables("./dat/id_name");
+		showTables("./dat/id_name_salary");
+		showTables("./dat/id_salary");
+	}
+	
+	public void showTables(String fileName) {
+		TableInstanceReader reader = new TableInstanceReader(fileName);
 		TableInstance table = reader.getTableInstance();
 		System.out.println(table);
 		
