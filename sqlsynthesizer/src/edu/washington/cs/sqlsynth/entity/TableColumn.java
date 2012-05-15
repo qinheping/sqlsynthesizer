@@ -49,6 +49,10 @@ public class TableColumn {
 	public String getColumnName() {
 		return columnName;
 	}
+	
+	public String getFullName() {
+		return tableName + "." + columnName;
+	}
 
 	public ColumnType getType() {
 		return type;
