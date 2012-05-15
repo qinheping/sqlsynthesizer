@@ -44,6 +44,29 @@ public class TableInstance {
 		this.columns.add(column);
 	}
 	
+	public boolean hasColumn(String columnName) {
+		return this.getColumnByName(columnName) != null;
+	}
+	
+	public TableColumn getColumnByName(String columnName) {
+		for(TableColumn c : this.columns) {
+			if(c.getColumnName().equals(columnName)) {
+				return c;
+			}
+		}
+		return null;
+	}
+	
+	public List<TableColumn> getKeyColumns() {
+		List<TableColumn> keys = new LinkedList<TableColumn>();
+		for(TableColumn c : this.columns) {
+			if(c.isKey()) {
+				keys.add(c);
+			}
+		}
+		return keys;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

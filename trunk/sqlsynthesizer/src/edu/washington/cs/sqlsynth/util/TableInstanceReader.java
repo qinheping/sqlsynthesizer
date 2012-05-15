@@ -16,6 +16,12 @@ public class TableInstanceReader {
 	public final String fileName;
 	private TableInstance instance = null;
 	
+	public static TableInstance readTableFromFile(String fileName) {
+		TableInstanceReader reader = new TableInstanceReader(fileName);
+		TableInstance table = reader.getTableInstance();
+		return table;
+	}
+	
 	public TableInstanceReader(String fileName) {
 		this.fileName = fileName;
 	}
