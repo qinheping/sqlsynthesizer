@@ -27,6 +27,10 @@ public class TableInstance {
 		return this.columns;
 	}
 	
+	public int getColumnNum() {
+		return this.getColumns().size();
+	}
+	
 	public void addColumn(TableColumn column) {
 		Utils.checkNotNull(column);
 		Utils.checkTrue(column.getTableName().equals(tableName));
