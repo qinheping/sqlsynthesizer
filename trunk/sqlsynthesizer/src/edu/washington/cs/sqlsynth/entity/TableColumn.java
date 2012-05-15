@@ -1,14 +1,16 @@
 package edu.washington.cs.sqlsynth.entity;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.washington.cs.sqlsynth.util.Globals;
 import edu.washington.cs.sqlsynth.util.Utils;
 
 public class TableColumn {
 
 	//only supports two types: integer or string
-	enum ColumnType{Integer, String};
+	public enum ColumnType{Integer, String};
 	
 	private final String tableName;
 	private final String columnName;
@@ -23,9 +25,13 @@ public class TableColumn {
 		this.isKey = isKey;
 	}
 	
-	public void addValues(Object o) {
+	public void addValue(Object o) {
 		Utils.checkNotNull(o);
 		this.values.add(o);
+	}
+	
+	public void addValues(Collection<Object> os) {
+		this.values.addAll(os);
 	}
 	
 	public boolean isStringType() {
@@ -56,6 +62,10 @@ public class TableColumn {
 		return this.values.size();
 	}
 	
+	public List<Object> getValues() {
+		return this.values;
+	}
+	
 	public List<String> getStringValues() {
 		Utils.checkTrue(this.isStringType(), "The current column is not string type");
 		List<String> retValues = new LinkedList<String>();
@@ -72,5 +82,26 @@ public class TableColumn {
 			retValues.add(Integer.parseInt(o.toString().trim()));
 		}
 		return retValues;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.tableName);
+		sb.append(".");
+		sb.append(this.columnName);
+		sb.append(" (isKey? ");
+		sb.append(isKey);
+		sb.append(", type: ");
+		sb.append(this.type);
+		sb.append(")");
+		sb.append(Globals.lineSep);
+		
+		for(Object v : this.values) {
+			sb.append(v);
+			sb.append(Globals.lineSep);
+		}
+		
+		return sb.toString();
 	}
 }

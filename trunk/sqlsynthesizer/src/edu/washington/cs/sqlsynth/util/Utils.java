@@ -48,6 +48,15 @@ public class Utils {
 		return str.replace('.', '/');
 	}
 	
+	public static boolean isInteger(String v) {
+		try {
+		   Integer.parseInt(v);
+		   return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+	
 	public static void checkDirExistence(String dir) {
 		File f = new File(dir);
 		if(!f.isDirectory()) {
