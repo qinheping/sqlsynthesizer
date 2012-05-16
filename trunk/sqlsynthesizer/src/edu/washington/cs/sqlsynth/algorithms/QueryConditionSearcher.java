@@ -1,5 +1,7 @@
 package edu.washington.cs.sqlsynth.algorithms;
 
+import java.util.Collection;
+
 import edu.washington.cs.sqlsynth.entity.QueryCondition;
 
 public class QueryConditionSearcher {
@@ -10,7 +12,7 @@ public class QueryConditionSearcher {
 		this.completor = completor;
 	}
 	
-	public QueryCondition inferQueryCondition() {
+	public Collection<QueryCondition> inferQueryConditions() {
 		//use decision tree to infer query condition
 		throw new RuntimeException("");
 	}

@@ -100,7 +100,6 @@ public class SQLSkeleton {
 		throw new Error("unreachable!");
 	}
 	
-	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
