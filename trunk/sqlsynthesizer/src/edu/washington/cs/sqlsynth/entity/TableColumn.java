@@ -53,6 +53,16 @@ public class TableColumn {
 	public String getFullName() {
 		return tableName + "." + columnName;
 	}
+	
+	public String getMySQLColumnType() {
+		if(this.isIntegerType()) {
+			return "Integer";
+		} else if (this.isStringType()) {
+			return "Varchar(10)";
+		} else {
+			throw new Error();
+		}
+	}
 
 	public ColumnType getType() {
 		return type;
@@ -64,6 +74,19 @@ public class TableColumn {
 	
 	public int getRowNumber() {
 		return this.values.size();
+	}
+	
+	public Object getValueWithQuoate(int index) {
+//		return this.values.get(index);
+		String v = this.values.get(index) + "";
+		if(this.isStringType()) {
+			return "\'" + v + "\'";
+		}
+		return v;
+	}
+	
+	public Object getValue(int index) {
+		return this.values.get(index);
 	}
 	
 	public List<Object> getValues() {
