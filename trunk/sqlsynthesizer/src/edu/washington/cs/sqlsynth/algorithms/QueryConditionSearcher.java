@@ -1,6 +1,7 @@
 package edu.washington.cs.sqlsynth.algorithms;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import edu.washington.cs.sqlsynth.entity.QueryCondition;
 
@@ -14,6 +15,7 @@ public class QueryConditionSearcher {
 	
 	public Collection<QueryCondition> inferQueryConditions() {
 		//use decision tree to infer query condition
-		throw new RuntimeException("");
+		//throw new RuntimeException("");
+		return Collections.emptySet();
 	}
 }

@@ -52,6 +52,28 @@ public class SQLQuery {
 	
 	//FIXME definitely not complete yet
 	public String toSQLString() {
-		throw new RuntimeException("Not implemented yet.");
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(" select ");
+		int count = 0;
+		for(TableColumn c : this.skeleton.getProjectColumns().values()) {
+			if(count != 0) {
+				sb.append(", ");
+			}
+			sb.append(c.getFullName());
+			count++;
+		}
+		sb.append(" from ");
+		for(int i = 0; i < skeleton.getTables().size(); i++) {
+			if(i!= 0) {
+				sb.append(", ");
+			}
+			sb.append(skeleton.getTables().get(i).getTableName());
+		}
+		sb.append(" where ");
+		//wrong here FIXME
+		sb.append(skeleton.getAllJoinConditions());
+		
+		return sb.toString();
 	}
 }
