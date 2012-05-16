@@ -50,7 +50,7 @@ public class SQLQuery {
 		return skeleton;
 	}
 	
-
+	//FIXME definitely not complete yet
 	public String toSQLString() {
 		throw new RuntimeException("Not implemented yet.");
 	}

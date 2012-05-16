@@ -23,6 +23,8 @@ public class AggregateExprInfer {
 		this.completor = completor;
 		this.inputTables = completor.getInputTables();
 		this.outputTable = completor.getOutputTable();
+		Utils.checkNotNull(this.inputTables);
+		Utils.checkNotNull(this.outputTable);
 	}
 	
 	//it is 0 based

@@ -1,5 +1,6 @@
 package edu.washington.cs.sqlsynth.algorithms;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class SQLQueryCompletor {
 	public List<SQLQuery> inferSQLQueries() {
 		//it calls QueryConditionSearcher to infer conditions
 		QueryConditionSearcher searcher = new QueryConditionSearcher(this);
-		QueryCondition condition = searcher.inferQueryCondition();
+		Collection<QueryCondition> conditions = searcher.inferQueryConditions();
 		
 		AggregateExprInfer aggInfer = new AggregateExprInfer(this);
 		Map<Integer, AggregateExpr> aggrExprs = aggInfer.inferAggregationExprs();
