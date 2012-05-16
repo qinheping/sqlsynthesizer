@@ -31,6 +31,30 @@ public class TableInstance {
 		return this.getColumns().size();
 	}
 	
+	//it is a 1-based
+	public int getRowNum() {
+		Utils.checkTrue(rowNum > -1);
+		return this.rowNum;
+	}
+	
+	public List<Object> getRowValuesWithQuoate(int i) {
+		Utils.checkTrue(i >= 0 && i < this.getRowNum());
+		List<Object> values = new LinkedList<Object>();
+		for(TableColumn c : this.columns) {
+			values.add(c.getValueWithQuoate(i));
+		}
+		return values;
+	}
+	
+	public List<Object> getRowValues(int i) {
+		Utils.checkTrue(i >= 0 && i < this.getRowNum());
+		List<Object> values = new LinkedList<Object>();
+		for(TableColumn c : this.columns) {
+			values.add(c.getValue(i));
+		}
+		return values;
+	}
+	
 	public void addColumn(TableColumn column) {
 		Utils.checkNotNull(column);
 		Utils.checkTrue(column.getTableName().equals(tableName));
