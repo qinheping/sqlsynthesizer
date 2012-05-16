@@ -11,6 +11,11 @@ import junit.framework.TestCase;
 public class TestSQLSkeletonCreator extends TestCase {
 
 	public void testSkeleton() {
+		SQLSkeleton skeleton = createSampleSkeleton();
+		System.out.println(skeleton);
+	}
+	
+	public static SQLSkeleton createSampleSkeleton() {
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/id_name");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/id_salary");
 		TableInstance output = TableInstanceReader.readTableFromFile("./dat/id_name_salary");
@@ -20,7 +25,7 @@ public class TestSQLSkeletonCreator extends TestCase {
 		inputs.add(input2);
 		SQLSkeletonCreator creator = new SQLSkeletonCreator(inputs, output);
 		SQLSkeleton skeleton = creator.inferSQLSkeleton();
-		System.out.println(skeleton);
+		
+		return skeleton;
 	}
-	
 }
