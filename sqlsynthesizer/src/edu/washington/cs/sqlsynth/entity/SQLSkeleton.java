@@ -18,7 +18,7 @@ public class SQLSkeleton {
 	//all equal join columns
 	private List<Pair<TableColumn, TableColumn>> joinColumns = new LinkedList<Pair<TableColumn, TableColumn>>();
 	
-	//the projections
+	//the projections, also zero based
 	private Map<Integer, TableColumn> projectColumns = new LinkedHashMap<Integer, TableColumn>();
 	private final int numberOfProjectColumns;
 	
@@ -37,6 +37,10 @@ public class SQLSkeleton {
 	
 	public void addTables(Collection<TableInstance> tables) {
 		this.tables.addAll(tables);
+	}
+	
+	public int getJoinPairNum() {
+		return this.joinColumns.size();
 	}
 	
 	public List<Pair<TableColumn, TableColumn>> getJoinColumns() {
@@ -65,6 +69,37 @@ public class SQLSkeleton {
 	public int getNumOfProjectColumns() {
 		return this.numberOfProjectColumns;
 	}
+	
+	public String getAllJoinConditions() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("(");
+		int count = 0;
+		for(Pair<TableColumn, TableColumn> p : this.joinColumns) {
+			if(count != 0) {
+				sb.append(" and ");
+			}
+			sb.append(p.a.getFullName());
+			sb.append("=");
+			sb.append(p.b.getFullName());
+			count++;
+		}
+		sb.append(")");
+		return sb.toString();
+	}
+	
+	public String getJoinCondition(int i) {
+		Utils.checkTrue(this.getJoinPairNum() > 0);
+		Utils.checkTrue(i >= 0 && i < this.getJoinPairNum());
+		int count = 0;
+		for(Pair<TableColumn, TableColumn> p : this.joinColumns) {
+			if(count == i) {
+				return "(" + p.a.getFullName() + " = " + p.b.getFullName() + ")";
+			}
+			count++;
+		}
+		throw new Error("unreachable!");
+	}
+	
 	
 	@Override
 	public String toString() {

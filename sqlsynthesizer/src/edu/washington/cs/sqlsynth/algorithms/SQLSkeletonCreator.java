@@ -9,6 +9,7 @@ import plume.Pair;
 import edu.washington.cs.sqlsynth.entity.SQLSkeleton;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
+import edu.washington.cs.sqlsynth.util.TableUtils;
 import edu.washington.cs.sqlsynth.util.Utils;
 
 public class SQLSkeletonCreator {
@@ -32,7 +33,7 @@ public class SQLSkeletonCreator {
 		List<TableColumn> outputColumns = outputTable.getColumns();
 		//FIXME no consider repetitive columns
 		for(TableColumn column : outputColumns) {
-			TableInstance t = this.findFirstTableWithMatchedColumn(column.getColumnName());
+			TableInstance t = TableUtils.findFirstTableWithMatchedColumn(column.getColumnName(), this.inputTables);
 			if(t != null && !tables.contains(t)) {
 				tables.add(t);
 			}
@@ -52,7 +53,7 @@ public class SQLSkeletonCreator {
 		//all projection columns
 		int index = 0;
 		for(TableColumn column : outputColumns) {
-			TableColumn c = this.findFirstMatchedColumn(column.getColumnName());
+			TableColumn c = TableUtils.findFirstMatchedColumn(column.getColumnName(), this.inputTables);
 			if(c != null) {
 				skeleton.setProjectColumn(index, c);
 			}
@@ -60,26 +61,6 @@ public class SQLSkeletonCreator {
 		}
 		
 		return skeleton;
-	}
-	
-	private TableInstance findFirstTableWithMatchedColumn(String columnName) {
-		for(TableInstance instance : this.inputTables) {
-			TableColumn c = instance.getColumnByName(columnName);
-			if(c != null) {
-				return  instance;
-			}
-		}
-		return null;
-	}
-	
-	private TableColumn findFirstMatchedColumn(String columnName) {
-		for(TableInstance instance : this.inputTables) {
-			TableColumn c = instance.getColumnByName(columnName);
-			if(c != null) {
-				return c;
-			}
-		}
-		return null;
 	}
 	
 	//FIXME
