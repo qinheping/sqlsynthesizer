@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import edu.washington.cs.sqlsynth.db.DbConnector;
 import edu.washington.cs.sqlsynth.entity.AggregateExpr;
 import edu.washington.cs.sqlsynth.entity.QueryCondition;
 import edu.washington.cs.sqlsynth.entity.SQLQuery;
@@ -33,7 +34,22 @@ public class SQLQueryCompletor {
 		
 		//create SQL statements
 		
-		throw new RuntimeException();
+		List<SQLQuery> quries = new LinkedList<SQLQuery>();
+		quries.add(new SQLQuery(skeleton)); //FIXME incomplete
+		return quries;
+	}
+	
+	public List<SQLQuery> validateQueriesOnDb(Collection<SQLQuery> qs) {
+		List<SQLQuery> queries = new LinkedList<SQLQuery>();
+		DbConnector connector = DbConnector.instance();
+		for(SQLQuery query : qs) {
+			connector.initializeInputTables(inputTables);
+			boolean checked = connector.checkSQLQueryWithOutput(outputTable, query);
+			if(checked) {
+				queries.add(query);
+			}
+		}
+		return queries;
 	}
 	
 	public SQLSkeleton getSkeleton() {
