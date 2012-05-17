@@ -71,6 +71,9 @@ public class SQLSkeleton {
 	}
 	
 	public String getAllJoinConditions() {
+		if(this.joinColumns.isEmpty()) {
+			return "";
+		}
 		StringBuilder sb = new StringBuilder();
 		sb.append("(");
 		int count = 0;

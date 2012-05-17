@@ -1,6 +1,7 @@
 package edu.washington.cs.sqlsynth.algorithms;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import edu.washington.cs.sqlsynth.entity.SQLQuery;
 import edu.washington.cs.sqlsynth.entity.SQLSkeleton;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
+import edu.washington.cs.sqlsynth.util.Utils;
 
 public class SQLQueryCompletor {
 
@@ -29,14 +31,35 @@ public class SQLQueryCompletor {
 		Collection<QueryCondition> conditions = searcher.inferQueryConditions();
 		
 		AggregateExprInfer aggInfer = new AggregateExprInfer(this);
-		Map<Integer, AggregateExpr> aggrExprs = aggInfer.inferAggregationExprs();
+		Map<Integer, List<AggregateExpr>> aggrExprs = aggInfer.inferAggregationExprs();
 		List<TableColumn> groupbyColumns = aggInfer.inferGroupbyColumns();
 		
 		//create SQL statements
 		
 		List<SQLQuery> quries = new LinkedList<SQLQuery>();
-		quries.add(new SQLQuery(skeleton)); //FIXME incomplete
+//		quries.add(new SQLQuery(skeleton)); //FIXME incomplete
+		quries.addAll(constructQueries(skeleton, aggrExprs, groupbyColumns));
 		return quries;
+	}
+	
+	private List<SQLQuery> constructQueries(SQLSkeleton skeleton, Map<Integer, List<AggregateExpr>> aggrExprs, List<TableColumn> groupbyColumns) {
+		if(aggrExprs.isEmpty()) {
+			Utils.checkTrue(groupbyColumns.isEmpty()); //no aggregation, no group by
+			return Collections.singletonList(new SQLQuery(skeleton));
+		}
+		List<SQLQuery> queries = new LinkedList<SQLQuery>();
+		//construct
+		Utils.checkTrue(aggrExprs.size() == 1); //FIXME
+		//replicate the aggr exprs
+		int key = aggrExprs.keySet().iterator().next();
+		for(AggregateExpr ex : aggrExprs.get(key)) {
+			SQLQuery q = new SQLQuery(skeleton);
+			Map<Integer, AggregateExpr> map = Collections.singletonMap(key, ex);
+			q.setAggregateExprs(map);
+			q.setGroupbyColumns(groupbyColumns);
+			queries.add(q);
+		}
+		return queries;
 	}
 	
 	public List<SQLQuery> validateQueriesOnDb(Collection<SQLQuery> qs) {

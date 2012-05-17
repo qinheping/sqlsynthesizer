@@ -56,13 +56,29 @@ public class SQLQuery {
 		
 		sb.append(" select ");
 		int count = 0;
-		for(TableColumn c : this.skeleton.getProjectColumns().values()) {
+		for(int i = 0; i < this.skeleton.getNumOfProjectColumns(); i++) {
 			if(count != 0) {
 				sb.append(", ");
 			}
-			sb.append(c.getFullName());
+			if(this.skeleton.getProjectColumns().containsKey(i)) {
+				sb.append(this.skeleton.getProjectColumns().get(i).getFullName());
+			} else if(this.getAggregateExprs().containsKey(i)) {
+				sb.append(this.getAggregateExprs().get(i).toSQL());
+			} else {
+				System.out.println(this.skeleton);
+				System.out.println(this.getAggregateExprs());
+				Utils.checkTrue(false, "The i: " + i);
+			}
 			count++;
 		}
+		
+//		for(TableColumn c : this.skeleton.getProjectColumns().values()) {
+//			if(count != 0) {
+//				sb.append(", ");
+//			}
+//			sb.append(c.getFullName());
+//			count++;
+//		}
 		sb.append(" from ");
 		for(int i = 0; i < skeleton.getTables().size(); i++) {
 			if(i!= 0) {
@@ -70,9 +86,22 @@ public class SQLQuery {
 			}
 			sb.append(skeleton.getTables().get(i).getTableName());
 		}
-		sb.append(" where ");
-		//wrong here FIXME
-		sb.append(skeleton.getAllJoinConditions());
+		String condition = skeleton.getAllJoinConditions();
+		if(!condition.isEmpty()) {
+		   sb.append(" where ");
+    		//wrong here FIXME
+	    	sb.append(skeleton.getAllJoinConditions());
+		}
+		if(!this.groupbyColumns.isEmpty()) {
+			sb.append(" group by ");
+			count = 0;
+			for(TableColumn c: this.groupbyColumns) {
+				if(count != 0) {
+					sb.append(", ");
+				}
+				sb.append(c.getFullName());
+			}
+		}
 		
 		return sb.toString();
 	}

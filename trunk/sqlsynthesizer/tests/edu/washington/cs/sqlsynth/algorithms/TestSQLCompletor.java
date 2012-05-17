@@ -3,9 +3,13 @@ package edu.washington.cs.sqlsynth.algorithms;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import edu.washington.cs.sqlsynth.db.DbConnector;
+import edu.washington.cs.sqlsynth.entity.AggregateExpr;
 import edu.washington.cs.sqlsynth.entity.SQLQuery;
 import edu.washington.cs.sqlsynth.entity.SQLSkeleton;
+import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.util.TableInstanceReader;
 import junit.framework.TestCase;
@@ -32,6 +36,32 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		queries = completor.validateQueriesOnDb(queries);
+		//after validating on my sql
+		System.out.println("The final output....");
+		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+	}
+	
+	public void test2() {
+		TableInstance input = TableInstanceReader.readTableFromFile("./dat/groupby/name_salary");
+		TableInstance output = TableInstanceReader.readTableFromFile("./dat/groupby/name_salary_count");
+		
+		Collection<TableInstance> inputs = new LinkedList<TableInstance>();
+		inputs.add(input);
+		SQLSkeletonCreator creator = new SQLSkeletonCreator(inputs, output);
+		SQLSkeleton skeleton = creator.inferSQLSkeleton();
+		
+		SQLQueryCompletor completor = new SQLQueryCompletor(skeleton);
+		completor.addInputTable(input);
+		completor.setOutputTable(output);
+		
+		List<SQLQuery> queries = completor.inferSQLQueries();
+		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+		DbConnector.NO_ORDER_MATCHING = true;
 		queries = completor.validateQueriesOnDb(queries);
 		//after validating on my sql
 		System.out.println("The final output....");

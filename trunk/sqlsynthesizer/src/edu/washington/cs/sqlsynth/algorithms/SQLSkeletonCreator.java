@@ -65,6 +65,9 @@ public class SQLSkeletonCreator {
 	
 	//FIXME
 	private Pair<TableColumn, TableColumn> getKeyPairs(List<TableInstance> tables) {
+		if(tables.size() == 1) {
+			return null;
+		}
 		Utils.checkTrue(tables.size() == 2);
 		TableColumn key1 = tables.get(0).getKeyColumns().get(0);
 		TableColumn key2 = tables.get(1).getKeyColumns().get(0);
