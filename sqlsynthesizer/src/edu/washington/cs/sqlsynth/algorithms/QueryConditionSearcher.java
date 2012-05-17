@@ -5,6 +5,10 @@ import java.util.Collections;
 
 import edu.washington.cs.sqlsynth.entity.QueryCondition;
 
+// firstly, use simpely weka
+import weka.core.Instances;
+import weka.classifiers.trees.j48.*;
+
 public class QueryConditionSearcher {
 
 	public final SQLQueryCompletor completor;
