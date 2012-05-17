@@ -15,6 +15,8 @@ import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.util.Utils;
 
+
+
 public class SQLQueryCompletor {
 
 	private final SQLSkeleton skeleton;
