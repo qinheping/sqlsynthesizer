@@ -1,5 +1,7 @@
 package edu.washington.cs.sqlsynth.algorithms;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +26,7 @@ public class TestAggregateExprInferrer extends TestCase {
 		
 		//create the inferrer
 		AggregateExprInfer aggInfer = new AggregateExprInfer(completor);
-		Map<Integer, AggregateExpr> aggrExprs = aggInfer.inferAggregationExprs();
+		Map<Integer, List<AggregateExpr>> aggrExprs = aggInfer.inferAggregationExprs();
 		List<TableColumn> groupbyColumns = aggInfer.inferGroupbyColumns();
 		
 		System.out.println(aggrExprs);
@@ -34,6 +36,37 @@ public class TestAggregateExprInferrer extends TestCase {
 		
 		assertTrue(aggrExprs.isEmpty());
 		assertTrue(groupbyColumns.isEmpty());
+	}
+	
+	public void test2() {
+		TableInstance input = TableInstanceReader.readTableFromFile("./dat/groupby/name_salary");
+		TableInstance output = TableInstanceReader.readTableFromFile("./dat/groupby/name_salary_count");
+		
+		Collection<TableInstance> inputs = new LinkedList<TableInstance>();
+		inputs.add(input);
+		SQLSkeletonCreator creator = new SQLSkeletonCreator(inputs, output);
+		SQLSkeleton skeleton = creator.inferSQLSkeleton();
+		
+		SQLQueryCompletor completor = new SQLQueryCompletor(skeleton);
+		completor.addInputTable(input);
+		completor.setOutputTable(output);
+		
+		//create the inferrer
+		AggregateExprInfer aggInfer = new AggregateExprInfer(completor);
+		Map<Integer, List<AggregateExpr>> aggrExprs = aggInfer.inferAggregationExprs();
+		List<TableColumn> groupbyColumns = aggInfer.inferGroupbyColumns();
+		
+		System.out.println("aggregate expressions:");
+		System.out.println(aggrExprs);
+		System.out.println("group by columns:");
+		System.out.println(groupbyColumns);
+		System.out.println("all join conditions:");
+		System.out.println(skeleton.getAllJoinConditions());
+		System.out.println("projection columns:");
+		System.out.println(skeleton.getProjectColumns());
+		
+		assertTrue(aggrExprs.size() == 1);
+		assertTrue(groupbyColumns.size() == 1);
 	}
 	
 }

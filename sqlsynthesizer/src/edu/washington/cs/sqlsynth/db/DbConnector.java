@@ -8,7 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.washington.cs.sqlsynth.entity.SQLQuery;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
@@ -17,6 +19,8 @@ import edu.washington.cs.sqlsynth.util.Globals;
 import edu.washington.cs.sqlsynth.util.Utils;
 
 public class DbConnector {
+	
+	public static boolean NO_ORDER_MATCHING = false;
 
 	private Connection con = null;
 	
@@ -67,7 +71,29 @@ public class DbConnector {
 		System.out.println(outputSb.toString());
 		System.out.println("query result: ");
 		System.out.println(queryResultStr.toString());
+		
+		if(NO_ORDER_MATCHING) {
+			return noOrderMatch(outputSb.toString(), queryResultStr);
+		}
+		
 		return outputSb.toString().equals(queryResultStr);
+	}
+	
+	private boolean noOrderMatch(String a, String b) {
+		Set<String> s1 = new HashSet<String>();
+		String[] as = a.split(Globals.lineSep);
+		for(String s : as) {
+			s1.add(s);
+		}
+		
+		Set<String> s2 = new HashSet<String>();
+		String[] bs = b.split(Globals.lineSep);
+		for(String s : bs) {
+			s2.add(s);
+		}
+//		System.out.println(s1);
+//		System.out.println(s2);
+		return s1.equals(s2);
 	}
 
 	public void connect() {
@@ -228,12 +254,12 @@ public class DbConnector {
 //					System.out.println(i);
 					int t = meta.getColumnType(i + 1); //note it is 1-based
 					String v = null;
-					if(t == Types.INTEGER) {
+					if(t == Types.INTEGER || t== Types.BIGINT || t == Types.DECIMAL) {
 						v = rs.getInt(i + 1) + "";
 					} else if (t == Types.VARCHAR) {
 						v = rs.getString(i + 1);
 					} else {
-						Utils.checkTrue(false);
+						Utils.checkTrue(false, "Type: " + t);
 					}
 					Utils.checkNotNull(v);
 					sb.append(v);
