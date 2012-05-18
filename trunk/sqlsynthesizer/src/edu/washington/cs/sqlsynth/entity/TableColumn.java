@@ -27,11 +27,16 @@ public class TableColumn {
 	
 	public void addValue(Object o) {
 		Utils.checkNotNull(o);
+		if(this.isIntegerType()) {
+			Utils.checkTrue(Utils.isInteger(o.toString()));
+		}
 		this.values.add(o);
 	}
 	
 	public void addValues(Collection<Object> os) {
-		this.values.addAll(os);
+		for(Object o : os) {
+			this.addValue(o);
+		}
 	}
 	
 	public boolean isStringType() {

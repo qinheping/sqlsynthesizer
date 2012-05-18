@@ -9,13 +9,19 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import plume.Pair;
+
 import edu.washington.cs.sqlsynth.entity.SQLQuery;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
+import edu.washington.cs.sqlsynth.entity.TableColumn.ColumnType;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.util.Globals;
+import edu.washington.cs.sqlsynth.util.TableInstanceReader;
 import edu.washington.cs.sqlsynth.util.Utils;
 
 public class DbConnector {
@@ -43,6 +49,105 @@ public class DbConnector {
 			this.initializeTable(t);
 		}
 	}
+	
+	public TableInstance joinTable(Collection<TableInstance> tables, Collection<Pair<TableColumn, TableColumn>> joinColumns) {
+		String newTableName = "join";
+		for(TableInstance t : tables) {
+			newTableName = newTableName + "_" + t.getTableName();
+		}
+		TableInstance newTable = new TableInstance(newTableName);
+		//create tables
+		this.initializeInputTables(tables);
+		//construct the SQL statements
+		StringBuilder joinSQL = new StringBuilder();
+		
+		//all columns
+		List<String> selectColumns = new LinkedList<String>();
+		for(TableInstance t : tables) {
+			for(TableColumn c : t.getColumns()) {
+				selectColumns.add(c.getFullName());
+			}
+		}
+		//remove repetitive FIXME
+		Set<String> removed = new LinkedHashSet<String>();
+		for(Pair<TableColumn, TableColumn> p : joinColumns) {
+			removed.add(p.b.getFullName()); //FIXME what about a = b and b =c
+		}
+		selectColumns.removeAll(removed);
+		
+		joinSQL.append("select ");
+		int count = 0;
+		for(String r : selectColumns) {
+			if(count != 0) {
+				joinSQL.append(", ");
+			}
+			joinSQL.append(r);
+			count++;
+		}
+		joinSQL.append(" from ");
+		count = 0;
+		for(TableInstance t : tables) {
+			if(count != 0) {
+				joinSQL.append(", ");
+			}
+			joinSQL.append(t.getTableName());
+			count++;
+		}
+		joinSQL.append(" where ");
+		count = 0;
+		for(Pair<TableColumn, TableColumn> p :joinColumns) {
+			if(count != 0) {
+				joinSQL.append(" and ");
+			}
+			joinSQL.append(p.a.getFullName() + "=" + p.b.getFullName());
+			count++;
+		}
+		
+		ResultSet r = this.executeQuery(this.con, joinSQL.toString());
+		this.insertResultSetIntoEmptyTable(newTable, r);
+		
+		return newTable;
+	}
+	
+	private void insertResultSetIntoEmptyTable(TableInstance newTable, ResultSet rs) {
+		Utils.checkTrue(newTable.getColumnNum() == 0);
+		try {
+		    ResultSetMetaData meta = rs.getMetaData();
+		    int columnCount = meta.getColumnCount();
+		    TableColumn[] columns = new TableColumn[columnCount];
+		    for(int i = 0; i < columnCount; i++) {
+		    	String columnName = meta.getColumnName(i + 1); //it is 1-based
+		    	columns[i] = new TableColumn(newTable.getTableName(), columnName,
+		    			getColumnType(meta.getColumnType(i + 1)),
+		    			columnName.endsWith(TableInstanceReader.KEY));
+		    }
+		    //feed data
+		    while(rs.next()) {
+				for(int i = 0; i < columnCount; i++) {
+					Object v = columns[i].isIntegerType() ? rs.getInt(i + 1) : rs.getString(i + 1); 
+					columns[i].addValue(v);
+					Utils.checkNotNull(v);
+				}
+			}
+		    //set the column
+		    for(TableColumn c : columns) {
+		    	newTable.addColumn(c);
+		    }
+		} catch (SQLException e ) {
+			throw new Error(e);
+		}
+	}
+	
+	private ColumnType getColumnType(int t) {
+		if(t == Types.INTEGER || t== Types.BIGINT || t == Types.DECIMAL) {
+			return ColumnType.Integer;
+		} else if (t == Types.VARCHAR) {
+			return ColumnType.String;
+		} else {
+			throw new Error();
+		}
+	}
+	
 
 	public boolean checkSQLQueryWithOutput(TableInstance output, SQLQuery sql) {
 		return checkSQLQueryWithOutput(output, sql.toSQLString());

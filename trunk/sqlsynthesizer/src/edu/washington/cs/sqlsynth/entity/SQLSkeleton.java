@@ -81,13 +81,36 @@ public class SQLSkeleton {
 	
 	//note that this method only returns a shallow copy
 	public TableInstance getTableOnlyWithMatchedColumns() {
-		TableInstance ret = new TableInstance(this.outputTable.getTableName());
+		return getTableOnlyWithMatchedColumns(this.outputTable);
+	}
+	
+	private TableInstance getTableOnlyWithMatchedColumns(TableInstance t) {
+		TableInstance ret = new TableInstance(t.getTableName());
 		//add columns that are matched
-		for(TableColumn c : this.outputTable.getColumns()) {
+		for(TableColumn c : t.getColumns()) {
 			if(TableUtils.findFirstMatchedColumn(c.getColumnName(), this.inputTables) != null) {
 				ret.addColumn(c);
 			}
 		}
+		return ret;
+	}
+	
+	//compute a table after applying the join conditions
+	public List<TableInstance> computeJoinTableWithoutUnmatches() {
+		Utils.checkTrue(!this.inputTables.isEmpty());		
+		if(this.inputTables.size() == 1) {
+			Utils.checkTrue(this.joinColumns.isEmpty());
+		} else {
+			Utils.checkTrue(!this.joinColumns.isEmpty());
+		}
+			
+		List<TableInstance> list = TableUtils.joinTables(this.inputTables, this.joinColumns);
+		
+		List<TableInstance> ret = new LinkedList<TableInstance>();
+		for(TableInstance t : list) {
+			ret.add(this.getTableOnlyWithMatchedColumns(t));
+		}
+		
 		return ret;
 	}
 	
