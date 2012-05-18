@@ -2,9 +2,15 @@ package edu.washington.cs.sqlsynth.util;
 
 import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
+import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 public class TestTableInstanceReader extends TestCase {
+	
+	public static Test suite() {
+		return new TestSuite(TestTableInstanceReader.class);
+	}
 
 	public void testIDNameSalary() {
 		showTables("./dat/id_name");

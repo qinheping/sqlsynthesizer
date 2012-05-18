@@ -8,10 +8,16 @@ import java.util.LinkedList;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.util.TableInstanceReader;
 
+import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 public class TestDatabaseConnection extends TestCase {
 
+	public static Test suite() {
+		return new TestSuite(TestDatabaseConnection.class);
+	}
+	
 	public void testPassConfigFile() {
 		System.out.println(MySQLConfigReader.getURL());
 		System.out.println(MySQLConfigReader.getDriver());
