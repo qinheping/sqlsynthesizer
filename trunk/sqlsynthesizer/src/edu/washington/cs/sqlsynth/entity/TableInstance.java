@@ -27,6 +27,11 @@ public class TableInstance {
 		return this.columns;
 	}
 	
+	public TableColumn getColumn(int i) {
+		Utils.checkTrue(i >= 0 && i < this.getColumnNum());
+		return this.columns.get(i);
+	}
+	
 	public int getColumnNum() {
 		return this.getColumns().size();
 	}

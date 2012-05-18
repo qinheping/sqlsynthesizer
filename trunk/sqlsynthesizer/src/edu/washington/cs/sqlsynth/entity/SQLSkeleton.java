@@ -9,6 +9,7 @@ import java.util.Map;
 import plume.Pair;
 
 import edu.washington.cs.sqlsynth.util.Globals;
+import edu.washington.cs.sqlsynth.util.TableUtils;
 import edu.washington.cs.sqlsynth.util.Utils;
 
 public class SQLSkeleton {
@@ -20,11 +21,19 @@ public class SQLSkeleton {
 	
 	//the projections, also zero based
 	private Map<Integer, TableColumn> projectColumns = new LinkedHashMap<Integer, TableColumn>();
-	private final int numberOfProjectColumns;
 	
-	public SQLSkeleton(int numOfProjectColumns) {
-		Utils.checkTrue(numOfProjectColumns > 0);
-		this.numberOfProjectColumns = numOfProjectColumns;
+	private final int numberOfProjectColumns;
+	private final List<TableInstance> inputTables;
+	private final TableInstance outputTable;
+	
+	public SQLSkeleton(List<TableInstance> inputTables, TableInstance outputTable) {
+		int outputColumnNum = outputTable.getColumnNum();
+		Utils.checkTrue(outputColumnNum > 0);
+		Utils.checkNotNull(outputTable);
+		Utils.checkTrue(inputTables.size() > 0);
+		this.numberOfProjectColumns = outputColumnNum;
+		this.outputTable = outputTable;
+		this.inputTables = inputTables;
 	}
 	
 	public List<TableInstance> getTables() {
@@ -64,6 +73,22 @@ public class SQLSkeleton {
 	public void setProjectColumn(int index, TableColumn column) {
 		Utils.checkTrue(!this.projectColumns.containsKey(index));
 		this.projectColumns.put(index, column);
+	}
+	
+	public TableInstance getOutputTable() {
+		return this.outputTable;
+	}
+	
+	//note that this method only returns a shallow copy
+	public TableInstance getTableOnlyWithMatchedColumns() {
+		TableInstance ret = new TableInstance(this.outputTable.getTableName());
+		//add columns that are matched
+		for(TableColumn c : this.outputTable.getColumns()) {
+			if(TableUtils.findFirstMatchedColumn(c.getColumnName(), this.inputTables) != null) {
+				ret.addColumn(c);
+			}
+		}
+		return ret;
 	}
 	
 	public int getNumOfProjectColumns() {

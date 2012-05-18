@@ -25,8 +25,8 @@ public class SQLSkeletonCreator {
 	}
 	
 	public SQLSkeleton inferSQLSkeleton() {
-		int outputColumnNum = this.outputTable.getColumnNum();
-		SQLSkeleton skeleton = new SQLSkeleton(outputColumnNum);
+		
+		SQLSkeleton skeleton = new SQLSkeleton(this.inputTables, this.outputTable);
 		
 		//first get all tables
 		List<TableInstance> tables = new LinkedList<TableInstance>();
