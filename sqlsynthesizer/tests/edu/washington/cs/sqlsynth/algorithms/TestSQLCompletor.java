@@ -12,9 +12,15 @@ import edu.washington.cs.sqlsynth.entity.SQLSkeleton;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.util.TableInstanceReader;
+import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 public class TestSQLCompletor extends TestCase {
+	
+	public static Test suite() {
+		return new TestSuite(TestSQLCompletor.class);
+	}
 
 	public void test1() {
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/id_name");

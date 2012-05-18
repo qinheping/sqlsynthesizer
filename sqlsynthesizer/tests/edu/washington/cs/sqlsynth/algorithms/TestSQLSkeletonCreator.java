@@ -6,10 +6,16 @@ import java.util.LinkedList;
 import edu.washington.cs.sqlsynth.entity.SQLSkeleton;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.util.TableInstanceReader;
+import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 public class TestSQLSkeletonCreator extends TestCase {
 
+	public static Test suite() {
+		return new TestSuite(TestSQLSkeletonCreator.class);
+	}
+	
 	public void testSkeleton() {
 		SQLSkeleton skeleton = createSampleSkeleton();
 		System.out.println(skeleton);

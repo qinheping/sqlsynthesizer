@@ -1,14 +1,19 @@
 package edu.washington.cs.sqlsynth.entity;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import edu.washington.cs.sqlsynth.util.TableInstanceReader;
+import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 public class TestSQLSkeleton extends TestCase {
 
+	public static Test suite() {
+		return new TestSuite(TestSQLSkeleton.class);
+	}
+	
 	public void testGetMatchedColumns() {
 		TableInstance input = TableInstanceReader.readTableFromFile("./dat/groupby/name_salary");
 		TableInstance output = TableInstanceReader.readTableFromFile("./dat/groupby/name_salary_count");
