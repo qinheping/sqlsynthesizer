@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.HashSet;
 
+import java.io.*;
+
 import edu.washington.cs.sqlsynth.entity.QueryCondition;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
@@ -35,6 +37,9 @@ public class QueryConditionSearcher {
 		
 		this.getConstructionInfo();
 		this.getLabelWeightInfo();
+		this.callDecisionTree();
+		
+		System.out.println("---------------------------------------------End of QueryConditionSearcherd---------------------------------------------");
 	}
 	
 	public Collection<QueryCondition> inferQueryConditions() {
@@ -51,7 +56,7 @@ public class QueryConditionSearcher {
 //		allData = new LinkedList<Instances>();
 		allData.clear();
 		
-		List<TableInstance> tables = completor.getSkeleton().getTables();
+		List<TableInstance> tables = completor.getSkeleton().computeJoinTableWithoutUnmatches();
 		
 		for (int i = 0; i < tables.size(); ++i){
 			TableInstance table = tables.get(i);
@@ -63,7 +68,16 @@ public class QueryConditionSearcher {
 			for (int j = 0; j < columns.size(); ++j){
 				if (columns.get(j).getType() == TableColumn.ColumnType.String)
 				{
-					attributes.addElement(new Attribute(columns.get(j).getFullName(), (FastVector) null));
+					
+					FastVector tmpVector = new FastVector();
+					for (int k = 0; k< table.getRowNum(); ++k)
+					{
+						if (!tmpVector.contains(table.getRowValues(k).get(j)))
+						{
+							tmpVector.addElement(table.getRowValues(k).get(j));
+						}
+					}
+					attributes.addElement(new Attribute(columns.get(j).getFullName(), tmpVector));
 				}
 				else
 				{
@@ -72,19 +86,63 @@ public class QueryConditionSearcher {
 				
 			}
 			
-//			attributes.addElement(new Attribute("class"));
+			FastVector tmpVector = new FastVector(2);
+			tmpVector.addElement("0");
+			tmpVector.addElement("1");
 			
+			attributes.addElement(new Attribute("class", tmpVector));
 			
 			
 			Instances inputData = new Instances(relationName, attributes, table.getRowNum());
+			inputData.setClassIndex(inputData.numAttributes() - 1);
+			
+			System.out.println(inputData.numAttributes() - 1);
+			
 			allData.add(i, inputData);
 			
 		}
 	}
 	
+	private boolean isPositive(List<Object> tuple1, List<Object> tuple2, List<Integer> matchList, List<TableColumn.ColumnType> matchType)
+	{
+		
+		boolean ret = true;
+		
+		for (int i = 0; i<tuple1.size(); ++i)
+		{
+			if (matchList.get(i)!=-1)
+			{
+				if (matchType.get(i) == TableColumn.ColumnType.Integer)
+				{	
+					
+					
+					
+					if (!((tuple1.get(i)).toString()).equals(((tuple2.get(matchList.get(i))).toString())))
+					{
+						ret = false;
+						break;
+					}
+				}
+				else
+				{
+					if (!((String)(tuple1.get(i))).equals((String)(tuple2.get(matchList.get(i)))))
+					{
+						ret = false;
+						break;
+					}
+				
+				}
+			}
+		}
+		
+		return ret;
+	}
+	
+
+	
 	private void getLabelWeightInfo()
 	{
-		List<TableInstance> tables = completor.getSkeleton().getTables();
+		List<TableInstance> tables = completor.getSkeleton().computeJoinTableWithoutUnmatches();
 		
 		TableInstance output = completor.getOutputTable();
 		
@@ -99,72 +157,71 @@ public class QueryConditionSearcher {
 			double posWeight = 0.5;
 			double negWeight = 0.5;
 			
-			for (int j = 0; j<table.getRowNum(); ++j)
-			{
-				usedIdx.add(j);
-			}
+			
+			LinkedList<Integer> matchList = new LinkedList<Integer>();
+			LinkedList<TableColumn.ColumnType> matchType = new LinkedList<TableColumn.ColumnType>();
 			
 			for (int j = 0; j<table.getColumnNum(); ++j)
 			{
-				boolean flag = false;
-				for (int k = 0; k<output.getColumnNum(); ++k)
+				int idx = -1;
+				TableColumn.ColumnType type = TableColumn.ColumnType.Integer;
+				for (int k = 0; k<output.getColumnNum()-1; ++k)
 				{
-					if (table.hasColumn(output.getColumns().get(k).getFullName()))
+					if (table.getColumn(j).getColumnName().equals((output.getColumn(k).getColumnName())) )
 					{
-						flag = true;
+						idx = k;
+						type = output.getColumn(k).getType();
 						break;
 					}
 				}
+				matchList.add(idx);
+				matchType.add(type);
 				
-				if (flag)
+			}
+			
+			
+			for (int j = 0; j<table.getRowNum(); ++j)
+			{
+				List<Object> tmp_candidate = table.getRowValues(j);
+				for (int k = 0; k<output.getRowNum(); ++k)
 				{
-					for (int k = 0; k<table.getRowNum(); ++k)
+					List<Object> tmp_output = output.getRowValues(j);
+					if (this.isPositive(tmp_candidate, tmp_output, matchList, matchType))
 					{
-						boolean eqFlag = false;
-						for (int l = 0; l<output.getRowNum(); ++l)
-						{
-							if (table.getRowValues(k) == output.getRowValues(l))
-							{
-								eqFlag = true;
-								break;
-							}
-						}
-						
-						if (!eqFlag)
-						{
-							usedIdx.remove(k);
-						}
+						usedIdx.add(j);
+						break;
 					}
 				}
 			}
-			
-			posWeight = usedIdx.size()/table.getRowNum();
-			negWeight = 1-posWeight;
-			
-//			weight.add(posWeight);
+
+			negWeight = (usedIdx.size()+0.5)/(table.getRowNum()+1);
+			posWeight = 1-negWeight;
 			
 			for (int j = 0; j<table.getRowNum(); ++j)
 			{
 				Instance inst = new Instance(allData.get(i).numAttributes());
-				for (int k = 0; k<table.getColumnNum()-1; ++k)
+				for (int k = 0; k<table.getColumnNum(); ++k)
 				{
 					if (table.getColumns().get(k).isIntegerType())
 					{
-						inst.setValue(allData.get(i).attribute(k), (Double)(table.getRowValues(i).get(j)));
+						inst.setValue(allData.get(i).attribute(k), Double.parseDouble( (table.getRowValues(j).get(k)).toString()));
 					}
 					else
 					{
-						inst.setValue(allData.get(i).attribute(k), (String)(table.getRowValues(i).get(j)));
+						System.out.println(table.getRowValues(j).get(k));
+						inst.setValue(allData.get(i).attribute(k), ((String)(table.getRowValues(j).get(k))));
 					}
 				}
 				if (usedIdx.contains(j))
 				{
-					inst.setClassValue(1);
+//					inst.setClassValue("1");
+					inst.setValue(allData.get(i).attribute(table.getColumnNum()), "1");
 					inst.setWeight(posWeight);
 				}
 				else
 				{
-					inst.setClassValue(0);
+//					inst.setClassValue("0");
+					inst.setValue(allData.get(i).attribute(table.getColumnNum()), "0");
 					inst.setWeight(negWeight);
 				}
 				
@@ -190,7 +247,17 @@ public class QueryConditionSearcher {
 				e.printStackTrace();
 			}
 
+			
+			System.out.println("----------------------------------Building tree is done----------------------------------");
+			try {
+				System.out.println(tree.prefix());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			System.out.println("----------------------------------   More to do here   ----------------------------------");
 		}
+		
 		
 	}
 	
