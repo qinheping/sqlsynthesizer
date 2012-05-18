@@ -119,9 +119,10 @@ public class TableInstance {
 		String[] contents = new String[rowNum];
 		for(TableColumn column : this.columns) {
 			for(int i = 0; i < rowNum; i++) {
-				contents[i] = (String) (contents[i] == null
+				contents[i] = "" + (contents[i] == null
 				    ? column.getValues().get(i)
-				    :  contents[i] + TableInstanceReader.SEP + column.getValues().get(i));
+				    :  (contents[i] + TableInstanceReader.SEP
+				        + column.getValues().get(i)));
 			}
 		}
 		for(String content : contents) {
