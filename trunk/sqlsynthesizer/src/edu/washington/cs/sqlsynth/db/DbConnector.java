@@ -93,7 +93,9 @@ public class DbConnector {
 			joinSQL.append(t.getTableName());
 			count++;
 		}
-		joinSQL.append(" where ");
+		if(!joinColumns.isEmpty()) {
+		    joinSQL.append(" where ");
+		}
 		count = 0;
 		for(Pair<TableColumn, TableColumn> p :joinColumns) {
 			if(count != 0) {
@@ -337,6 +339,7 @@ public class DbConnector {
 //			s.close();
 			return rs;
 		} catch (SQLException e) {
+			System.err.println("Error in executing: " + sql);
 			throw new Error(e);
 		}
 	}

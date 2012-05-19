@@ -44,7 +44,7 @@ public class SQLQueryCompletor {
 		return quries;
 	}
 	
-	private List<SQLQuery> constructQueries(SQLSkeleton skeleton, Map<Integer, List<AggregateExpr>> aggrExprs, List<TableColumn> groupbyColumns) {
+	List<SQLQuery> constructQueries(SQLSkeleton skeleton, Map<Integer, List<AggregateExpr>> aggrExprs, List<TableColumn> groupbyColumns) {
 		if(aggrExprs.isEmpty()) {
 			Utils.checkTrue(groupbyColumns.isEmpty()); //no aggregation, no group by
 			return Collections.singletonList(new SQLQuery(skeleton));

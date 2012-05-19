@@ -1,7 +1,9 @@
 package edu.washington.cs.sqlsynth.entity;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import edu.washington.cs.sqlsynth.util.Globals;
 import edu.washington.cs.sqlsynth.util.TableInstanceReader;
@@ -71,6 +73,13 @@ public class TableInstance {
 					"The given column's row num: " + column.getRowNumber()
 					+ " != rowNum: " + rowNum);
 		}
+		//check no columns with the same name has been added
+		Set<String> existingColumns = new HashSet<String>();
+		for(TableColumn c : this.columns) {
+			existingColumns.add(c.getColumnName());
+		}
+		Utils.checkTrue(!existingColumns.contains(column.getColumnName()),
+				"You can not have two columns with the same name: " + column.getColumnName());
 		this.columns.add(column);
 	}
 	
@@ -94,6 +103,9 @@ public class TableInstance {
 				keys.add(c);
 			}
 		}
+		//FIXME
+		Utils.checkTrue(keys.size() < 2, "At most 1 key is allowed, but table: " + this.tableName
+				+ " has: " + keys.size() + " keys");
 		return keys;
 	}
 	
