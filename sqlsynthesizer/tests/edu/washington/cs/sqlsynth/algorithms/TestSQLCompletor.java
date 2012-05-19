@@ -99,7 +99,15 @@ public class TestSQLCompletor extends TestCase {
 		completor.addInputTable(input);
 		completor.setOutputTable(output);
 		
-		List<SQLQuery> queries = completor.inferSQLQueries();
+		AggregateExprInfer aggInfer = new AggregateExprInfer(completor);
+		Map<Integer, List<AggregateExpr>> aggrExprs = aggInfer.inferAggregationExprs();
+		List<TableColumn> groupbyColumns = aggInfer.inferGroupbyColumns();
+		
+		//create SQL statements
+		
+		List<SQLQuery> queries = new LinkedList<SQLQuery>();
+		queries.addAll(completor.constructQueries(skeleton, aggrExprs, groupbyColumns));
+		
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}

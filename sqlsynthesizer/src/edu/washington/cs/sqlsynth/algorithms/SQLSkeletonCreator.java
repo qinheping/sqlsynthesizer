@@ -44,12 +44,14 @@ public class SQLSkeletonCreator {
 		
 		//all possible joining conditions
 		Pair<TableColumn, TableColumn> p1 = this.getKeyPairs(tables);
-		Pair<TableColumn, TableColumn> p2 = this.getNameMatchedPairs(tables);
+		List<Pair<TableColumn, TableColumn>> p2list = this.getNameMatchedPairs(tables);
 		if(p1 != null) {
 			skeleton.addJoinColumns(p1);
 		}
-		if(p2 != null) {
-			skeleton.addJoinColumns(p2);
+		if(p2list != null && !p2list.isEmpty()) {
+			for(Pair<TableColumn, TableColumn> p2 : p2list) {
+			    skeleton.addJoinColumns(p2);
+			}
 		}
 		
 		//all projection columns
@@ -77,7 +79,14 @@ public class SQLSkeletonCreator {
 	}
 	
 	//FIXME
-	private Pair<TableColumn, TableColumn> getNameMatchedPairs(List<TableInstance> tables) {
+	private List<Pair<TableColumn, TableColumn>> getNameMatchedPairs(List<TableInstance> tables) {
+		if(tables.size() == 1) {
+			return null;
+		}
+		Utils.checkTrue(tables.size() == 2);
+		
+		List<Pair<TableColumn, TableColumn>> pairs = new LinkedList<Pair<TableColumn, TableColumn>>();
+		
 		return null;
 	}
 }
