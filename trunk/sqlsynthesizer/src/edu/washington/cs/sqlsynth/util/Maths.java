@@ -33,4 +33,45 @@ public class Maths {
 		return ret;
 	}
 	
+	public static<T> List<List<T>> allCombination(List<T>...ts) {
+		Utils.checkTrue(ts.length > 0);
+		for(Collection<T> t : ts) {
+			Utils.checkTrue(!t.isEmpty(), "the given collection cannot be empty");
+		}
+		//Collection<List<T>> ret = new LinkedList<List<T>>();
+		
+		List<T> firstList = ts[0];
+		List<List<T>> init = new LinkedList<List<T>>();
+		for(T t : firstList) {
+			List<T> l = new LinkedList<T>();
+			l.add(t);
+			init.add(l);
+		}
+		//do pair wise
+		List<List<T>> result = init;
+		for(int i = 1; i < ts.length; i++) {
+			result = pairWise(ts[i], result);
+		}
+		
+		
+		return result;
+	}
+	
+	public static<T> List<List<T>> pairWise(List<T> l1, List<List<T>> l2) {
+		List<List<T>> ret = new LinkedList<List<T>>();
+		
+		for(T t : l1) {
+			for(List<T> lt : l2) {
+				List<T> newList = new LinkedList<T>();
+				newList.add(t);
+				newList.addAll(lt);
+				ret.add(newList);
+			}
+		}
+		
+		Utils.checkTrue(ret.size() == l1.size() * l2.size());
+		
+		return ret;
+	}
+	
 }

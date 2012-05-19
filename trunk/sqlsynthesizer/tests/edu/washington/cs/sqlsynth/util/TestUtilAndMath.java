@@ -29,6 +29,23 @@ public class TestUtilAndMath extends TestCase {
 		}
 		assertEquals(7, ret.size());
 	}
+	
+	public void testCombination() {
+		List<String> l1 = new LinkedList<String>();
+		l1.add("a");
+		l1.add("b");
+		l1.add("c");
+		List<String> l2 = new LinkedList<String>();
+		l2.add("1");
+		l2.add("2");
+		l2.add("3");
+		List<String> l3 = new LinkedList<String>();
+		l3.add("x");
+		l3.add("y");
+		List<List<String>> all = Maths.allCombination(l1, l2, l3);
+		assertEquals(all.size(), 18);
+		System.out.println(all);
+	}
 
 	public void allCombi(int N) {
 		int allMasks = (1 << N);
