@@ -6,6 +6,7 @@ import edu.washington.cs.sqlsynth.algorithms.TestSQLSkeletonCreator;
 import edu.washington.cs.sqlsynth.db.TestDatabaseConnection;
 import edu.washington.cs.sqlsynth.entity.TestSQLSkeleton;
 import edu.washington.cs.sqlsynth.util.TestTableInstanceReader;
+import edu.washington.cs.sqlsynth.util.TestUtilAndMath;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -24,6 +25,7 @@ public class AllTests extends TestCase {
 		suite.addTest(TestDatabaseConnection.suite());
 		suite.addTest(TestSQLSkeleton.suite());
 		suite.addTest(TestTableInstanceReader.suite());
+		suite.addTest(TestUtilAndMath.suite());
 		
 		return suite;
 	}
