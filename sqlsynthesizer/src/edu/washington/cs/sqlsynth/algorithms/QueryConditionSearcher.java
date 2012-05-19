@@ -108,7 +108,7 @@ public class QueryConditionSearcher {
 		
 		boolean ret = true;
 		
-		for (int i = 0; i<tuple1.size(); ++i)
+		for (int i = 0; i<tuple1.size()-1; ++i)
 		{
 			if (matchList.get(i)!=-1)
 			{
@@ -161,11 +161,11 @@ public class QueryConditionSearcher {
 			LinkedList<Integer> matchList = new LinkedList<Integer>();
 			LinkedList<TableColumn.ColumnType> matchType = new LinkedList<TableColumn.ColumnType>();
 			
-			for (int j = 0; j<table.getColumnNum(); ++j)
+			for (int j = 0; j<table.getColumnNum()-1; ++j)
 			{
 				int idx = -1;
 				TableColumn.ColumnType type = TableColumn.ColumnType.Integer;
-				for (int k = 0; k<output.getColumnNum()-1; ++k)
+				for (int k = 0; k<output.getColumnNum(); ++k)
 				{
 					if (table.getColumn(j).getColumnName().equals((output.getColumn(k).getColumnName())) )
 					{
@@ -185,7 +185,7 @@ public class QueryConditionSearcher {
 				List<Object> tmp_candidate = table.getRowValues(j);
 				for (int k = 0; k<output.getRowNum(); ++k)
 				{
-					List<Object> tmp_output = output.getRowValues(j);
+					List<Object> tmp_output = output.getRowValues(k);
 					if (this.isPositive(tmp_candidate, tmp_output, matchList, matchType))
 					{
 						usedIdx.add(j);
@@ -195,7 +195,12 @@ public class QueryConditionSearcher {
 			}
 
 			negWeight = (usedIdx.size()+0.5)/(table.getRowNum()+1);
+			
 			posWeight = 1-negWeight;
+			
+			posWeight = posWeight/usedIdx.size();
+			
+			negWeight = negWeight/(table.getRowNum() - usedIdx.size());
 			
 			for (int j = 0; j<table.getRowNum(); ++j)
 			{
