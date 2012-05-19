@@ -2,6 +2,7 @@ package edu.washington.cs.sqlsynth.algorithms;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import edu.washington.cs.sqlsynth.entity.SQLQuery;
 import edu.washington.cs.sqlsynth.entity.SQLSkeleton;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
+import edu.washington.cs.sqlsynth.util.Maths;
 import edu.washington.cs.sqlsynth.util.Utils;
 
 
@@ -51,16 +53,36 @@ public class SQLQueryCompletor {
 		}
 		List<SQLQuery> queries = new LinkedList<SQLQuery>();
 		//construct
-		Utils.checkTrue(aggrExprs.size() == 1); //FIXME
-		//replicate the aggr exprs
-		int key = aggrExprs.keySet().iterator().next();
-		for(AggregateExpr ex : aggrExprs.get(key)) {
+		
+//		Utils.checkTrue(aggrExprs.size() == 1); //FIXME
+		List<Integer> keyList = new LinkedList<Integer>();
+		List<List<AggregateExpr>> exprList = new LinkedList<List<AggregateExpr>>();
+		for(Integer key : aggrExprs.keySet()) {
+			keyList.add(key);
+			exprList.add(aggrExprs.get(key));
+		}
+		List<List<AggregateExpr>> allCombinations = Maths.allCombination(exprList);
+		for(List<AggregateExpr> list : allCombinations) {
+			Utils.checkTrue(list.size() == keyList.size());
+			Map<Integer, AggregateExpr> map = new LinkedHashMap<Integer, AggregateExpr>();
+			for(int i = 0; i < keyList.size(); i++) {
+				map.put(keyList.get(i), list.get(i));
+			}
 			SQLQuery q = new SQLQuery(skeleton);
-			Map<Integer, AggregateExpr> map = Collections.singletonMap(key, ex);
 			q.setAggregateExprs(map);
 			q.setGroupbyColumns(groupbyColumns);
 			queries.add(q);
 		}
+		
+		//replicate the aggr exprs
+//		int key = aggrExprs.keySet().iterator().next();
+//		for(AggregateExpr ex : aggrExprs.get(key)) {
+//			SQLQuery q = new SQLQuery(skeleton);
+//			Map<Integer, AggregateExpr> map = Collections.singletonMap(key, ex);
+//			q.setAggregateExprs(map);
+//			q.setGroupbyColumns(groupbyColumns);
+//			queries.add(q);
+//		}
 		return queries;
 	}
 	
