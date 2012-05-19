@@ -52,7 +52,8 @@ public class TableInstance {
 	}
 	
 	public List<Object> getRowValues(int i) {
-		Utils.checkTrue(i >= 0 && i < this.getRowNum());
+		Utils.checkTrue(i >= 0 && i < this.getRowNum(), "The table only has: "
+				+ this.getRowNum() + " rows, but you want to fetch row: " + i);
 		List<Object> values = new LinkedList<Object>();
 		for(TableColumn c : this.columns) {
 			values.add(c.getValue(i));

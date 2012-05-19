@@ -34,6 +34,13 @@ public class TestSQLCompletor extends TestCase {
 		SQLSkeletonCreator creator = new SQLSkeletonCreator(inputs, output);
 		SQLSkeleton skeleton = creator.inferSQLSkeleton();
 		
+		System.out.println("input 1:");
+		System.out.println(input1);
+		System.out.println("input 2:");
+		System.out.println(input2);
+		
+		System.out.println("number of join columns: " + skeleton.getJoinPairNum());
+		
 		SQLQueryCompletor completor = new SQLQueryCompletor(skeleton);
 		completor.addInputTable(input1);
 		completor.addInputTable(input2);
@@ -102,6 +109,12 @@ public class TestSQLCompletor extends TestCase {
 		System.out.println("The final output....");
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
+		}
+	}
+	
+	public void testDull() {
+		for(int i = 0; i<5; ++i) {
+			System.out.println(i);
 		}
 	}
 	

@@ -32,13 +32,15 @@ public class SQLSkeletonCreator {
 		List<TableInstance> tables = new LinkedList<TableInstance>();
 		List<TableColumn> outputColumns = outputTable.getColumns();
 		//FIXME no consider repetitive columns
-		for(TableColumn column : outputColumns) {
-			TableInstance t = TableUtils.findFirstTableWithMatchedColumn(column.getColumnName(), this.inputTables);
-			if(t != null && !tables.contains(t)) {
-				tables.add(t);
-			}
-		}
+//		for(TableColumn column : outputColumns) {
+//			TableInstance t = TableUtils.findFirstTableWithMatchedColumn(column.getColumnName(), this.inputTables);
+//			if(t != null && !tables.contains(t)) {
+//				tables.add(t);
+//			}
+//		}
+		tables.addAll(this.inputTables);
 		skeleton.addTables(tables);
+		Utils.checkTrue(skeleton.getTables().size() >= this.inputTables.size());
 		
 		//all possible joining conditions
 		Pair<TableColumn, TableColumn> p1 = this.getKeyPairs(tables);
