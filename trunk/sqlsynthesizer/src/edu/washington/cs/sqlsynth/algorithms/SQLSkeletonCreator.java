@@ -75,7 +75,11 @@ public class SQLSkeletonCreator {
 		Utils.checkTrue(tables.size() == 2);
 		TableColumn key1 = tables.get(0).getKeyColumns().get(0);
 		TableColumn key2 = tables.get(1).getKeyColumns().get(0);
-		return new Pair<TableColumn, TableColumn>(key1, key2);
+		if(TableUtils.sameType(key1, key2)) {
+		    return new Pair<TableColumn, TableColumn>(key1, key2);
+		} else {
+			return null;
+		}
 	}
 	
 	//FIXME
@@ -86,7 +90,26 @@ public class SQLSkeletonCreator {
 		Utils.checkTrue(tables.size() == 2);
 		
 		List<Pair<TableColumn, TableColumn>> pairs = new LinkedList<Pair<TableColumn, TableColumn>>();
+		TableInstance t1 = tables.get(0);
+		TableInstance t2 = tables.get(1);
 		
-		return null;
+		for(TableColumn c1 : t1.getColumns()) {
+			for(TableColumn c2 : t2.getColumns()) {
+				if(c1.isKey() && c2.isKey()) {
+					continue;
+				}
+				if(TableUtils.sameType(c1, c2) && this.columnMatched(c1, c2)) {
+					Pair<TableColumn, TableColumn> p = new Pair<TableColumn, TableColumn>(c1, c2);
+					pairs.add(p);
+				}
+			}
+		}
+		
+		return pairs;
+	}
+	
+	private boolean columnMatched(TableColumn c1, TableColumn c2) {
+		Utils.checkTrue(!c1.getFullName().equals(c2.getFullName()));
+		return c1.getColumnName().equals(c2.getColumnName());
 	}
 }
