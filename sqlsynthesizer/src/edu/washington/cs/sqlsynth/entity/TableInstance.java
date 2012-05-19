@@ -78,8 +78,8 @@ public class TableInstance {
 		for(TableColumn c : this.columns) {
 			existingColumns.add(c.getColumnName());
 		}
-		Utils.checkTrue(!existingColumns.contains(column.getColumnName()),
-				"You can not have two columns with the same name: " + column.getColumnName());
+//		Utils.checkTrue(!existingColumns.contains(column.getColumnName()),
+//				"You can not have two columns with the same name: " + column.getColumnName());
 		this.columns.add(column);
 	}
 	

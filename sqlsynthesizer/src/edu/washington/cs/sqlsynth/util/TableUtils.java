@@ -33,11 +33,22 @@ public class TableUtils {
 		return null;
 	}
 	
-	//XXFIXME only consider one possibility
+	public static boolean sameType(TableColumn c1, TableColumn c2) {
+		return c1.getType().equals(c2.getType());
+	}
+	
+	//enumerate all possible joining conditions
 	public static List<TableInstance> joinTables(Collection<TableInstance> tables, Collection<Pair<TableColumn, TableColumn>> joinColumns) {
-		//XXX FIXME need to enumerate all possible joining conditions
 		List<TableInstance> list = new LinkedList<TableInstance>();
-		list.add(DbConnector.instance().joinTable(tables, joinColumns));
+		if(joinColumns.isEmpty()) {
+		    list.add(DbConnector.instance().joinTable(tables, joinColumns));
+		} else {
+			Collection<Collection<Pair<TableColumn, TableColumn>>> allSubs = Maths.allSubset(joinColumns);
+			for(Collection<Pair<TableColumn, TableColumn>> js : allSubs) {
+				list.add(DbConnector.instance().joinTable(tables, js));
+			}
+		}
+		Log.logln("Number of tables after join: " + list.size());
 		return list;
 	}
 }
