@@ -87,8 +87,9 @@ public class Maths {
 		for(T t : l1) {
 			for(List<T> lt : l2) {
 				List<T> newList = new LinkedList<T>();
-				newList.add(t);
+//				newList.add(t);
 				newList.addAll(lt);
+				newList.add(t);
 				ret.add(newList);
 			}
 		}
