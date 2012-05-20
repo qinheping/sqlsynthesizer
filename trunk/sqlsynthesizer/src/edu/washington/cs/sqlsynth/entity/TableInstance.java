@@ -96,6 +96,16 @@ public class TableInstance {
 		return null;
 	}
 	
+	public TableColumn getKeyColumn() {
+		List<TableColumn> cs = this.getKeyColumns();
+		if(cs.isEmpty()) {
+			return null;
+		} else {
+			Utils.checkTrue(cs.size() == 1);
+			return cs.get(0);
+		}
+	}
+	
 	public List<TableColumn> getKeyColumns() {
 		List<TableColumn> keys = new LinkedList<TableColumn>();
 		for(TableColumn c : this.columns) {

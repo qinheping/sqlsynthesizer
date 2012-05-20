@@ -43,10 +43,12 @@ public class SQLSkeletonCreator {
 		Utils.checkTrue(skeleton.getTables().size() >= this.inputTables.size());
 		
 		//all possible joining conditions
-		Pair<TableColumn, TableColumn> p1 = this.getKeyPairs(tables);
+		List<Pair<TableColumn, TableColumn>> p1list = this.getKeyPairs(tables);
 		List<Pair<TableColumn, TableColumn>> p2list = this.getNameMatchedPairs(tables);
-		if(p1 != null) {
-			skeleton.addJoinColumns(p1);
+		if(p1list != null && !p1list.isEmpty()) {
+			for(Pair<TableColumn, TableColumn> p1 : p1list) {
+			    skeleton.addJoinColumns(p1);
+			}
 		}
 		if(p2list != null && !p2list.isEmpty()) {
 			for(Pair<TableColumn, TableColumn> p2 : p2list) {
@@ -67,47 +69,85 @@ public class SQLSkeletonCreator {
 		return skeleton;
 	}
 	
-	//FIXME
-	private Pair<TableColumn, TableColumn> getKeyPairs(List<TableInstance> tables) {
+	//FIXME, already extended to multi tables
+	private List<Pair<TableColumn, TableColumn>> getKeyPairs(List<TableInstance> tables) {
+		List<Pair<TableColumn, TableColumn>> pairList = new LinkedList<Pair<TableColumn, TableColumn>>();
 		if(tables.size() == 1) {
-			return null;
-		}
-		Utils.checkTrue(tables.size() == 2);
-		if(tables.get(0).getKeyColumns().isEmpty() || tables.get(1).getKeyColumns().isEmpty()) {
-			return null;
+			return pairList;
 		}
 		
-		TableColumn key1 = tables.get(0).getKeyColumns().get(0);
-		TableColumn key2 = tables.get(1).getKeyColumns().get(0);
-		if(TableUtils.sameType(key1, key2)) {
-		    return new Pair<TableColumn, TableColumn>(key1, key2);
-		} else {
-			return null;
+		List<TableColumn> allKeys = new LinkedList<TableColumn>();
+		for(TableInstance t : tables) {
+			allKeys.addAll(t.getKeyColumns());
 		}
+		
+		for(int i = 0; i < allKeys.size(); i++) {
+			for(int j = i + 1; j < allKeys.size(); j++) {
+				TableColumn key1 = allKeys.get(i);
+				TableColumn key2 = allKeys.get(j);
+				if(TableUtils.sameType(key1, key2)) {
+					Pair<TableColumn, TableColumn> p = new Pair<TableColumn, TableColumn>(key1, key2);
+					pairList.add(p);
+				}
+			}
+		}
+		
+//		
+//		Utils.checkTrue(tables.size() == 2);
+//		if(tables.get(0).getKeyColumns().isEmpty() || tables.get(1).getKeyColumns().isEmpty()) {
+//			return pairList;
+//		}
+//		
+//		TableColumn key1 = tables.get(0).getKeyColumns().get(0);
+//		TableColumn key2 = tables.get(1).getKeyColumns().get(0);
+//		if(TableUtils.sameType(key1, key2)) {
+//		    Pair<TableColumn, TableColumn> p = new Pair<TableColumn, TableColumn>(key1, key2);
+//		    pairList.add(p);
+//		}
+		return pairList;
 	}
 	
-	//FIXME
+	//FIXME, already extends to multiple tables
 	private List<Pair<TableColumn, TableColumn>> getNameMatchedPairs(List<TableInstance> tables) {
 		if(tables.size() == 1) {
 			return null;
 		}
-		Utils.checkTrue(tables.size() == 2);
 		
 		List<Pair<TableColumn, TableColumn>> pairs = new LinkedList<Pair<TableColumn, TableColumn>>();
-		TableInstance t1 = tables.get(0);
-		TableInstance t2 = tables.get(1);
-		
-		for(TableColumn c1 : t1.getColumns()) {
-			for(TableColumn c2 : t2.getColumns()) {
+		List<TableColumn> allColumns = new LinkedList<TableColumn>();
+		for(TableInstance t : tables) {
+			allColumns.addAll(t.getColumns());
+		}
+		for(int i = 0; i < allColumns.size(); i++) {
+			for(int j = i; j < allColumns.size(); j++) {
+				TableColumn c1 = allColumns.get(i);
+				TableColumn c2 = allColumns.get(j);
 				if(c1.isKey() && c2.isKey()) {
 					continue;
 				}
-				if(TableUtils.sameType(c1, c2) && this.columnMatched(c1, c2)) {
+				if(TableUtils.sameType(c1, c2)
+						&& !c1.getTableName().equals(c2.getTableName())
+						&& this.columnMatched(c1, c2)) {
 					Pair<TableColumn, TableColumn> p = new Pair<TableColumn, TableColumn>(c1, c2);
 					pairs.add(p);
 				}
 			}
 		}
+		
+//		Utils.checkTrue(tables.size() == 2);
+//		TableInstance t1 = tables.get(0);
+//		TableInstance t2 = tables.get(1);
+//		for(TableColumn c1 : t1.getColumns()) {
+//			for(TableColumn c2 : t2.getColumns()) {
+//				if(c1.isKey() && c2.isKey()) {
+//					continue;
+//				}
+//				if(TableUtils.sameType(c1, c2) && this.columnMatched(c1, c2)) {
+//					Pair<TableColumn, TableColumn> p = new Pair<TableColumn, TableColumn>(c1, c2);
+//					pairs.add(p);
+//				}
+//			}
+//		}
 		
 		return pairs;
 	}

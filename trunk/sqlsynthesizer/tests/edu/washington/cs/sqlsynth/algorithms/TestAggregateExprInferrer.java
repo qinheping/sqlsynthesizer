@@ -162,4 +162,51 @@ public class TestAggregateExprInferrer extends TestCase {
 			System.out.println(sql.toSQLString());
 		}
 	}
+	
+	public void test5() {
+		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/proposalexample/table1");
+		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/proposalexample/table2");
+		TableInstance input3 = TableInstanceReader.readTableFromFile("./dat/proposalexample/table3");
+		TableInstance output = TableInstanceReader.readTableFromFile("./dat/proposalexample/output_nocond");
+		
+		Collection<TableInstance> inputs = new LinkedList<TableInstance>();
+		inputs.add(input1);
+		inputs.add(input2);
+		inputs.add(input3);
+		SQLSkeletonCreator creator = new SQLSkeletonCreator(inputs, output);
+		SQLSkeleton skeleton = creator.inferSQLSkeleton();
+		
+		SQLQueryCompletor completor = new SQLQueryCompletor(skeleton);
+		completor.addInputTable(input1);
+		completor.addInputTable(input2);
+		completor.setOutputTable(output);
+		
+		//create the inferrer
+		AggregateExprInfer aggInfer = new AggregateExprInfer(completor);
+		Map<Integer, List<AggregateExpr>> aggrExprs = aggInfer.inferAggregationExprs();
+		List<TableColumn> groupbyColumns = aggInfer.inferGroupbyColumns();
+		
+		System.out.println("aggregate expressions:");
+		System.out.println(aggrExprs.size());
+		System.out.println(aggrExprs);
+		System.out.println("group by columns:");
+		System.out.println(groupbyColumns);
+		System.out.println("all join conditions:");
+		System.out.println(skeleton.getAllJoinConditions());
+		System.out.println("projection columns:");
+		System.out.println(skeleton.getProjectColumns());
+		
+//		List<SQLQuery> queries = completor.constructQueries(skeleton, aggrExprs, groupbyColumns);
+//		
+//		System.out.println("Num of queries: " + queries.size());
+//		for(SQLQuery sql : queries) {
+//			System.out.println(sql.toSQLString());
+//		}
+//		
+//		queries = completor.validateQueriesOnDb(queries);
+//		System.out.println("After validation: ");
+//		for(SQLQuery sql : queries) {
+//			System.out.println(sql.toSQLString());
+//		}
+	}
 }
