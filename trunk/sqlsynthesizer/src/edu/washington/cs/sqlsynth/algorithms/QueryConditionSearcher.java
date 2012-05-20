@@ -221,13 +221,13 @@ public class QueryConditionSearcher {
 				{
 //					inst.setClassValue("1");
 					inst.setValue(allData.get(i).attribute(table.getColumnNum()), "1");
-					inst.setWeight(posWeight);
+//					inst.setWeight(posWeight);
 				}
 				else
 				{
 //					inst.setClassValue("0");
 					inst.setValue(allData.get(i).attribute(table.getColumnNum()), "0");
-					inst.setWeight(negWeight);
+//					inst.setWeight(negWeight);
 				}
 				
 				
@@ -255,7 +255,7 @@ public class QueryConditionSearcher {
 			
 			System.out.println("----------------------------------Building tree is done----------------------------------");
 			try {
-				System.out.println(tree.prefix());
+				System.out.println(tree.toSource("1"));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
