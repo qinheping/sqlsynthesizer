@@ -50,9 +50,13 @@ public class AggregateExpr {
 	public List<AggregateExpr> enumerateAllExprs() {
 		List<AggregateExpr> completedExprs = new LinkedList<AggregateExpr>();
 		completedExprs.add(new AggregateExpr(column, AggregateType.COUNT));
-		if(this.column.isIntegerType() || (this.column.isStringType() && this.moreStringOp)) {
+		if(this.column.isIntegerType()) {
 		    completedExprs.add(new AggregateExpr(column, AggregateType.SUM));
 		    completedExprs.add(new AggregateExpr(column, AggregateType.AVG));
+		    completedExprs.add(new AggregateExpr(column, AggregateType.MAX));
+		    completedExprs.add(new AggregateExpr(column, AggregateType.MIN));
+		} else if (this.column.isStringType() && this.moreStringOp) { //no average
+			completedExprs.add(new AggregateExpr(column, AggregateType.SUM));
 		    completedExprs.add(new AggregateExpr(column, AggregateType.MAX));
 		    completedExprs.add(new AggregateExpr(column, AggregateType.MIN));
 		}
