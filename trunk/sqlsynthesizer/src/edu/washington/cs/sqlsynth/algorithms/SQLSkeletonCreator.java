@@ -73,6 +73,10 @@ public class SQLSkeletonCreator {
 			return null;
 		}
 		Utils.checkTrue(tables.size() == 2);
+		if(tables.get(0).getKeyColumns().isEmpty() || tables.get(1).getKeyColumns().isEmpty()) {
+			return null;
+		}
+		
 		TableColumn key1 = tables.get(0).getKeyColumns().get(0);
 		TableColumn key2 = tables.get(1).getKeyColumns().get(0);
 		if(TableUtils.sameType(key1, key2)) {
