@@ -108,7 +108,7 @@ public class QueryConditionSearcher {
 		
 		boolean ret = true;
 		
-		for (int i = 0; i<tuple1.size()-1; ++i)
+		for (int i = 0; i<tuple1.size(); ++i)
 		{
 			if (matchList.get(i)!=-1)
 			{
@@ -161,7 +161,7 @@ public class QueryConditionSearcher {
 			LinkedList<Integer> matchList = new LinkedList<Integer>();
 			LinkedList<TableColumn.ColumnType> matchType = new LinkedList<TableColumn.ColumnType>();
 			
-			for (int j = 0; j<table.getColumnNum()-1; ++j)
+			for (int j = 0; j<table.getColumnNum(); ++j)
 			{
 				int idx = -1;
 				TableColumn.ColumnType type = TableColumn.ColumnType.Integer;
