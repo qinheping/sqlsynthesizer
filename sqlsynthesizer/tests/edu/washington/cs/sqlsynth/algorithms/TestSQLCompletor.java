@@ -126,4 +126,9 @@ public class TestSQLCompletor extends TestCase {
 		}
 	}
 	
+	@Override
+	public void tearDown() {
+		DbConnector.NO_ORDER_MATCHING = false;
+	}
+	
 }
