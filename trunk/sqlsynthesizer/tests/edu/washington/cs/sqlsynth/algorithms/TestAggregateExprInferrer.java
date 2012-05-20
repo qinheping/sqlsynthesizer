@@ -5,11 +5,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import edu.washington.cs.sqlsynth.db.DbConnector;
 import edu.washington.cs.sqlsynth.entity.AggregateExpr;
 import edu.washington.cs.sqlsynth.entity.SQLQuery;
 import edu.washington.cs.sqlsynth.entity.SQLSkeleton;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
+import edu.washington.cs.sqlsynth.util.Log;
 import edu.washington.cs.sqlsynth.util.TableInstanceReader;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -164,6 +166,11 @@ public class TestAggregateExprInferrer extends TestCase {
 	}
 	
 	public void test5() {
+		AggregateExpr.moreStringOp = true;
+		DbConnector.NO_ORDER_MATCHING = true;
+		
+		Log.logConfig("./log.txt");
+		
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/proposalexample/table1");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/proposalexample/table2");
 		TableInstance input3 = TableInstanceReader.readTableFromFile("./dat/proposalexample/table3");
@@ -179,6 +186,7 @@ public class TestAggregateExprInferrer extends TestCase {
 		SQLQueryCompletor completor = new SQLQueryCompletor(skeleton);
 		completor.addInputTable(input1);
 		completor.addInputTable(input2);
+		completor.addInputTable(input3);
 		completor.setOutputTable(output);
 		
 		//create the inferrer
@@ -196,17 +204,29 @@ public class TestAggregateExprInferrer extends TestCase {
 		System.out.println("projection columns:");
 		System.out.println(skeleton.getProjectColumns());
 		
-//		List<SQLQuery> queries = completor.constructQueries(skeleton, aggrExprs, groupbyColumns);
-//		
-//		System.out.println("Num of queries: " + queries.size());
-//		for(SQLQuery sql : queries) {
-//			System.out.println(sql.toSQLString());
-//		}
-//		
-//		queries = completor.validateQueriesOnDb(queries);
-//		System.out.println("After validation: ");
-//		for(SQLQuery sql : queries) {
-//			System.out.println(sql.toSQLString());
-//		}
+		List<SQLQuery> queries = completor.constructQueries(skeleton, aggrExprs, groupbyColumns);
+		
+		System.out.println("Num of queries: " + queries.size());
+		List<SQLQuery> filtered = queries; 
+		filtered = new LinkedList<SQLQuery>();
+		for(SQLQuery sql : queries) {
+			//if(sql.toSQLString().trim().startsWith("select min(table1.T1Column1), table2.T2Column3, min(table1.T1Column4), min(table3.T3Column2)")) {
+			    System.out.println(sql.toSQLString());
+			    filtered.add(sql);
+			//}
+		}
+		
+		filtered = completor.validateQueriesOnDb(filtered);
+		System.out.println("After validation: size of filtered: " + filtered.size());
+		for(SQLQuery sql : filtered) {
+			System.out.println(sql.toSQLString());
+		}
+	}
+	
+	@Override
+	public void tearDown() {
+		AggregateExpr.moreStringOp = false;
+		DbConnector.NO_ORDER_MATCHING = false;
+		Log.removeLog();
 	}
 }
