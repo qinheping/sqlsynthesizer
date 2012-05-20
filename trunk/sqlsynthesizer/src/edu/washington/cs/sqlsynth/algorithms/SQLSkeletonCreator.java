@@ -92,18 +92,6 @@ public class SQLSkeletonCreator {
 			}
 		}
 		
-//		
-//		Utils.checkTrue(tables.size() == 2);
-//		if(tables.get(0).getKeyColumns().isEmpty() || tables.get(1).getKeyColumns().isEmpty()) {
-//			return pairList;
-//		}
-//		
-//		TableColumn key1 = tables.get(0).getKeyColumns().get(0);
-//		TableColumn key2 = tables.get(1).getKeyColumns().get(0);
-//		if(TableUtils.sameType(key1, key2)) {
-//		    Pair<TableColumn, TableColumn> p = new Pair<TableColumn, TableColumn>(key1, key2);
-//		    pairList.add(p);
-//		}
 		return pairList;
 	}
 	
@@ -133,21 +121,6 @@ public class SQLSkeletonCreator {
 				}
 			}
 		}
-		
-//		Utils.checkTrue(tables.size() == 2);
-//		TableInstance t1 = tables.get(0);
-//		TableInstance t2 = tables.get(1);
-//		for(TableColumn c1 : t1.getColumns()) {
-//			for(TableColumn c2 : t2.getColumns()) {
-//				if(c1.isKey() && c2.isKey()) {
-//					continue;
-//				}
-//				if(TableUtils.sameType(c1, c2) && this.columnMatched(c1, c2)) {
-//					Pair<TableColumn, TableColumn> p = new Pair<TableColumn, TableColumn>(c1, c2);
-//					pairs.add(p);
-//				}
-//			}
-//		}
 		
 		return pairs;
 	}
