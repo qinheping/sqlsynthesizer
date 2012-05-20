@@ -16,6 +16,8 @@ public class AggregateExpr {
 	
 	private AggregateType t = null;
 	
+	private boolean moreStringOp = false;
+	
 	public  AggregateExpr(TableColumn column) {
 		this.column = column;
 	}
@@ -37,6 +39,10 @@ public class AggregateExpr {
 		return t;
 	}
 	
+	public void setMoreStringOp(boolean moreOp) {
+		this.moreStringOp = moreOp;
+	}
+	
 	public boolean isComplete() {
 		return t != null;
 	}
@@ -44,7 +50,7 @@ public class AggregateExpr {
 	public List<AggregateExpr> enumerateAllExprs() {
 		List<AggregateExpr> completedExprs = new LinkedList<AggregateExpr>();
 		completedExprs.add(new AggregateExpr(column, AggregateType.COUNT));
-		if(this.column.isIntegerType()) {
+		if(this.column.isIntegerType() || (this.column.isStringType() && this.moreStringOp)) {
 		    completedExprs.add(new AggregateExpr(column, AggregateType.SUM));
 		    completedExprs.add(new AggregateExpr(column, AggregateType.AVG));
 		    completedExprs.add(new AggregateExpr(column, AggregateType.MAX));
