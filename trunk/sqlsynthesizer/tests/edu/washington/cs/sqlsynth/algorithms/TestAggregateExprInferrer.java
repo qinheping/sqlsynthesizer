@@ -165,7 +165,7 @@ public class TestAggregateExprInferrer extends TestCase {
 		}
 	}
 	
-	public void test5() {
+	public void removedtest5() {
 		AggregateExpr.moreStringOp = true;
 		DbConnector.NO_ORDER_MATCHING = true;
 		
