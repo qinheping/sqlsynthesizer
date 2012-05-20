@@ -14,6 +14,7 @@ import edu.washington.cs.sqlsynth.entity.SQLQuery;
 import edu.washington.cs.sqlsynth.entity.SQLSkeleton;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
+import edu.washington.cs.sqlsynth.util.Log;
 import edu.washington.cs.sqlsynth.util.Maths;
 import edu.washington.cs.sqlsynth.util.Utils;
 
@@ -60,8 +61,10 @@ public class SQLQueryCompletor {
 		for(Integer key : aggrExprs.keySet()) {
 			keyList.add(key);
 			exprList.add(aggrExprs.get(key));
+			Log.logln("key: " + key + ",  exprList: " + exprList);
 		}
 		List<List<AggregateExpr>> allCombinations = Maths.allCombination(exprList);
+		
 		for(List<AggregateExpr> list : allCombinations) {
 			Utils.checkTrue(list.size() == keyList.size());
 			Map<Integer, AggregateExpr> map = new LinkedHashMap<Integer, AggregateExpr>();
@@ -70,8 +73,10 @@ public class SQLQueryCompletor {
 			}
 			SQLQuery q = new SQLQuery(skeleton);
 			q.setAggregateExprs(map);
+			Log.logln(map.toString());
 			q.setGroupbyColumns(groupbyColumns);
 			queries.add(q);
+			Log.logln("sql: " + q.toSQLString());
 		}
 		
 		//replicate the aggr exprs

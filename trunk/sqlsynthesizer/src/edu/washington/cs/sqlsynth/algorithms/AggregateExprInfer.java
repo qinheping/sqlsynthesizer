@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.washington.cs.sqlsynth.entity.AggregateExpr;
+import edu.washington.cs.sqlsynth.entity.AggregateExpr.AggregateType;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.util.TableUtils;
@@ -44,7 +45,8 @@ public class AggregateExprInfer {
 			TableColumn c = outputColumns.get(i);
 			TableColumn column = TableUtils.findFirstMatchedColumn(c.getColumnName(), this.inputTables);
 			if(column == null) {
-				aggExprs.put(i, possAggrExprs);
+				List<AggregateExpr> filtered = this.filterUnlikelyColumns(possAggrExprs, c);
+				aggExprs.put(i, filtered);
 			}
 		}
 		return aggExprs;
@@ -68,6 +70,38 @@ public class AggregateExprInfer {
 		
 		return exprs;
 		
+	}
+	
+	private List<AggregateExpr> filterUnlikelyColumns(List<AggregateExpr> possAggrExprs,
+			TableColumn outputColumn) {
+		System.err.println("+++ consider: " + outputColumn.getFullName()
+				+ ",  type: " + outputColumn.getType());
+		List<AggregateExpr> filtered = new LinkedList<AggregateExpr>();
+		for(AggregateExpr expr : possAggrExprs) {
+			Utils.checkTrue(expr.isComplete());
+			List<Object> values = outputColumn.getValues();
+			TableColumn c = expr.getColumn(); //max(xx)
+			AggregateType t = expr.getT();
+			//remove unlikely count
+			if((t.equals(AggregateType.COUNT) || t.equals(AggregateType.AVG) || t.equals(AggregateType.SUM))
+					&& outputColumn.isStringType()) {
+				continue;
+			} 
+//			else {
+//				filtered.add(expr);
+//			}
+			if(outputColumn.isStringType()) {
+				//remove those columns that are integrate types
+				if(c.isStringType()) {
+					filtered.add(expr);
+				}
+			} else {
+				filtered.add(expr);
+			}
+//			filtered.add(expr);
+		}
+		System.err.println("----------");
+		return filtered;
 	}
 	
 	public List<TableColumn> inferGroupbyColumns() {

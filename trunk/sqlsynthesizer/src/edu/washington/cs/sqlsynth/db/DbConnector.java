@@ -179,11 +179,14 @@ public class DbConnector {
 		System.out.println("query result: ");
 		System.out.println(queryResultStr.toString());
 		
+		boolean matched = false;
 		if(NO_ORDER_MATCHING) {
-			return noOrderMatch(outputSb.toString(), queryResultStr);
+			matched = noOrderMatch(outputSb.toString(), queryResultStr);
+		} else {
+		    matched = outputSb.toString().equals(queryResultStr);
 		}
-		
-		return outputSb.toString().equals(queryResultStr);
+		System.out.println("Matched: " + matched);
+		return matched;
 	}
 	
 	private boolean noOrderMatch(String a, String b) {
