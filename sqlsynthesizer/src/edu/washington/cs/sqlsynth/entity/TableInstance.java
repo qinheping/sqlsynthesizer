@@ -119,6 +119,112 @@ public class TableInstance {
 		return keys;
 	}
 	
+	/**
+	 * A few utility methods for computing statistics
+	 * Note that the rowNum is 0-based. You can use the same column name for the 1st, 2nd
+	 * arguments
+	 * */
+	public int getCountOfSameKey(String columnName, String keyColumnName, int rowNum) {
+		checkColumnsExistence(columnName, keyColumnName);
+//		Utils.checkTrue(!columnName.equals(keyColumnName));
+		Utils.checkTrue(rowNum > -1 && rowNum < this.rowNum, "The provided row num: "
+				+ rowNum + " is illegal, it should >= 0 and < " + this.rowNum);
+//		TableColumn column = this.getColumnByName(columnName); //not used
+		TableColumn keyColumn = this.getColumnByName(keyColumnName);
+		Object referredKey = keyColumn.getValue(rowNum);
+		int count = 0;
+		for(Object o : keyColumn.getValues()) {
+			if(o.equals(referredKey)) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	public int getSumOfSameKey(String columnName, String keyColumnName, int rowNum) {
+		checkColumnsExistence(columnName, keyColumnName);
+//		Utils.checkTrue(!columnName.equals(keyColumnName));
+		Utils.checkTrue(rowNum > -1 && rowNum < this.rowNum, "The provided row num: "
+				+ rowNum + " is illegal, it should >= 0 and < " + this.rowNum);
+		TableColumn column = this.getColumnByName(columnName);
+		Utils.checkTrue(column.isIntegerType());
+		
+		TableColumn keyColumn = this.getColumnByName(keyColumnName);
+		Object referredKey = keyColumn.getValue(rowNum);
+		
+		int sum = 0;
+		for(int index = 0; index < keyColumn.getValues().size(); index++) {
+			if(keyColumn.getValues().get(index).equals(referredKey)) {
+				sum += Integer.parseInt(column.getValue(index).toString());
+			}
+		}
+		return sum;
+	}
+	
+	public int getMaxOfSameKey(String columnName, String keyColumnName, int rowNum) {
+		checkColumnsExistence(columnName, keyColumnName);
+//		Utils.checkTrue(!columnName.equals(keyColumnName));
+		Utils.checkTrue(rowNum > -1 && rowNum < this.rowNum, "The provided row num: "
+				+ rowNum + " is illegal, it should >= 0 and < " + this.rowNum);
+		TableColumn column = this.getColumnByName(columnName);
+		Utils.checkTrue(column.isIntegerType());
+		
+		TableColumn keyColumn = this.getColumnByName(keyColumnName);
+		Object referredKey = keyColumn.getValue(rowNum);
+		
+		int max = Integer.MIN_VALUE;
+		for(int index = 0; index < keyColumn.getValues().size(); index++) {
+			if(keyColumn.getValues().get(index).equals(referredKey)) {
+				int value = Integer.parseInt(column.getValue(index).toString());
+				if(value > max) {
+					max = value;
+				}
+			}
+		}
+		return max;
+	}
+	
+    public int getMinOfSameKey(String columnName, String keyColumnName, int rowNum) {
+    	checkColumnsExistence(columnName, keyColumnName);
+//		Utils.checkTrue(!columnName.equals(keyColumnName));
+		Utils.checkTrue(rowNum > -1 && rowNum < this.rowNum, "The provided row num: "
+				+ rowNum + " is illegal, it should >= 0 and < " + this.rowNum);
+		TableColumn column = this.getColumnByName(columnName);
+		Utils.checkTrue(column.isIntegerType());
+		
+		TableColumn keyColumn = this.getColumnByName(keyColumnName);
+		Object referredKey = keyColumn.getValue(rowNum);
+		
+		int min = Integer.MAX_VALUE;
+		for(int index = 0; index < keyColumn.getValues().size(); index++) {
+			if(keyColumn.getValues().get(index).equals(referredKey)) {
+//				sum += Integer.parseInt(column.getValue(index).toString());
+				int value = Integer.parseInt(column.getValue(index).toString());
+				if(value < min) {
+					min = value;
+				}
+			}
+		}
+		return min;
+	}
+    
+    public int getAvgOfSameKey(String columnName, String keyColumnName, int rowNum) {
+    	int sum = this.getSumOfSameKey(columnName, keyColumnName, rowNum);
+    	int count = this.getCountOfSameKey(columnName, keyColumnName, rowNum);
+    	return sum/count;
+	}
+    
+    private void checkColumnsExistence(String...columnNames) {
+    	Set<String> cNames = new HashSet<String>();
+    	for(TableColumn column : this.columns) {
+    		cNames.add(column.getColumnName());
+    	}
+    	for(String columnName : columnNames) {
+    		Utils.checkTrue(cNames.contains(columnName), "The column name: " + columnName
+    				+ " does not exist in table: " + this.tableName);
+    	}
+    }
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
