@@ -224,6 +224,30 @@ public class TableInstance {
     				+ " does not exist in table: " + this.tableName);
     	}
     }
+    
+    public String getTableContent() {
+    	StringBuilder sb = new StringBuilder();
+    	
+    	String[] contents = new String[rowNum];
+		for(TableColumn column : this.columns) {
+			for(int i = 0; i < rowNum; i++) {
+				contents[i] = "" + (contents[i] == null
+				    ? column.getValues().get(i)
+				    :  (contents[i] + TableInstanceReader.SEP
+				        + column.getValues().get(i)));
+			}
+		}
+		
+		for(int i = 0; i < contents.length; i++) {
+			String content = contents[i];
+			if(i != 0) {
+				sb.append(Globals.lineSep);
+			}
+			sb.append(content);
+		}
+    	
+    	return sb.toString();
+    }
 	
 	@Override
 	public String toString() {
