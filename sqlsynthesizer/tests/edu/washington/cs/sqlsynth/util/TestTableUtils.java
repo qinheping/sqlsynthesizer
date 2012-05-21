@@ -35,4 +35,11 @@ public class TestTableUtils extends TestCase {
 		}
 		assertEquals(3, tables.size());
 	}
+	
+	public void testTableSubsume() {
+		TableInstance bt = TableInstanceReader.readTableFromFile("./dat/subsume/bigt");
+		TableInstance st = TableInstanceReader.readTableFromFile("./dat/subsume/smallt");
+		assertTrue(TableUtils.subsume(st, bt));
+		assertTrue(!TableUtils.subsume(bt, st));
+	}
 }
