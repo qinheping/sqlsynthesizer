@@ -1,8 +1,10 @@
 package edu.washington.cs.sqlsynth.util;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import plume.Pair;
 
@@ -50,5 +52,30 @@ public class TableUtils {
 		}
 		Log.logln("Number of tables after join: " + list.size());
 		return list;
+	}
+	
+	//is table t1 a part table t2?
+	public static boolean subsume(TableInstance t1, TableInstance t2) {
+		String t1str = t1.getTableContent();
+		String t2str = t2.getTableContent() ;
+		return subsume(t1str, t2str);
+	}
+	
+	//t1str is the table dumpm is t1str a part t2str
+	public static boolean subsume(String t1str, String t2str) {
+		String[] t1strs = t1str.split(Globals.lineSep);
+		String[] t2strs = t2str.split(Globals.lineSep);
+		
+		Set<String> set1 = new HashSet<String>();
+		Set<String> set2 = new HashSet<String>();
+		
+		for(String s1 : t1strs) {
+			set1.add(s1);
+		}
+		for(String s2 : t2strs) {
+			set2.add(s2);
+		}
+		
+		return set2.containsAll(set1);
 	}
 }

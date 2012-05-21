@@ -1,5 +1,6 @@
 package edu.washington.cs.sqlsynth.entity;
 
+import edu.washington.cs.sqlsynth.util.Globals;
 import edu.washington.cs.sqlsynth.util.TableInstanceReader;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -71,5 +72,11 @@ public class TestTableInstance extends TestCase {
 		assertEquals(450, avg);
 		avg = t.getAvgOfSameKey("Column3", "Column1", 3);
 		assertEquals(700, avg);
+	}
+	
+	public void testGetTableContent() {
+		TableInstance t = TableInstanceReader.readTableFromFile("./dat/testtablestatistics/key_2columns");
+		String content = t.getTableContent();
+		assertEquals(7, content.split(Globals.lineSep).length);
 	}
 }
