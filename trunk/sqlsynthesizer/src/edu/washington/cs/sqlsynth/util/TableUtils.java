@@ -23,7 +23,7 @@ public class TableUtils {
 		}
 		return null;
 	}
-	
+
 	public static TableInstance findFirstTableWithMatchedColumn(String columnName,
 			Collection<TableInstance> inputTables) {
 		for(TableInstance instance : inputTables) {

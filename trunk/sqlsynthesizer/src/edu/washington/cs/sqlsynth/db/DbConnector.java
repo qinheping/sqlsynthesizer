@@ -236,13 +236,30 @@ public class DbConnector {
 		}
 	}
 	
+	public static boolean NO_DROP_TABLE = false;
+	
 	void initializeTable(TableInstance table) {
 		String tableName = table.getTableName();
-		//always drop the table first
-		if(this.isTableExist(tableName)) {
-			this.dropTable(tableName);
-			//this.deleteAllTableContent(tableName);
+		if(NO_DROP_TABLE) {
+			if(this.isTableExist(tableName)) {
+				this.deleteAllTableContent(tableName);
+			} else {
+				this.createTable(table);
+			}
+			this.insertTableData(table);
+		} else {
+		    //always drop the table first
+		    if(this.isTableExist(tableName)) {
+			    this.dropTable(tableName);
+		    }
+		    //also inserting data
+		    this.createTable(table);
+		    this.insertTableData(table);
 		}
+	}
+	
+	private void createTable(TableInstance table) {
+		String tableName = table.getTableName();
 		//then create the table again
 		StringBuilder sql = new StringBuilder();
 		sql.append("create table ");
@@ -260,7 +277,10 @@ public class DbConnector {
 		sql.append(" )");
 		this.executeSQL(con, sql.toString());
 		//}
-		
+	}
+	
+	private void insertTableData(TableInstance table) {
+		String tableName = table.getTableName();
 		//then insert the data
 		for(int i = 0; i < table.getRowNum(); i++) {
 			List<Object> values = table.getRowValuesWithQuoate(i);
