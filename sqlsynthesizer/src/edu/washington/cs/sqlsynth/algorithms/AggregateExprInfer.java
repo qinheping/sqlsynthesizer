@@ -87,18 +87,13 @@ public class AggregateExprInfer {
 					&& outputColumn.isStringType()) {
 				continue;
 			} 
-//			else {
-//				filtered.add(expr);
-//			}
 			if(outputColumn.isStringType()) {
 				//remove those columns that are integrate types
-				if(c.isStringType()) {
-					filtered.add(expr);
+				if(!c.isStringType()) {
+					continue;
 				}
-			} else {
-				filtered.add(expr);
-			}
-//			filtered.add(expr);
+			} 
+			filtered.add(expr);
 		}
 		System.err.println("----------");
 		return filtered;

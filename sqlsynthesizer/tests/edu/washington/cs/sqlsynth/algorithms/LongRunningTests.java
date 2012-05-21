@@ -17,13 +17,16 @@ import edu.washington.cs.sqlsynth.util.Log;
 import edu.washington.cs.sqlsynth.util.TableInstanceReader;
 
 public class LongRunningTests extends TestCase {
-
+	
 	//around 2 mins
 	public void test5() {
 		AggregateExpr.moreStringOp = true;
 		DbConnector.NO_ORDER_MATCHING = true;
+		DbConnector.NO_DROP_TABLE = true;
 		
 		Log.logConfig("./log.txt");
+		
+		long start = System.currentTimeMillis();
 		
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/proposalexample/table1");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/proposalexample/table2");
@@ -71,16 +74,20 @@ public class LongRunningTests extends TestCase {
 		}
 		
 		filtered = completor.validateQueriesOnDb(filtered);
+		System.out.println("Num of queries before validation: " + queries.size());
 		System.out.println("After validation: size of filtered: " + filtered.size());
 		for(SQLQuery sql : filtered) {
 			System.out.println(sql.toSQLString());
 		}
+		
+		System.out.println("Time cost: " + (System.currentTimeMillis() - start));
 	}
 	
 	@Override
 	public void tearDown() {
 		AggregateExpr.moreStringOp = false;
 		DbConnector.NO_ORDER_MATCHING = false;
+		DbConnector.NO_DROP_TABLE = false;
 		Log.removeLog();
 	}
 }
