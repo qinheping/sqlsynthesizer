@@ -92,7 +92,29 @@ public class AggregateExprInfer {
 				if(!c.isStringType()) {
 					continue;
 				}
-			} 
+			}
+			if(t.equals(AggregateType.MAX) || t.equals(AggregateType.MIN)) {
+				//every values in the output column should appear in the input table
+				List<Object> originalValues = c.getValues();
+				boolean allContains = originalValues.containsAll(values);
+				if(!allContains) {
+					continue;
+				}
+			}
+			if(t.equals(AggregateType.COUNT)) {
+				//if the output column have too many columns that the original table
+				Utils.checkTrue(outputColumn.isIntegerType());
+				boolean shouldSkip = false;
+				for(Object v : outputColumn.getValues()) {
+					if(Integer.parseInt(v.toString()) > c.getRowNumber()) {
+						shouldSkip = true;
+						break;
+					}
+				}
+				if(shouldSkip) {
+					continue;
+				}
+			}
 			filtered.add(expr);
 		}
 		System.err.println("----------");
