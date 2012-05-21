@@ -238,27 +238,28 @@ public class DbConnector {
 	
 	void initializeTable(TableInstance table) {
 		String tableName = table.getTableName();
+		//always drop the table first
 		if(this.isTableExist(tableName)) {
-			this.deleteAllTableContent(tableName);
-		} else {
-			//then create the table
-			StringBuilder sql = new StringBuilder();
-			sql.append("create table ");
-			sql.append(tableName);
-			sql.append(" (");
-			for(int i = 0; i < table.getColumnNum(); i++) {
-				if(i != 0) {
-					sql.append(" , ");
-				}
-				TableColumn c = table.getColumns().get(i);
-				sql.append(c.getColumnName());
-				sql.append(" ");
-				sql.append(c.getMySQLColumnType());
-				
-			}
-			sql.append(" )");
-			this.executeSQL(con, sql.toString());
+			this.dropTable(tableName);
+			//this.deleteAllTableContent(tableName);
 		}
+		//then create the table again
+		StringBuilder sql = new StringBuilder();
+		sql.append("create table ");
+		sql.append(tableName);
+		sql.append(" (");
+		for(int i = 0; i < table.getColumnNum(); i++) {
+			if(i != 0) {
+				sql.append(" , ");
+			}
+			TableColumn c = table.getColumns().get(i);
+			sql.append(c.getColumnName());
+			sql.append(" ");
+			sql.append(c.getMySQLColumnType());		
+		}
+		sql.append(" )");
+		this.executeSQL(con, sql.toString());
+		//}
 		
 		//then insert the data
 		for(int i = 0; i < table.getRowNum(); i++) {
@@ -330,7 +331,8 @@ public class DbConnector {
 			s.execute(sql);
 			s.close();
 		} catch (SQLException e) {
-			throw new Error(e);
+			e.printStackTrace();
+			throw new Error("Error in executing: " + sql);
 		}
 	}
 	
