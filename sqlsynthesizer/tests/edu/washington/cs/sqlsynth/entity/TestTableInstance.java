@@ -21,6 +21,8 @@ public class TestTableInstance extends TestCase {
        4,      Bob,    900
        4,      Mike,   100
        4,      Kate,   200
+       5,      Dup,    1000
+       5,      Dup,    1000
 	 * */
 	public void testGetTableStatistic() {
 		TableInstance t = TableInstanceReader.readTableFromFile("./dat/testtablestatistics/key_2columns");
@@ -44,6 +46,17 @@ public class TestTableInstance extends TestCase {
 		assertEquals(2, count);
 		count = t.getCountOfSameKey("Column3", "Column3", 0);
 		assertEquals(2, count);
+		//test the unique count
+		count = t.getUniqueCountOfSameKey("Column2", "Column1", 1);
+		assertEquals(2, count);
+		count = t.getUniqueCountOfSameKey("Column2", "Column1", 7);
+		assertEquals(1, count);
+		count = t.getUniqueCountOfSameKey("Column2", "Column2", 1); //the row is 0-based
+		assertEquals(1, count);
+		count = t.getUniqueCountOfSameKey("Column3", "Column2", 1); //the row is 0-based
+		assertEquals(2, count);
+		count = t.getUniqueCountOfSameKey("Column3", "Column2", 8); //the row is 0-based
+		assertEquals(1, count);
 		//test the sum
 		int sum = t.getSumOfSameKey("Column3", "Column1", 0);
 		assertEquals(200, sum);
