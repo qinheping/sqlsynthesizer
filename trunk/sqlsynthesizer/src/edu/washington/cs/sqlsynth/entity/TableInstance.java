@@ -1,6 +1,7 @@
 package edu.washington.cs.sqlsynth.entity;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -124,6 +125,23 @@ public class TableInstance {
 	 * Note that the rowNum is 0-based. You can use the same column name for the 1st, 2nd
 	 * arguments
 	 * */
+	public int getUniqueCountOfSameKey(String columnName, String keyColumnName, int rowNum) {
+		checkColumnsExistence(columnName, keyColumnName);
+		Utils.checkTrue(rowNum > -1 && rowNum < this.rowNum, "The provided row num: "
+				+ rowNum + " is illegal, it should >= 0 and < " + this.rowNum);
+		TableColumn column = this.getColumnByName(columnName);
+		TableColumn keyColumn = this.getColumnByName(keyColumnName);
+		Object referredKey = keyColumn.getValue(rowNum);
+		Set<Object> set = new LinkedHashSet<Object>();
+		for(int index = 0; index < keyColumn.getValues().size(); index++) {
+			if(keyColumn.getValues().get(index).equals(referredKey)) {
+				set.add(column.getValue(index));
+			}
+		}
+		Utils.checkTrue(!set.isEmpty());
+		return set.size();
+	}
+	
 	public int getCountOfSameKey(String columnName, String keyColumnName, int rowNum) {
 		checkColumnsExistence(columnName, keyColumnName);
 //		Utils.checkTrue(!columnName.equals(keyColumnName));
