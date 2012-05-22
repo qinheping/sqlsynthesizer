@@ -19,7 +19,7 @@ import weka.core.FastVector;
 import weka.core.Instance;
 
 import weka.classifiers.trees.*;
-
+import weka.classifiers.rules.*;
 
 
 public class QueryConditionSearcher {
@@ -37,7 +37,8 @@ public class QueryConditionSearcher {
 		
 		this.getConstructionInfo();
 		this.getLabelWeightInfo();
-		this.callDecisionTree();
+//		this.callDecisionTree();
+		this.callRulePART();
 		
 		System.out.println("---------------------------------------------End of QueryConditionSearcherd---------------------------------------------");
 	}
@@ -84,6 +85,28 @@ public class QueryConditionSearcher {
 					attributes.addElement(new Attribute(columns.get(j).getColumnName()));
 				}
 				
+			}
+			
+			
+			for (int j = 0; j< columns.size(); ++j)
+			{
+				if (columns.get(j).getType() == TableColumn.ColumnType.String)
+				{
+					for (int k = 0; k< columns.size(); ++k)
+					{
+						if (columns.get(k).getType() == TableColumn.ColumnType.String)
+						{
+							attributes.addElement(new Attribute(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_count"));
+						}
+						else
+						{
+							attributes.addElement(new Attribute(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_max"));
+							attributes.addElement(new Attribute(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_min"));
+							attributes.addElement(new Attribute(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_sum"));
+							attributes.addElement(new Attribute(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_avg"));
+						}
+					}
+				}
 			}
 			
 			FastVector tmpVector = new FastVector(2);
@@ -217,35 +240,127 @@ public class QueryConditionSearcher {
 						inst.setValue(allData.get(i).attribute(k), ((String)(table.getRowValues(j).get(k))));
 					}
 				}
+				
+				int attCount = table.getColumnNum();
+				
+				
+				for (int k = 0; k< table.getColumnNum(); ++k)
+				{
+					if (table.getColumn(k).getType() == TableColumn.ColumnType.String)
+					{
+						for (int l = 0; l< table.getColumnNum(); ++l)
+						{
+							if (table.getColumn(l).getType() == TableColumn.ColumnType.String)
+							{
+								List<TableInstance> inputTables = completor.getInputTables();
+								boolean flag = false;
+								for (int m = 0; m<inputTables.size(); ++m)
+								{
+									TableInstance tmpTable = inputTables.get(m);
+									if (tmpTable.hasColumn(table.getColumn(l).getColumnName()) && tmpTable.hasColumn(table.getColumn(k).getColumnName()))
+									{
+										int rowNum = -1;
+										TableColumn col = tmpTable.getColumnByName(table.getColumn(k).getColumnName());
+										
+										for (int n = 0; n<tmpTable.getRowNum(); ++n)
+										{
+											if (col.getValue(n).toString().equals(table.getColumn(k).getValue(j).toString()))
+											{
+												rowNum = n;
+												break;
+											}
+										}
+										inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getCountOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), rowNum));
+										flag = true;
+										break;
+									}
+								}
+								if (!flag)
+								{
+									inst.setValue(allData.get(i).attribute(attCount++), 0);
+								}
+
+							}
+							else
+							{
+								
+								List<TableInstance> inputTables = completor.getInputTables();
+								boolean flag = false;
+								
+								for (int m = 0; m<inputTables.size(); ++m)
+								{
+									TableInstance tmpTable = inputTables.get(m);
+									if (tmpTable.hasColumn(table.getColumn(l).getColumnName()) && tmpTable.hasColumn(table.getColumn(k).getColumnName()))
+									{
+										int rowNum = 0;
+										TableColumn col = tmpTable.getColumnByName(table.getColumn(k).getColumnName());
+										
+										for (int n = 0; n<tmpTable.getRowNum(); ++n)
+										{
+											if (col.getValue(n).toString().equals(table.getColumn(k).getValue(j).toString()))
+											{
+												rowNum = n;
+												break;
+											}
+										}
+										
+										inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getMaxOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), rowNum));
+										inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getMinOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), rowNum));
+										inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getSumOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), rowNum));
+										inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getAvgOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), rowNum));
+	
+										flag = true;
+										break;
+									}
+								}
+								if (!flag)
+								{
+									inst.setValue(allData.get(i).attribute(attCount++), 0);
+									inst.setValue(allData.get(i).attribute(attCount++), 0);
+									inst.setValue(allData.get(i).attribute(attCount++), 0);
+									inst.setValue(allData.get(i).attribute(attCount++), 0);
+								}								
+							}
+						}
+					}
+				}
+				
 				if (usedIdx.contains(j))
 				{
-//					inst.setClassValue("1");
-					inst.setValue(allData.get(i).attribute(table.getColumnNum()), "1");
+					int classIdx = allData.get(i).numAttributes() - 1;
+					inst.setValue(allData.get(i).attribute(classIdx), "1");
 //					inst.setWeight(posWeight);
 				}
 				else
 				{
-//					inst.setClassValue("0");
-					inst.setValue(allData.get(i).attribute(table.getColumnNum()), "0");
+					int classIdx = allData.get(i).numAttributes() - 1;
+					inst.setValue(allData.get(i).attribute(classIdx), "0");
 //					inst.setWeight(negWeight);
-				}
-				
-				
+				}				
 				allData.get(i).add(inst);
 			}
 			
 		}
 	}
 	
+	
+	
 	private void callDecisionTree()
 	{
-		String[] options = new String[1];
+		String[] options = new String[3];
 		options[0] = "-U";
+		options[1] = "-B";
+		options[2] = "-L";
+		
+		
 		
 		for (int i = 0; i<allData.size(); ++i)
 		{
 			J48 tree = new J48();
 			try {
+//				allData.get(i).deleteAttributeAt(0);
+//				allData.get(i).deleteAttributeAt(0);
+//				allData.get(i).deleteAttributeAt(0);
 				tree.setOptions(options);
 				tree.buildClassifier(allData.get(i));
 			} catch (Exception e) {
@@ -264,6 +379,32 @@ public class QueryConditionSearcher {
 		}
 		
 		
+	}
+	
+	private void callRulePART()
+	{
+		String[] options = new String[3];
+		options[0] = "-U";
+		options[1] = "-B";
+		options[2] = "-L";
+		
+		
+		for (int i = 0; i<allData.size(); ++i)
+		{
+			PART tree = new PART();
+			try{
+				tree.setOptions(options);
+				tree.buildClassifier(allData.get(i));
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+			System.out.println("----------------------------------Building tree is done----------------------------------");
+			
+			System.out.println("----------------------------------   More to do here   ----------------------------------");
+		}
 	}
 	
 	private void getQueryConditions(J48 tree)
