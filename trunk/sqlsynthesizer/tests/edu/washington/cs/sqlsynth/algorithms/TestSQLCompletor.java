@@ -24,9 +24,9 @@ public class TestSQLCompletor extends TestCase {
 
 	public void testDTree1()
 	{
-		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/id_class");
-		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/id_enroll");
-		TableInstance output = TableInstanceReader.readTableFromFile("./dat/output_5_1_3");
+		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_3/id_class_5_1_3");
+		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_1_3/id_enroll_5_1_3");
+		TableInstance output = TableInstanceReader.readTableFromFile("./dat/5_1_3/output_5_1_3");
 		
 		Collection<TableInstance> inputs = new LinkedList<TableInstance>();
 		inputs.add(input1);
@@ -60,9 +60,9 @@ public class TestSQLCompletor extends TestCase {
 	
 	public void testDTree2()
 	{
-		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/id_class_5_1_5");
-		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/id_faculty_5_1_5");
-		TableInstance output = TableInstanceReader.readTableFromFile("./dat/output_5_1_5");
+		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_5/id_class_5_1_5");
+		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_1_5/id_faculty_5_1_5");
+		TableInstance output = TableInstanceReader.readTableFromFile("./dat/5_1_5/output_5_1_5");
 		
 		Collection<TableInstance> inputs = new LinkedList<TableInstance>();
 		inputs.add(input1);
