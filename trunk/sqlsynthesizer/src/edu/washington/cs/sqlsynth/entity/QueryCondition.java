@@ -4,7 +4,10 @@ import edu.washington.cs.sqlsynth.util.Utils;
 
 public class QueryCondition {
 	
-	enum CONJ {AND, OR};
+	enum CONJ {
+		AND { public String toString() { return " and "; }},
+		OR { public String toString() { return " or "; }}
+		};
 	
 	private final ConditionNode root;
 	
@@ -14,7 +17,7 @@ public class QueryCondition {
 	}
 	
 	public String toSQLCode() {
-		throw new RuntimeException();
+		return root.toSQLString();
 	}
 	
 }
