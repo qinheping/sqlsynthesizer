@@ -78,7 +78,7 @@ public class QueryConditionSearcher {
 							tmpVector.addElement(table.getRowValues(k).get(j));
 						}
 					}
-					attributes.addElement(new Attribute(columns.get(j).getFullName(), tmpVector));
+					attributes.addElement(new Attribute(columns.get(j).getColumnName(), tmpVector));
 				}
 				else
 				{
@@ -403,8 +403,63 @@ public class QueryConditionSearcher {
 			
 			System.out.println("----------------------------------Building tree is done----------------------------------");
 			
+			System.out.println(tree.toString());
+			
+			String rules = tree.toString();
+			
+			parseRules(rules);
+			
 			System.out.println("----------------------------------   More to do here   ----------------------------------");
 		}
+	}
+	
+	
+	private void parseRules(String rules)
+	{
+		String[] lines = rules.split(System.getProperty("line.separator"));
+		
+		int startIdx = lines[lines.length - 1].lastIndexOf(":") + 3;
+	
+		int numRules = Integer.parseInt(lines[lines.length - 1].substring(startIdx));
+		
+		int ruleIdx = 0;
+		
+		for (int i = 2; i<lines.length-1; ++i)
+		{
+			if (lines[i].length() == 0)
+			{
+				continue;
+			}
+			
+			if ( lines[i].contains(":") )
+			{
+				int idx1 = lines[i].lastIndexOf(":")+2;
+				int idx2 = lines[i].lastIndexOf("(")-1;
+				
+				int label = Integer.parseInt(lines[i].substring(idx1, idx2));
+
+				String condition = "";
+				if (idx1-3>0)
+				{
+					condition = lines[i].substring(0, idx1-3);
+				}				
+			}
+			else
+			{
+				if( lines[i].contains("AND") )
+				{
+					int idx1 = lines[i].lastIndexOf("AND")-3;
+					String condition = lines[i].substring(0, idx1);
+				}
+			}
+			
+		}
+		System.out.println("----------------------------------   End of parse rules   ----------------------------------");
+	}
+	
+	private void parseCondition(String condition)
+	{
+		
 	}
 	
 	private void getQueryConditions(J48 tree)
