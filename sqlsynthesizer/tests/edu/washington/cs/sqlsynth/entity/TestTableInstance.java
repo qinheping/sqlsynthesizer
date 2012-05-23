@@ -90,6 +90,6 @@ public class TestTableInstance extends TestCase {
 	public void testGetTableContent() {
 		TableInstance t = TableInstanceReader.readTableFromFile("./dat/testtablestatistics/key_2columns");
 		String content = t.getTableContent();
-		assertEquals(7, content.split(Globals.lineSep).length);
+		assertEquals(9, content.split(Globals.lineSep).length);
 	}
 }
