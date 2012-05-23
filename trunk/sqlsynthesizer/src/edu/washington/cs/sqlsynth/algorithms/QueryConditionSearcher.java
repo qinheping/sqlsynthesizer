@@ -411,7 +411,7 @@ public class QueryConditionSearcher {
 			System.out.println(tree.toString());
 			
 			String rules = tree.toString();
-			
+/*			
 			System.out.println(tree.toSummaryString());
 			
 			MakeDecList root = tree.getRoot();
@@ -428,7 +428,7 @@ public class QueryConditionSearcher {
 			}
 			
 			parseRules(rules);
-			
+	*/		
 			System.out.println("----------------------------------   More to do here   ----------------------------------");
 		}
 	}
