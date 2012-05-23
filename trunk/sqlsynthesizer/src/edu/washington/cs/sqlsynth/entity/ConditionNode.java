@@ -208,7 +208,10 @@ public class ConditionNode {
 			String leftPart = this.leftColumn.getFullName();
 			String opStr = this.op.toString();
 			String rightPart = this.rightColumn == null ? this.rightConstant.toString() : this.rightColumn.getFullName();
-			return leftPart + opStr + rightPart;
+//			String leftPara = (this.leftColumn.isStringType() && this.rightColumn == null) ? "\'" : "";
+//			String rightPara = (this.leftColumn.isStringType() && this.rightColumn == null) ? "\'" : "";
+//			return leftPart + opStr + leftPara+ rightPart + rightPara;
+			return leftPart + opStr+ rightPart;
 		} else {
 			String leftPart = "(" + this.leftNode.toSQLString() + ")";
 			String opStr = this.conj.toString();
