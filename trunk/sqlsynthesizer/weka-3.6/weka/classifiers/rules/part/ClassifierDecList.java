@@ -259,6 +259,26 @@ public class ClassifierDecList
   }
   
   //added by Sai Zhang
+  public String toStringNoLabelNoBreak(){
+
+	    try {
+	      StringBuffer text;
+	      
+	      text = new StringBuffer();
+	      if (m_isLeaf){
+//		text.append(": ");
+//		text.append(m_localModel.dumpLabel(0,m_train)+"\n");
+	      }else{
+	      dumpDecListNoLabel(text);
+	      //dumpTree(0,text);
+	      }
+	      return text.toString();
+	    } catch (Exception e) {
+	      return "Can't print rule.";
+	    }
+	  }
+  
+  //added by Sai Zhang
   public boolean isLeaf() {
 	  return this.m_isLeaf;
   }
@@ -353,9 +373,9 @@ public class ClassifierDecList
   private void dumpDecList(StringBuffer text) throws Exception {
     
     text.append(m_localModel.leftSide(m_train));
-    System.out.println("leftside: " + text);
+//    System.out.println("leftside: " + text);
     text.append(m_localModel.rightSide(indeX, m_train));
-    System.out.println("rightside: " + text);
+//    System.out.println("rightside: " + text);
     if (m_sons[indeX].m_isLeaf){
       text.append(": ");
       text.append(m_localModel.dumpLabel(indeX,m_train)+"\n");
@@ -364,6 +384,23 @@ public class ClassifierDecList
       m_sons[indeX].dumpDecList(text);
     }
   }
+  
+  //added by Sai Zhang
+  private void dumpDecListNoLabel(StringBuffer text) throws Exception {
+	    
+	    text.append(m_localModel.leftSide(m_train));
+//	    System.out.println("leftside: " + text);
+	    text.append(m_localModel.rightSide(indeX, m_train));
+//	    System.out.println("rightside: " + text);
+	    if (m_sons[indeX].m_isLeaf){
+//	      text.append(": ");
+//	      text.append(m_localModel.dumpLabel(indeX,m_train)+"\n");
+	    }else{
+//	      text.append(" AND\n");
+	      text.append(" AND ");
+	      m_sons[indeX].dumpDecListNoLabel(text);
+	    }
+	  }
 
   /**
    * Dumps the partial tree (only used for debugging)
