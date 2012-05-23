@@ -56,6 +56,34 @@ public class BTree {
 		System.out.println("------------------End of buildTreeFromRules------------------");
 	}
 	
+	public void buildTreeFromRules(LinkedList<String> allRules, LinkedList<Integer> allLabels)
+	{
+		if (allRules.size() != allLabels.size())
+		{
+			System.err.println("---------------------Something Wrong in BuildTreeFromRules---------------------");
+		}
+		BNode root = new BNode("", -1);
+		this.insertBNode(this.theBTRootNode, root, true);
+		for (int i = 0; i<allRules.size()-1; ++i)
+		{
+			BNode leftNode = new BNode(allRules.get(i), allLabels.get(i));
+			BNode rightNode = null;
+			if (i == allRules.size()-2)
+			{
+				rightNode = new BNode("NOT ("+allRules.get(i)+")", allLabels.get(i+1));
+			}
+			else
+			{
+				rightNode = new BNode("NOT ("+allRules.get(i)+")", -1);
+			}
+			insertBNode(root, leftNode, true);
+			insertBNode(root, rightNode, false);
+			root = rightNode;
+		}
+		
+		System.out.println("------------------End of buildTreeFromRules------------------");
+	}
+	
 	public void getRulesFromTree()
 	{
 		System.out.print(getRulesFromTree(this.theBTRootNode, ""));
