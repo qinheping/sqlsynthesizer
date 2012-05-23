@@ -65,11 +65,11 @@ public class TestQueryCondition extends TestCase {
 		columnMap.put("Room", new TableColumn("tbl", "Room", ColumnType.String, false));
 		ConditionNode node = QueryCondition.parseNode(columnMap, cond);
 		System.out.println(node.toSQLString());
-		assertEquals("tbl.Room != R128", node.toSQLString());
+		assertEquals("tbl.Room != 'R128'", node.toSQLString());
 		
 		ConditionNode revNode = ConditionNode.reverseOp(node);
 		System.out.println(revNode.toSQLString());
-		assertEquals("tbl.Room = R128", revNode.toSQLString());
+		assertEquals("tbl.Room = 'R128'", revNode.toSQLString());
 	}
 	
 	//ID_key_ID_key_student_count <= 4.0
@@ -95,13 +95,13 @@ public class TestQueryCondition extends TestCase {
 		
 		QueryCondition queryCond = QueryCondition.parse(columnMap, cond);
 		System.out.println(queryCond.toSQLCode());
-		assertEquals("(tbl.ID_key_ID_key_student_count <= 4 and tbl.Room != R128)", queryCond.toSQLCode());
+		assertEquals("(tbl.ID_key_ID_key_student_count <= 4 and tbl.Room != 'R128')", queryCond.toSQLCode());
 		
 		//test reverse query
 		QueryCondition reverseQ = QueryCondition.reverse(queryCond);
 		System.out.println(reverseQ.toSQLCode());
 		//NOT (ID_key_ID_key_student_count <= 4.0 AND Room != R128)
-		assertEquals("(tbl.ID_key_ID_key_student_count > 4 or tbl.Room = R128)", reverseQ.toSQLCode());
+		assertEquals("(tbl.ID_key_ID_key_student_count > 4 or tbl.Room = 'R128')", reverseQ.toSQLCode());
 	}
 	
 	//Test transforming NOT statements
@@ -118,7 +118,7 @@ public class TestQueryCondition extends TestCase {
 		
 		QueryCondition queryCond = QueryCondition.parse(columnMap, cond);
 		System.out.println(queryCond.toSQLCode());
-		assertEquals("(tbl.ID_key_room_count <= 1 and tbl.room = R128)", queryCond.toSQLCode());
+		assertEquals("(tbl.ID_key_room_count <= 1 and tbl.room = 'R128')", queryCond.toSQLCode());
 	
 	}
 	
@@ -131,7 +131,7 @@ public class TestQueryCondition extends TestCase {
 		
 		QueryCondition queryCond = QueryCondition.parse(columnMap, cond);
 		System.out.println(queryCond.toSQLCode());
-		assertEquals("(tbl.ID_key_room_count <= 1 or tbl.room != R128)", queryCond.toSQLCode());
+		assertEquals("(tbl.ID_key_room_count <= 1 or tbl.room != 'R128')", queryCond.toSQLCode());
 		
 	}
 	
@@ -144,7 +144,7 @@ public class TestQueryCondition extends TestCase {
 		
 		QueryCondition queryCond = QueryCondition.parse(columnMap, cond);
 		System.out.println(queryCond.toSQLCode());
-		assertEquals("(tbl.ID_key_room_count <= 1 or tbl.room = R128)", queryCond.toSQLCode());
+		assertEquals("(tbl.ID_key_room_count <= 1 or tbl.room = 'R128')", queryCond.toSQLCode());
 		
 	}
 	
@@ -158,7 +158,7 @@ public class TestQueryCondition extends TestCase {
 		
 		QueryCondition queryCond = QueryCondition.parse(columnMap, cond);
 		System.out.println(queryCond.toSQLCode());
-		assertEquals("((tbl.ID_key_room_count <= 1 and tbl.ID_key_room_count > 2) and tbl.room != R128)", queryCond.toSQLCode());
+		assertEquals("((tbl.ID_key_room_count <= 1 and tbl.ID_key_room_count > 2) and tbl.room != 'R128')", queryCond.toSQLCode());
 	}
 	
 	public void testParseNested2() {
@@ -171,7 +171,7 @@ public class TestQueryCondition extends TestCase {
 		
 		QueryCondition queryCond = QueryCondition.parse(columnMap, cond);
 		System.out.println(queryCond.toSQLCode());
-		assertEquals("((tbl.ID_key_room_count <= 1 and tbl.ID_key_room_count > 2) and tbl.room = R128)", queryCond.toSQLCode());
+		assertEquals("((tbl.ID_key_room_count <= 1 and tbl.ID_key_room_count > 2) and tbl.room = 'R128')", queryCond.toSQLCode());
 	}
 	
 	public void testSplitAtTop() {
