@@ -1,5 +1,8 @@
 package edu.washington.cs.sqlsynth.entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.washington.cs.sqlsynth.entity.ConditionNode.OP;
 import edu.washington.cs.sqlsynth.entity.QueryCondition.CONJ;
 import edu.washington.cs.sqlsynth.entity.TableColumn.ColumnType;
@@ -53,5 +56,36 @@ public class TestQueryCondition extends TestCase {
 		System.out.println(sql);
 		
 		assertEquals("(t1.c1 = t2.c2) and ((t3.c3 = 20) or (tr.c4 = t2.c2))", sql);
+	}
+	
+	//Room != R128
+	public void testParseCondNode1() {
+		String cond = "Room != R128";
+		Map<String, TableColumn> columnMap = new HashMap<String, TableColumn>();
+		columnMap.put("Room", new TableColumn("tbl", "Room", ColumnType.String, false));
+		ConditionNode node = QueryCondition.parseNode(columnMap, cond);
+		System.out.println(node.toSQLString());
+		assertEquals("tbl.Room != R128", node.toSQLString());
+	}
+	
+	//ID_key_ID_key_student_count <= 4.0
+	public void testParseCondNode2() {
+		String cond = "ID_key_ID_key_student_count <= 4.0";
+		Map<String, TableColumn> columnMap = new HashMap<String, TableColumn>();
+		columnMap.put("ID_key_ID_key_student_count", new TableColumn("tbl", "ID_key_ID_key_student_count", ColumnType.Integer, false));
+		ConditionNode node = QueryCondition.parseNode(columnMap, cond);
+		System.out.println(node.toSQLString());
+		assertEquals("tbl.ID_key_ID_key_student_count <= 4", node.toSQLString());
+	}
+	
+	//ID_key_ID_key_student_count <= 4.0 AND Room != R128
+	public void testParseQueryCondition() {
+		String cond = "ID_key_ID_key_student_count <= 4.0 AND Room != R128";
+		Map<String, TableColumn> columnMap = new HashMap<String, TableColumn>();
+		columnMap.put("ID_key_ID_key_student_count", new TableColumn("tbl", "ID_key_ID_key_student_count", ColumnType.Integer, false));
+		columnMap.put("Room", new TableColumn("tbl", "Room", ColumnType.String, false));
+		
+		QueryCondition queryCond = QueryCondition.parse(columnMap, cond);
+		assertEquals("(tbl.ID_key_ID_key_student_count <= 4 and tbl.Room != R128)", queryCond.toSQLCode());
 	}
 }
