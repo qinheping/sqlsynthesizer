@@ -426,9 +426,9 @@ public class QueryConditionSearcher {
 				    System.out.println("No label no break: " + dl.toStringNoLabelNoBreak());
 				}
 			}
-			
-			parseRules(rules);
 	*/		
+			parseRules(rules);
+			
 			System.out.println("----------------------------------   More to do here   ----------------------------------");
 		}
 	}
@@ -444,8 +444,12 @@ public class QueryConditionSearcher {
 		
 		int ruleIdx = 0;
 		
+		
+		StringBuffer condBuffer = new StringBuffer();
+		
 		for (int i = 2; i<lines.length-1; ++i)
 		{
+			
 			if (lines[i].length() == 0)
 			{
 				continue;
@@ -462,15 +466,35 @@ public class QueryConditionSearcher {
 				if (idx1-3>0)
 				{
 					condition = lines[i].substring(0, idx1-3);
-				}				
+				}
+				
+				if (condBuffer.length() != 0)
+				{
+					condBuffer.append(" "+condition);
+				}
+				else
+				{
+					condBuffer.append(condition);
+				}
+				
+				System.out.println(condBuffer);
+				condBuffer.delete(0, condBuffer.length());
 			}
 			else
 			{
-				if( lines[i].contains("AND") )
+				if (condBuffer.length() !=0)
 				{
-					int idx1 = lines[i].lastIndexOf("AND")-3;
-					String condition = lines[i].substring(0, idx1);
+					condBuffer.append(" "+lines[i]);
 				}
+				else
+				{
+					condBuffer.append(lines[i]);
+				}
+//				if( lines[i].contains("AND") )
+//				{
+//					int idx1 = lines[i].lastIndexOf("AND")-3;
+//					String condition = lines[i].substring(0, idx1);
+//				}
 			}
 			
 		}
