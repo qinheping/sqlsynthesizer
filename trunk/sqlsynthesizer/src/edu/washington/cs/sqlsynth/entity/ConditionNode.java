@@ -30,11 +30,29 @@ import edu.washington.cs.sqlsynth.util.Utils;
 public class ConditionNode {
 	
 	enum OP{
+		/*modifiy it as the same as weka*/
 		GT { public String toString() { return " > "; }},
+		NE { public String toString() { return " != "; }},
 		EQ { public String toString() { return " = "; }},
-		LT { public String toString() { return " < "; }}
+		LE { public String toString() { return " <= "; }}
 		}; //greater than, equal, or less than
 
+	public static OP getOP(String str) {
+		Utils.checkNotNull(str);
+		String trim = str.trim();
+		if(trim.equals(OP.GT.toString().trim())) {
+			return OP.GT;
+		} else if (trim.equals(OP.NE.toString().trim())) {
+			return OP.NE;
+		} else if (trim.equals(OP.EQ.toString().trim())) {
+			return OP.EQ;
+		} else if (trim.equals(OP.LE.toString().trim())) {
+			return OP.LE;
+		} else {
+			return null;
+		}
+	}
+		
 	private final boolean isLeaf;
 	
 	//if it is a condition node
@@ -64,7 +82,7 @@ public class ConditionNode {
 			Utils.checkTrue(leftColumn.getType().equals(rightColumn.getType()));
 		}
 		//check the type
-		if(op.equals(OP.GT) || op.equals(OP.LT)) {
+		if(op.equals(OP.GT) || op.equals(OP.LE)) {
 			Utils.checkTrue(leftColumn.isIntegerType(), "Only integer can be compared using < and > .");
 			if(rightColumn != null) {
 				Utils.checkTrue(rightColumn.isIntegerType(), "Only integer can be compared using < and > .");
@@ -170,7 +188,7 @@ public class ConditionNode {
 		}
 		// check the type
 		if (op != null) {
-			if (op.equals(OP.GT) || op.equals(OP.LT)) {
+			if (op.equals(OP.GT) || op.equals(OP.LE)) {
 				Utils.checkTrue(leftColumn.isIntegerType(),
 						"Only integer can be compared using < and > .");
 				if (rightColumn != null) {
