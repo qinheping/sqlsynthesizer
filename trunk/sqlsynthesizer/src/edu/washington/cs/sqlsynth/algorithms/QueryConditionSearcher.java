@@ -490,26 +490,9 @@ public class QueryConditionSearcher {
 				{
 					condBuffer.append(lines[i]);
 				}
-//				if( lines[i].contains("AND") )
-//				{
-//					int idx1 = lines[i].lastIndexOf("AND")-3;
-//					String condition = lines[i].substring(0, idx1);
-//				}
 			}
 			
 		}
 		System.out.println("----------------------------------   End of parse rules   ----------------------------------");
 	}
-	
-	private void parseCondition(String condition)
-	{
-		
-	}
-	
-	private void getQueryConditions(J48 tree)
-	{
-		
-	}
-	
-
 }
