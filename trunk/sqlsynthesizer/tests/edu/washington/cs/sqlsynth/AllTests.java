@@ -4,6 +4,7 @@ import edu.washington.cs.sqlsynth.algorithms.TestAggregateExprInferrer;
 import edu.washington.cs.sqlsynth.algorithms.TestSQLCompletor;
 import edu.washington.cs.sqlsynth.algorithms.TestSQLSkeletonCreator;
 import edu.washington.cs.sqlsynth.db.TestDatabaseConnection;
+import edu.washington.cs.sqlsynth.entity.TestBTree;
 import edu.washington.cs.sqlsynth.entity.TestQueryCondition;
 import edu.washington.cs.sqlsynth.entity.TestSQLSkeleton;
 import edu.washington.cs.sqlsynth.entity.TestTableInstance;
@@ -32,6 +33,7 @@ public class AllTests extends TestCase {
 		suite.addTest(TestTableInstanceReader.suite());
 		suite.addTest(TestUtilAndMath.suite());
 		suite.addTest(TestTableUtils.suite());
+		suite.addTest(TestBTree.suite());
 		
 		return suite;
 	}

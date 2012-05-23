@@ -66,6 +66,10 @@ public class TestQueryCondition extends TestCase {
 		ConditionNode node = QueryCondition.parseNode(columnMap, cond);
 		System.out.println(node.toSQLString());
 		assertEquals("tbl.Room != R128", node.toSQLString());
+		
+		ConditionNode revNode = ConditionNode.reverseOp(node);
+		System.out.println(revNode.toSQLString());
+		assertEquals("tbl.Room = R128", revNode.toSQLString());
 	}
 	
 	//ID_key_ID_key_student_count <= 4.0
@@ -76,6 +80,10 @@ public class TestQueryCondition extends TestCase {
 		ConditionNode node = QueryCondition.parseNode(columnMap, cond);
 		System.out.println(node.toSQLString());
 		assertEquals("tbl.ID_key_ID_key_student_count <= 4", node.toSQLString());
+		
+		ConditionNode revNode = ConditionNode.reverseOp(node);
+		System.out.println(revNode.toSQLString());
+		assertEquals("tbl.ID_key_ID_key_student_count > 4", revNode.toSQLString());
 	}
 	
 	//ID_key_ID_key_student_count <= 4.0 AND Room != R128
@@ -86,6 +94,105 @@ public class TestQueryCondition extends TestCase {
 		columnMap.put("Room", new TableColumn("tbl", "Room", ColumnType.String, false));
 		
 		QueryCondition queryCond = QueryCondition.parse(columnMap, cond);
+		System.out.println(queryCond.toSQLCode());
 		assertEquals("(tbl.ID_key_ID_key_student_count <= 4 and tbl.Room != R128)", queryCond.toSQLCode());
+		
+		//test reverse query
+		QueryCondition reverseQ = QueryCondition.reverse(queryCond);
+		System.out.println(reverseQ.toSQLCode());
+		//NOT (ID_key_ID_key_student_count <= 4.0 AND Room != R128)
+		assertEquals("(tbl.ID_key_ID_key_student_count > 4 or tbl.Room = R128)", reverseQ.toSQLCode());
 	}
+	
+	//Test transforming NOT statements
+	//NOT (ID_key_ID_key_student_count <= 4.0 AND Room != R128) - see above
+	//(NOT (ID_key_room_count > 1.0)) AND (room = R128) - see testParseNotQuery2
+	//((NOT (C1)) AND (NOT (C2))) AND (NOT (C3))
+	//((NOT (C1)) AND (NOT (C2))) AND (C3)
+	public void testParseNotQuery() {
+		Map<String, TableColumn> columnMap = new HashMap<String, TableColumn>();
+		String cond = "(NOT (ID_key_room_count > 1.0)) AND (room = R128)";
+		
+		columnMap.put("ID_key_room_count", new TableColumn("tbl", "ID_key_room_count", ColumnType.Integer, false));
+		columnMap.put("room", new TableColumn("tbl", "room", ColumnType.String, false));
+		
+		QueryCondition queryCond = QueryCondition.parse(columnMap, cond);
+		System.out.println(queryCond.toSQLCode());
+		assertEquals("(tbl.ID_key_room_count <= 1 and tbl.room = R128)", queryCond.toSQLCode());
+	
+	}
+	
+	public void testParseNotQuery2() {
+		Map<String, TableColumn> columnMap = new HashMap<String, TableColumn>();
+		String cond = "NOT (ID_key_room_count > 1.0 AND room = R128)";
+		
+		columnMap.put("ID_key_room_count", new TableColumn("tbl", "ID_key_room_count", ColumnType.Integer, false));
+		columnMap.put("room", new TableColumn("tbl", "room", ColumnType.String, false));
+		
+		QueryCondition queryCond = QueryCondition.parse(columnMap, cond);
+		System.out.println(queryCond.toSQLCode());
+		assertEquals("(tbl.ID_key_room_count <= 1 or tbl.room != R128)", queryCond.toSQLCode());
+		
+	}
+	
+	public void testParseNotQuery3() {
+		Map<String, TableColumn> columnMap = new HashMap<String, TableColumn>();
+		String cond = "NOT (ID_key_room_count > 1.0 AND NOT (room = R128))";
+		
+		columnMap.put("ID_key_room_count", new TableColumn("tbl", "ID_key_room_count", ColumnType.Integer, false));
+		columnMap.put("room", new TableColumn("tbl", "room", ColumnType.String, false));
+		
+		QueryCondition queryCond = QueryCondition.parse(columnMap, cond);
+		System.out.println(queryCond.toSQLCode());
+		assertEquals("(tbl.ID_key_room_count <= 1 or tbl.room = R128)", queryCond.toSQLCode());
+		
+	}
+	
+	public void testParseNested() {
+		Map<String, TableColumn> columnMap = new HashMap<String, TableColumn>();
+		//((NOT (C1)) AND (NOT (C2))) AND (NOT (C3))
+		String cond = "((NOT (ID_key_room_count > 1.0)) AND (NOT (ID_key_room_count <= 2.0))) AND (NOT (room = R128))";
+		
+		columnMap.put("ID_key_room_count", new TableColumn("tbl", "ID_key_room_count", ColumnType.Integer, false));
+		columnMap.put("room", new TableColumn("tbl", "room", ColumnType.String, false));
+		
+		QueryCondition queryCond = QueryCondition.parse(columnMap, cond);
+		System.out.println(queryCond.toSQLCode());
+		assertEquals("((tbl.ID_key_room_count <= 1 and tbl.ID_key_room_count > 2) and tbl.room != R128)", queryCond.toSQLCode());
+	}
+	
+	public void testParseNested2() {
+		Map<String, TableColumn> columnMap = new HashMap<String, TableColumn>();
+		//((NOT (C1)) AND (NOT (C2))) AND (C3)
+		String cond = "((NOT (ID_key_room_count > 1.0)) AND (NOT (ID_key_room_count <= 2.0))) AND ((room = R128))";
+		
+		columnMap.put("ID_key_room_count", new TableColumn("tbl", "ID_key_room_count", ColumnType.Integer, false));
+		columnMap.put("room", new TableColumn("tbl", "room", ColumnType.String, false));
+		
+		QueryCondition queryCond = QueryCondition.parse(columnMap, cond);
+		System.out.println(queryCond.toSQLCode());
+		assertEquals("((tbl.ID_key_room_count <= 1 and tbl.ID_key_room_count > 2) and tbl.room = R128)", queryCond.toSQLCode());
+	}
+	
+	public void testSplitAtTop() {
+		String AND = "AND";
+		String cond = "((NOT (ID_key_room_count > 1.0)) AND (NOT (ID_key_room_count <= 2.0))) AND (NOT (room = R128))";
+		String[] strs = QueryCondition.splitAtTopLevel(cond, AND);
+		for(String str : strs) {
+			//((NOT (ID_key_room_count > 1.0)) AND((NOT (ID_key_room_count > 1.0))
+			//((NOT (ID_key_room_count > 1.0)) AND (NOT (ID_key_room_count <= 2.0)))
+			System.out.println(str);
+		}
+		assertEquals(2, strs.length);
+		
+		cond = "((NOT (ID_key_room_count > 1.0)) AND (NOT (ID_key_room_count <= 2.0)))";
+		cond = QueryCondition.eliminateMatchedPara(cond);
+		strs = QueryCondition.splitAtTopLevel(cond, AND);
+		for(String str : strs) {
+			//((NOT (ID_key_room_count > 1.0)) AND((NOT (ID_key_room_count > 1.0))
+			//((NOT (ID_key_room_count > 1.0)) AND (NOT (ID_key_room_count <= 2.0)))
+			System.out.println(str);
+		}
+	}
+	
 }

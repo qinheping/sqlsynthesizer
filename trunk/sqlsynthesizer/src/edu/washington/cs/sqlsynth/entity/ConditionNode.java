@@ -52,16 +52,52 @@ public class ConditionNode {
 			return null;
 		}
 	}
+	
+	public static OP getOppositeOP(String str) {
+		OP op = getOP(str);
+		return getOppositeOP(op);
+	}
+	
+    public static OP getOppositeOP(OP op) {
+		if(op.equals(OP.GT)) {
+			return OP.LE;
+		}
+		if(op.equals(OP.LE)) {
+			return OP.GT;
+		}
+		if(op.equals(OP.EQ)) {
+			return OP.NE;
+		}
+		if(op.equals(OP.NE)) {
+			return OP.EQ;
+		}
+		throw new Error("invalid op: " + op);
+	}
+    
+    public static ConditionNode reverseOp(ConditionNode node) {
+    	ConditionNode revNode = copy(node);
+    	revNode.reverseOp();
+//    	revNode.setOp(getOppositeOP(revNode.getOp()));
+    	return revNode;
+    }
+    
+    public static ConditionNode copy(ConditionNode node) {
+    	if(node.isLeaf) {
+    		return new ConditionNode(node.op, node.leftColumn, node.rightColumn, node.rightConstant);
+    	} else {
+    		return new ConditionNode(node.conj, node.leftNode, node.rightNode);
+    	}
+    }
 		
 	private final boolean isLeaf;
 	
-	//if it is a condition node
+	//if it is a condition node, i.e., a leaf node
 	private OP op = null;
 	private TableColumn leftColumn = null;
 	private TableColumn rightColumn = null;
 	private Object rightConstant = null; //constant is always on the right side
 	
-	//if it is not a condition node
+	//if it is not a condition node, i.e., a non-leaf node
 	private CONJ conj = null; //"and" or "or"
 	private ConditionNode leftNode = null;
 	private ConditionNode rightNode = null;
@@ -112,7 +148,12 @@ public class ConditionNode {
 	}
 
 	public void setOp(OP op) {
+		Utils.checkNotNull(op);
 		this.op = op;
+	}
+	
+	public void reverseOp() {
+		this.setOp(getOppositeOP(this.op));
 	}
 
 	public TableColumn getLeftColumn() {
