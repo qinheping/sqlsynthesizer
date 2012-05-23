@@ -48,12 +48,21 @@ public class Utils {
 		return str.replace('.', '/');
 	}
 	
-	public static boolean isInteger(String v) {
+	public static boolean isInteger(Object v) {
 		try {
-		   Integer.parseInt(v);
+		   Integer.parseInt(v+"");
 		   return true;
 		} catch (NumberFormatException e) {
 			return false;
+		}
+	}
+	
+	public static Integer convertToInteger(String v) {
+		try {
+			double d = Double.parseDouble(v);
+			return (int)d;
+		} catch (NumberFormatException e) {
+			throw new Error("not a numeric: " + v);
 		}
 	}
 	

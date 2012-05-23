@@ -421,16 +421,10 @@ public class QueryConditionSearcher {
 			for(Object o : allRules) {
 				ClassifierDecList dl = (ClassifierDecList)o;
 				System.out.println("see rule: ");
-				System.out.println(o + ", class: " + o.getClass());
-				System.out.println("  is leaf: " + dl.isLeaf());
+				System.out.println(dl);
 				if(!dl.isLeaf()) {
-					
+				    System.out.println("No label no break: " + dl.toStringNoLabelNoBreak());
 				}
-				for(ClassifierDecList son : dl.getSons()) {
-					System.out.println("    son: " + son + "     , son is leaf: " + son.isLeaf());
-				}
-				
-				System.out.println(Globals.lineSep);
 			}
 			
 			parseRules(rules);
