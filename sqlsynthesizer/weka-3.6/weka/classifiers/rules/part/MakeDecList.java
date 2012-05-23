@@ -297,6 +297,11 @@ public class MakeDecList
     return theRules.size();
   }
   
+  //added by Sai Zhang
+  public Vector getRules() {
+	  return theRules;
+  }
+  
   /**
    * Returns the revision string.
    * 

@@ -5,12 +5,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.HashSet;
+import java.util.Vector;
 
 import java.io.*;
 
 import edu.washington.cs.sqlsynth.entity.QueryCondition;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
+import edu.washington.cs.sqlsynth.util.Globals;
 
 // firstly, use simpely weka
 import weka.core.Instances;
@@ -20,6 +22,8 @@ import weka.core.Instance;
 
 import weka.classifiers.trees.*;
 import weka.classifiers.rules.*;
+import weka.classifiers.rules.part.ClassifierDecList;
+import weka.classifiers.rules.part.MakeDecList;
 
 
 public class QueryConditionSearcher {
@@ -407,6 +411,27 @@ public class QueryConditionSearcher {
 			System.out.println(tree.toString());
 			
 			String rules = tree.toString();
+			
+			System.out.println(tree.toSummaryString());
+			
+			MakeDecList root = tree.getRoot();
+			Vector allRules = root.getRules();
+			
+			System.out.println("See all rules");
+			for(Object o : allRules) {
+				ClassifierDecList dl = (ClassifierDecList)o;
+				System.out.println("see rule: ");
+				System.out.println(o + ", class: " + o.getClass());
+				System.out.println("  is leaf: " + dl.isLeaf());
+				if(!dl.isLeaf()) {
+					
+				}
+				for(ClassifierDecList son : dl.getSons()) {
+					System.out.println("    son: " + son + "     , son is leaf: " + son.isLeaf());
+				}
+				
+				System.out.println(Globals.lineSep);
+			}
 			
 			parseRules(rules);
 			

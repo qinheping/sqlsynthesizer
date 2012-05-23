@@ -257,6 +257,11 @@ public class ClassifierDecList
       return "Can't print rule.";
     }
   }
+  
+  //added by Sai Zhang
+  public boolean isLeaf() {
+	  return this.m_isLeaf;
+  }
 
   /**
    * Returns a newly created tree.
@@ -348,7 +353,9 @@ public class ClassifierDecList
   private void dumpDecList(StringBuffer text) throws Exception {
     
     text.append(m_localModel.leftSide(m_train));
+    System.out.println("leftside: " + text);
     text.append(m_localModel.rightSide(indeX, m_train));
+    System.out.println("rightside: " + text);
     if (m_sons[indeX].m_isLeaf){
       text.append(": ");
       text.append(m_localModel.dumpLabel(indeX,m_train)+"\n");
@@ -417,7 +424,7 @@ public class ClassifierDecList
   /**
    * Method just exists to make program easier to read.
    */
-  protected ClassifierSplitModel localModel(){
+  public /*modified by Sai Zhang*/ ClassifierSplitModel localModel(){
     
     return (ClassifierSplitModel)m_localModel;
   }
@@ -428,6 +435,11 @@ public class ClassifierDecList
   protected ClassifierDecList son(int index){
     
     return m_sons[index];
+  }
+  
+  //added by Sai Zhang
+  public ClassifierDecList[] getSons() {
+	  return m_sons;
   }
   
   /**
