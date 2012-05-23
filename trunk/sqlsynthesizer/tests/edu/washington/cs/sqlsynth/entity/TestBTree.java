@@ -1,7 +1,7 @@
 package edu.washington.cs.sqlsynth.entity;
 
 
-
+import java.util.LinkedList;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -59,4 +59,24 @@ public class TestBTree extends TestCase {
 		testTree.getRulesFromTree();
 	}
 	
+	public void testBuildTreeFromRules5()
+	{
+		LinkedList<String> allRules = new LinkedList<String>();
+		LinkedList<Integer> allLabels = new LinkedList<Integer>();
+		
+		allRules.add("C1");
+		allRules.add("C2");
+		allRules.add("C3");
+		allRules.add("");
+		
+		allLabels.add(0);
+		allLabels.add(1);
+		allLabels.add(1);
+		allLabels.add(0);
+		
+		BTree testTree = new BTree();
+		testTree.buildTreeFromRules(allRules, allLabels);
+		testTree.getRulesFromTree();
+		
+	}
 }
