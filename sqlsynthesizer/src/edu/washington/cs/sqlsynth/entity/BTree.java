@@ -84,12 +84,14 @@ public class BTree {
 		System.out.println("------------------End of buildTreeFromRules------------------");
 	}
 	
-	public void getRulesFromTree()
+	public String getRulesFromTree()
 	{
-		System.out.print(getRulesFromTree(this.theBTRootNode, ""));
+		String ret = getRulesFromTree(this.theBTRootNode, "");
+		System.out.print(ret);
+		return ret;
 	}
 	
-	public String getRulesFromTree(BNode root, String prefix)
+	private String getRulesFromTree(BNode root, String prefix)
 	{
 		if (root == null)
 		{
