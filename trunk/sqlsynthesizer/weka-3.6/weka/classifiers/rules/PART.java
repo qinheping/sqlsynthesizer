@@ -447,6 +447,11 @@ public class PART
     return "PART decision list\n------------------\n\n" + m_root.toString();
   }
   
+  //added by Saii Zhang
+  public MakeDecList getRoot() {
+	  return this.m_root;
+  }
+  
   /**
    * Returns a superconcise version of the model
    * 
