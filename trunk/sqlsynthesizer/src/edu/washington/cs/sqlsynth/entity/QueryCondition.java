@@ -1,5 +1,7 @@
 package edu.washington.cs.sqlsynth.entity;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -109,6 +111,9 @@ public class QueryCondition {
 	 * Below are the helper static methods
 	 * */
 	public static QueryCondition parse(Map<String, TableColumn> columnMap, String cond) {
+		return parse(columnMap, new HashMap<String, AggregateExpr>(), cond);
+	}
+	public static QueryCondition parse(Map<String, TableColumn> columnMap, Map<String, AggregateExpr> aggMap, String cond) {
 		cond = eliminateMatchedPara(cond);
 		boolean needReverse = false;
 		String NOT = "NOT";
@@ -121,7 +126,7 @@ public class QueryCondition {
 		cond = cond.trim();
 		System.out.println("parse query condition: " + cond);
 		cond = eliminateMatchedPara(cond);
-		QueryCondition q = parseInternal(columnMap, cond);
+		QueryCondition q = parseInternal(columnMap, aggMap, cond);
 		
 		if(needReverse) {
 			q = reverse(q);
@@ -169,7 +174,8 @@ public class QueryCondition {
 	
 	//ID_key_ID_key_student_count <= 4.0 AND Room != R128
 	//what about this one: ((NOT (C1)) AND (NOT (C2))) AND (C3)? XXXFIXME
-	private static QueryCondition parseInternal(Map<String, TableColumn> columnMap, String cond) {
+	private static QueryCondition parseInternal(Map<String, TableColumn> columnMap,
+			Map<String, AggregateExpr> aggMap, String cond) {
 		//return null;
 		String AND = "AND";
 		String[] rules = splitAtTopLevel(cond, AND);
@@ -179,13 +185,13 @@ public class QueryCondition {
 				continue;
 			}
 			if(rule.indexOf(AND) == -1) {
-				ConditionNode node = parseNode(columnMap, rule);
+				ConditionNode node = parseNode(columnMap, aggMap, rule);
 				QueryCondition q = new QueryCondition(node);
 				conditions.add(q);
 			} else {
 				cond = eliminateMatchedPara(cond);
 				//((NOT (ID_key_room_count > 1.0)) AND (NOT (ID_key_room_count <= 2.0))) AND (NOT (room = R128))
-				conditions.add(parse(columnMap, rule));
+				conditions.add(parse(columnMap, aggMap, rule));
 			}
 		}
 		Utils.checkTrue(!conditions.isEmpty());
@@ -221,7 +227,11 @@ public class QueryCondition {
 		return results.toArray(new String[0]);
 	}
 	
-	public static ConditionNode  parseNode(Map<String, TableColumn> columnMap,
+	public static ConditionNode  parseNode(Map<String, TableColumn> columnMap,String predicate) {
+		return parseNode(columnMap, new HashMap<String, AggregateExpr>(), predicate);
+	}
+	
+	public static ConditionNode  parseNode(Map<String, TableColumn> columnMap, Map<String, AggregateExpr> aggMap,
 			String predicate) {
 		//(NOT (a > b))
 		predicate = eliminateMatchedPara(predicate);
@@ -235,7 +245,7 @@ public class QueryCondition {
 			predicate = predicate.trim();
 		}
 		predicate = eliminateMatchedPara(predicate);
-		ConditionNode node = parseNodeInternal(columnMap, predicate);
+		ConditionNode node = parseNodeInternal(columnMap, aggMap, predicate);
 		if(needReverse) {
 //			System.out.println("reverse a single node: " + node.toSQLString());
 			node = ConditionNode.reverseOp(node);
@@ -245,7 +255,7 @@ public class QueryCondition {
 	}
 	
 	private static ConditionNode  parseNodeInternal(Map<String, TableColumn> columnMap,
-			String predicate) {
+			Map<String, AggregateExpr> aggMap, String predicate) {
 		System.out.println("parseNodeInternal: predicate: " + predicate);
 		Utils.checkTrue(predicate != null);
 		Utils.checkTrue(!predicate.isEmpty());
@@ -271,16 +281,23 @@ public class QueryCondition {
 		Utils.checkNotNull(op);
 		
 		TableColumn leftColumn = columnMap.get(leftPart);
-		Utils.checkTrue(leftColumn != null, "Not exist? " + leftPart); //FIXME not accurate
+		AggregateExpr leftAgg = aggMap.get(leftPart);
+		Utils.checkTrue(leftColumn != null || leftAgg != null, "Not exist? " + leftPart); //FIXME not accurate
+		Utils.checkTrue(leftColumn == null || leftAgg == null, "All exist? " + leftPart); //FIXME not accurate
+		ConditionExpr leftExpr = leftColumn != null ? new ConditionExpr(leftColumn) : new ConditionExpr(leftAgg);
+		
 		TableColumn rightColumn = columnMap.get(rightPart);
 		if(rightColumn == null) {
-			if(leftColumn.isIntegerType()) {
+			if(leftExpr.isIntegerType()) {
 				Integer t = Utils.convertToInteger(rightPart);
-				return ConditionNode.createInstance(op, leftColumn, null, t);
+//				return ConditionNode.createInstance(op, leftColumn, null, t);
+				return new ConditionNode(op, leftExpr, null, t);
 			}
-			return ConditionNode.createInstance(op, leftColumn, null, rightPart);
+//			return ConditionNode.createInstance(op, leftColumn, null, rightPart);
+			return new ConditionNode(op, leftExpr, null, rightPart);
 		} else {
-			return ConditionNode.createInstance(op, leftColumn, rightColumn, null);
+			ConditionExpr rightExpr = new ConditionExpr(rightColumn);
+			return new ConditionNode(op, leftExpr, rightExpr, null);
 		}
 	}
 	
