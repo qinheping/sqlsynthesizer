@@ -5,13 +5,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.Map;
+import java.util.HashMap;
 
 import java.io.*;
 
+import edu.washington.cs.sqlsynth.entity.BTree;
 import edu.washington.cs.sqlsynth.entity.QueryCondition;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
+import edu.washington.cs.sqlsynth.entity.TableColumn.ColumnType;
 import edu.washington.cs.sqlsynth.util.Globals;
 
 // firstly, use simpely weka
@@ -41,7 +47,6 @@ public class QueryConditionSearcher {
 		
 		this.getConstructionInfo();
 		this.getLabelWeightInfo();
-//		this.callDecisionTree();
 		this.callRulePART();
 		
 		System.out.println("---------------------------------------------End of QueryConditionSearcherd---------------------------------------------");
@@ -363,9 +368,6 @@ public class QueryConditionSearcher {
 		{
 			J48 tree = new J48();
 			try {
-//				allData.get(i).deleteAttributeAt(0);
-//				allData.get(i).deleteAttributeAt(0);
-//				allData.get(i).deleteAttributeAt(0);
 				tree.setOptions(options);
 				tree.buildClassifier(allData.get(i));
 			} catch (Exception e) {
@@ -411,31 +413,54 @@ public class QueryConditionSearcher {
 			System.out.println(tree.toString());
 			
 			String rules = tree.toString();
-/*			
-			System.out.println(tree.toSummaryString());
 			
-			MakeDecList root = tree.getRoot();
-			Vector allRules = root.getRules();
+			Map<LinkedList<String>, LinkedList<Integer>> condLabelPair = parseRules(rules);
 			
-			System.out.println("See all rules");
-			for(Object o : allRules) {
-				ClassifierDecList dl = (ClassifierDecList)o;
-				System.out.println("see rule: ");
-				System.out.println(dl);
-				if(!dl.isLeaf()) {
-				    System.out.println("No label no break: " + dl.toStringNoLabelNoBreak());
-				}
+			Set condSet = condLabelPair.keySet();
+			
+			LinkedList<String> allRules = (LinkedList<String>)condSet.iterator().next();
+			LinkedList<Integer> allLabels = condLabelPair.get(allRules);
+			
+			BTree testTree = new BTree();
+			testTree.buildTreeFromRules(allRules, allLabels);
+			String allConditions = testTree.getRulesFromTree();
+			
+			String[] lines = allConditions.split(System.getProperty("line.separator"));
+			
+			for (int j = 0; j<lines.length; ++j)
+			{
+				Map<String, TableColumn> columnMap = new HashMap<String, TableColumn>();
+//				String cond = "NOT (ID_key_room_count > 1.0 AND NOT (room = R128))";
+				
+				
+				columnMap.put("ID_key_room_count", new TableColumn("tbl", "ID_key_room_count", ColumnType.Integer, false));
+				columnMap.put("room", new TableColumn("tbl", "room", ColumnType.String, false));
+				
+				QueryCondition queryCond = QueryCondition.parse(columnMap, lines[j]);
+				System.out.println(queryCond.toSQLCode());
 			}
-	*/		
-			parseRules(rules);
+
 			
 			System.out.println("----------------------------------   More to do here   ----------------------------------");
 		}
 	}
 	
 	
-	private void parseRules(String rules)
+	public void findColumns(String oneLine)
 	{
+		StringTokenizer st = new StringTokenizer(oneLine, "NOTAND><!= ()");
+		while(st.hasMoreElements())
+		{
+			System.out.println("Token:" + st.nextToken());
+		}
+	}
+	
+	
+	private Map<LinkedList<String>, LinkedList<Integer>> parseRules(String rules)
+	{
+		LinkedList<String> condList = new LinkedList<String>();
+		LinkedList<Integer> labelList = new LinkedList<Integer>();
+		
 		String[] lines = rules.split(System.getProperty("line.separator"));
 		
 		int startIdx = lines[lines.length - 1].lastIndexOf(":") + 3;
@@ -477,6 +502,9 @@ public class QueryConditionSearcher {
 					condBuffer.append(condition);
 				}
 				
+				condList.add(condBuffer.toString());
+				labelList.add(label);
+				
 				System.out.println(condBuffer);
 				condBuffer.delete(0, condBuffer.length());
 			}
@@ -493,6 +521,10 @@ public class QueryConditionSearcher {
 			}
 			
 		}
-		System.out.println("----------------------------------   End of parse rules   ----------------------------------");
+		
+		Map<LinkedList<String>, LinkedList<Integer>> ret = new HashMap<LinkedList<String>, LinkedList<Integer>>();
+		ret.put(condList, labelList);
+		return ret;
+//		System.out.println("----------------------------------   End of parse rules   ----------------------------------");
 	}
 }
