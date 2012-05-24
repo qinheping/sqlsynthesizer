@@ -3,6 +3,7 @@ package edu.washington.cs.sqlsynth.entity;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.washington.cs.sqlsynth.entity.AggregateExpr.AggregateType;
 import edu.washington.cs.sqlsynth.entity.ConditionNode.OP;
 import edu.washington.cs.sqlsynth.entity.QueryCondition.CONJ;
 import edu.washington.cs.sqlsynth.entity.TableColumn.ColumnType;
@@ -193,6 +194,77 @@ public class TestQueryCondition extends TestCase {
 			//((NOT (ID_key_room_count > 1.0)) AND (NOT (ID_key_room_count <= 2.0)))
 			System.out.println(str);
 		}
+	}
+	
+	public void testConditionWithAggregation1() {
+		String cond = "ID_key_room_count > 1.0";
+		Map<String, TableColumn> columnMap = new HashMap<String, TableColumn>();
+		
+		Map<String, AggregateExpr> exprMap = new HashMap<String, AggregateExpr>();
+		TableColumn c = new TableColumn("tbl", "room", ColumnType.Integer, false);
+		AggregateExpr expr = new AggregateExpr(c, AggregateType.COUNT);
+		exprMap.put("ID_key_room_count", expr);
+		
+		ConditionNode node = QueryCondition.parseNode(columnMap,exprMap, cond);
+		System.out.println(node.toSQLString());
+		assertEquals("count(tbl.room) > 1", node.toSQLString());
+		
+		ConditionNode revNode = ConditionNode.reverseOp(node);
+		System.out.println(revNode.toSQLString());
+		assertEquals("count(tbl.room) <= 1", revNode.toSQLString());
+	}
+	
+	public void testConditionWithAggregation2() {
+		String cond = "room = R128";
+		Map<String, TableColumn> columnMap = new HashMap<String, TableColumn>();
+		
+		Map<String, AggregateExpr> exprMap = new HashMap<String, AggregateExpr>();
+		TableColumn c = new TableColumn("tbl", "room_name", ColumnType.String, false);
+		AggregateExpr expr = new AggregateExpr(c, AggregateType.MAX);
+		exprMap.put("room", expr);
+		
+		ConditionNode node = QueryCondition.parseNode(columnMap,exprMap, cond);
+		System.out.println(node.toSQLString());
+		assertEquals("max(tbl.room_name) = 'R128'", node.toSQLString());
+		
+		ConditionNode revNode = ConditionNode.reverseOp(node);
+		System.out.println(revNode.toSQLString());
+		assertEquals("max(tbl.room_name) != 'R128'", revNode.toSQLString());
+	}
+	
+	public void testComplexConditionWithAggregation2() {
+		String cond = "room = R128 AND ID_key_room_count > 1.0";
+		Map<String, TableColumn> columnMap = new HashMap<String, TableColumn>();
+		columnMap.put("room", new TableColumn("tbl1", "roomName", ColumnType.String, false));
+		
+		Map<String, AggregateExpr> exprMap = new HashMap<String, AggregateExpr>();
+		TableColumn c = new TableColumn("tbl2", "room", ColumnType.Integer, false);
+		AggregateExpr expr = new AggregateExpr(c, AggregateType.COUNT);
+		exprMap.put("ID_key_room_count", expr);
+		
+		QueryCondition query = QueryCondition.parse(columnMap,exprMap, cond);
+		System.out.println(query.toSQLCode());
+		assertEquals("(tbl1.roomName = 'R128' and count(tbl2.room) > 1)", query.toSQLCode());
+		
+		QueryCondition revQ = QueryCondition.reverse(query);
+		System.out.println(revQ.toSQLCode());
+		assertEquals("(tbl1.roomName != 'R128' or count(tbl2.room) <= 1)", revQ.toSQLCode());
+	}
+	
+	public void testNestedComplexConditionWithAggregation() {
+		Map<String, TableColumn> columnMap = new HashMap<String, TableColumn>();
+		//((NOT (C1)) AND (NOT (C2))) AND (NOT (C3))
+		String cond = "((NOT (ID_key_room_count > 1.0)) AND (NOT (ID_key_room_count <= 2.0))) AND (NOT (room = R128))";
+		columnMap.put("room", new TableColumn("tbl", "room", ColumnType.String, false));
+		
+		Map<String, AggregateExpr> exprMap = new HashMap<String, AggregateExpr>();
+		TableColumn c = new TableColumn("tbl2", "room", ColumnType.Integer, false);
+		AggregateExpr expr = new AggregateExpr(c, AggregateType.COUNT);
+		exprMap.put("ID_key_room_count", expr);
+		
+		QueryCondition queryCond = QueryCondition.parse(columnMap, exprMap, cond);
+		System.out.println(queryCond.toSQLCode());
+		assertEquals("((count(tbl2.room) <= 1 and count(tbl2.room) > 2) and tbl.room != 'R128')", queryCond.toSQLCode());
 	}
 	
 }

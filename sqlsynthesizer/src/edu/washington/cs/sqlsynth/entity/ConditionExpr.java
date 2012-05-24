@@ -1,5 +1,6 @@
 package edu.washington.cs.sqlsynth.entity;
 
+import edu.washington.cs.sqlsynth.entity.AggregateExpr.AggregateType;
 import edu.washington.cs.sqlsynth.entity.TableColumn.ColumnType;
 import edu.washington.cs.sqlsynth.util.Utils;
 
@@ -40,30 +41,23 @@ public class ConditionExpr {
 	}
 	
 	public boolean isIntegerType() {
-		if(this.isTableColumn()) {
-			return this.column.isIntegerType();
-		} else if (this.isAggregateExpr()) {
-			return this.expr.isIntegerType();
-		} else {
-			throw new Error();
-		}
+		return this.getType().equals(ColumnType.Integer);
 	}
 	
 	public boolean isStringType() {
-		if(this.isTableColumn()) {
-			return this.column.isStringType();
-		} else if (this.isAggregateExpr()) {
-			return this.expr.isStringType();
-		} else {
-			throw new Error();
-		}
+		return this.getType().equals(ColumnType.String);
 	}
 	
 	public ColumnType getType() {
+		
 		if(this.isTableColumn()) {
 			return this.column.getType();
 		} else if (this.isAggregateExpr()) {
-			return this.expr.getColumn().getType();
+			if(expr.getT().equals(AggregateType.COUNT)) { //no matter which one, always return int
+				return ColumnType.Integer;
+			} else {
+			    return this.expr.getColumn().getType();
+			}
 		} else {
 			throw new Error();
 		}
