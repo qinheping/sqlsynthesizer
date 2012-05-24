@@ -1,10 +1,15 @@
 package edu.washington.cs.sqlsynth.entity;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import plume.Pair;
 
 import edu.washington.cs.sqlsynth.entity.ConditionNode.OP;
 import edu.washington.cs.sqlsynth.util.Utils;
@@ -44,26 +49,6 @@ public class QueryCondition {
 		this.allConds = allJoins;
 	}
 	
-	public static QueryCondition reverse(QueryCondition cond) {
-		if(cond.isAtom()) {
-			QueryCondition revQuery = copy(cond);
-			revQuery.root.reverseOp();
-			return revQuery;
-		} else {
-			//change isAnd, as well as reverse the list of queries
-			//reverse the isAnd flag
-			QueryCondition revQuery = new QueryCondition(cond.allConds, !cond.isAnd);
-			//reverse the query condition
-			List<QueryCondition> revQs = new LinkedList<QueryCondition>();
-			for(QueryCondition q : cond.allConds) {
-				revQs.add(reverse(q));
-			}
-			cond.allConds.clear();
-			cond.allConds.addAll(revQs);
-			return revQuery;
-		}
-	}
-	
 	private boolean isAtom() {
 		if(this.root != null) {
 			Utils.checkTrue(this.allConds == null);
@@ -71,20 +56,104 @@ public class QueryCondition {
 		return this.root != null;
 	}
 	
-	public static QueryCondition copy(QueryCondition cond) {
-		boolean isAtom = cond.isAtom();
-		List<QueryCondition> list = isAtom ? null : new LinkedList<QueryCondition>();
-		QueryCondition c = new QueryCondition(cond.root, cond.isAnd, list);
-		if(isAtom) {
-			return c;
-		} else {
-			for(QueryCondition q : cond.allConds) {
-				c.allConds.add(QueryCondition.copy(q));
-			}
-			return c;
+	//Pair<SelectionCondition, QueryCondition>, use null if absent
+	//XXX FIXME, the other parts
+	//also jsut use shallow copy
+	public Collection<Pair<QueryCondition, QueryCondition>> splitSelectionAndQueryConditions() {
+		QueryCondition having = getMostOneAggregation();
+		if(having != null) {
+			System.out.println(having.toSQLCode());
 		}
+		QueryCondition other = this;
+		if(having != null) {
+			other = this.getOtherPart(having);
+		}
+		
+		Collection<Pair<QueryCondition, QueryCondition>> results =
+			new LinkedList<Pair<QueryCondition, QueryCondition>>();
+		results.add(new Pair<QueryCondition, QueryCondition>(other, having));
+		return results;
 	}
 	
+	private QueryCondition getOtherPart(QueryCondition cond) {
+		QueryCondition copy = copy(this);
+		
+//		System.out.println("After copy:  " + copy);
+		Utils.checkTrue(!copy.isAtom());
+		List<QueryCondition> list = new LinkedList<QueryCondition>();
+		list.addAll(copy.allConds);
+		QueryCondition firstLevelToRemove = null;
+	    for(QueryCondition q : copy.allConds) {
+	    	if(q.isAtom() && q.root.isLeaf() && q.root.getLeftExpr().isAggregateExpr()) {
+	    		firstLevelToRemove = q;
+	    		break;
+	    	}
+	    }
+	    if(firstLevelToRemove != null) {
+	    	System.out.println("removing: " + firstLevelToRemove);
+	    	copy.allConds.remove(firstLevelToRemove);
+	    	return copy;
+	    }
+		
+		
+		Set<QueryCondition> visited = new HashSet<QueryCondition>();
+		while(!list.isEmpty()) {
+			QueryCondition v = list.remove(0);
+			if(visited.contains(v)) {
+				continue;
+			}
+			visited.add(v);
+			if(!v.isAtom()) {
+				QueryCondition toRemove = null;
+			    for(QueryCondition q : v.allConds) {
+			    	if(q.isAtom() && q.root.isLeaf() && q.root.getLeftExpr().isAggregateExpr()) {
+			    		toRemove = q;
+			    		break;
+			    	}
+			    }
+			    if(toRemove != null) {
+			    	System.out.println("removing: " + toRemove);
+			    	v.allConds.remove(toRemove);
+			    	break;
+			    }
+			}
+			if(!v.isAtom()) {
+				list.addAll(v.allConds);
+			}
+		}
+		
+		return copy;
+	}
+	
+	private QueryCondition getMostOneAggregation() {
+		Utils.checkTrue(!this.isAtom());
+		QueryCondition aggQuery = null;
+		List<QueryCondition> list = new LinkedList<QueryCondition>();
+		list.addAll(this.allConds);
+		
+		Set<QueryCondition> visited = new HashSet<QueryCondition>();
+		int count = 0;
+		while(!list.isEmpty()) {
+			QueryCondition v = list.remove(0);
+			if(visited.contains(v)) {
+				continue;
+			}
+			visited.add(v);
+			if(v.isAtom() && v.root.isLeaf() && v.root.getLeftExpr().isAggregateExpr()) {
+				count++;
+//				System.out.println(v.toSQLCode());
+				aggQuery = v;
+				continue;
+			}
+			if(!v.isAtom()) {
+				list.addAll(v.allConds);
+			}
+		}
+		
+		System.out.println("Number of expression: " + count);
+		Utils.checkTrue(count < 2);
+		return aggQuery;
+	}
 	
 	public String toSQLCode() {
 		if(isAtom()) {
@@ -107,9 +176,49 @@ public class QueryCondition {
 		}
 	}
 	
-	/**
+	@Override
+	public String toString() {
+		return this.toSQLCode();
+	}
+	
+	/**************************************
 	 * Below are the helper static methods
-	 * */
+	 **************************************/
+	
+	public static QueryCondition reverse(QueryCondition cond) {
+		if(cond.isAtom()) {
+			QueryCondition revQuery = copy(cond);
+			revQuery.root.reverseOp();
+			return revQuery;
+		} else {
+			//change isAnd, as well as reverse the list of queries
+			//reverse the isAnd flag
+			QueryCondition revQuery = new QueryCondition(cond.allConds, !cond.isAnd);
+			//reverse the query condition
+			List<QueryCondition> revQs = new LinkedList<QueryCondition>();
+			for(QueryCondition q : cond.allConds) {
+				revQs.add(reverse(q));
+			}
+			cond.allConds.clear();
+			cond.allConds.addAll(revQs);
+			return revQuery;
+		}
+	}
+	
+	public static QueryCondition copy(QueryCondition cond) {
+		boolean isAtom = cond.isAtom();
+		List<QueryCondition> list = isAtom ? null : new LinkedList<QueryCondition>();
+		QueryCondition c = new QueryCondition(cond.root, cond.isAnd, list);
+		if(isAtom) {
+			return c;
+		} else {
+			for(QueryCondition q : cond.allConds) {
+				c.allConds.add(QueryCondition.copy(q));
+			}
+			return c;
+		}
+	}
+	
 	public static QueryCondition parse(Map<String, TableColumn> columnMap, String cond) {
 		return parse(columnMap, new HashMap<String, AggregateExpr>(), cond);
 	}
@@ -300,20 +409,4 @@ public class QueryCondition {
 			return new ConditionNode(op, leftExpr, rightExpr, null);
 		}
 	}
-	
-//	public static QueryCondition constructAllAndQueryCondition(List<ConditionNode> nodes) {
-//		List<QueryCondition> conds = new LinkedList<QueryCondition>();
-//		for(ConditionNode node : nodes) {
-//			conds.add(new QueryCondition(node));
-//		}
-//		return new QueryCondition(conds, true);
-//	}
-	
-//	public static QueryCondition constructAllOrQueryCondition(List<ConditionNode> nodes) {
-//		List<QueryCondition> conds = new LinkedList<QueryCondition>();
-//		for(ConditionNode node : nodes) {
-//			conds.add(new QueryCondition(node));
-//		}
-//		return new QueryCondition(conds, false);
-//	}
 }

@@ -166,7 +166,7 @@ public class ConditionNode {
 		this.setOp(getOppositeOP(this.op));
 	}
 
-	public ConditionExpr getLeftColumn() {
+	public ConditionExpr getLeftExpr() {
 		return this.leftExpr;
 	}
 
