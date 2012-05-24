@@ -17,6 +17,8 @@ public class SQLQuery {
 	
 	private List<TableColumn> groupbyColumns = new LinkedList<TableColumn>();
 	
+	private HavingCondition havingCond = null;
+	
 	public SQLQuery(SQLSkeleton skeleton) {
 		Utils.checkNotNull(skeleton);
 		this.skeleton = skeleton;
@@ -24,6 +26,15 @@ public class SQLQuery {
 	
 	public QueryCondition getCondition() {
 		return condition;
+	}
+	
+	public HavingCondition getHavingCond() {
+		return this.havingCond;
+	}
+	
+	public void setHavingCondition(HavingCondition cond) {
+		Utils.checkNotNull(cond);
+		this.havingCond = cond;
 	}
 
 	public void setCondition(QueryCondition condition) {
