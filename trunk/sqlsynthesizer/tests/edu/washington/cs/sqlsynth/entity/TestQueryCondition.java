@@ -20,8 +20,8 @@ public class TestQueryCondition extends TestCase {
 		TableColumn c1 = new TableColumn("table1", "column1", ColumnType.Integer, false);
 		TableColumn c2 = new TableColumn("table2", "column2", ColumnType.Integer, false);
 		//, TableColumn rightColumn, Object rightConstant
-		ConditionNode leaf1 = new ConditionNode(OP.GT, c1, c2, null); //predicate: table1.column1 > table2.column2
-		ConditionNode leaf2 = new ConditionNode(OP.GT, c2, null, 10); //predicate: table2.column2 > 10
+		ConditionNode leaf1 = ConditionNode.createInstance(OP.GT, c1, c2, null); //predicate: table1.column1 > table2.column2
+		ConditionNode leaf2 = ConditionNode.createInstance(OP.GT, c2, null, 10); //predicate: table2.column2 > 10
 		
 		//construct a compound condition node: (table1.column1 > table2.column2) || (table2.column2 > 10)
 		ConditionNode root = new ConditionNode(CONJ.OR, leaf1, leaf2);
@@ -43,9 +43,9 @@ public class TestQueryCondition extends TestCase {
 		TableColumn c3 = new TableColumn("t3", "c3", ColumnType.Integer, false);
 		TableColumn c4 = new TableColumn("tr", "c4", ColumnType.String, false);
 		
-		ConditionNode leaf1 = new ConditionNode(OP.EQ, c1, c2, null);
-		ConditionNode leaf2 = new ConditionNode(OP.EQ, c3, null, 20);
-		ConditionNode leaf3 = new ConditionNode(OP.EQ, c4, c2, null);
+		ConditionNode leaf1 = ConditionNode.createInstance(OP.EQ, c1, c2, null);
+		ConditionNode leaf2 = ConditionNode.createInstance(OP.EQ, c3, null, 20);
+		ConditionNode leaf3 = ConditionNode.createInstance(OP.EQ, c4, c2, null);
 		
 		ConditionNode compound1 = new ConditionNode(CONJ.OR, leaf2, leaf3);
 		ConditionNode root = new ConditionNode(CONJ.AND, leaf1, compound1);

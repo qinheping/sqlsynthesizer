@@ -26,10 +26,6 @@ public class QueryCondition {
 		allConds = null;
 		this.isAnd = false;
 	}
-	
-	private boolean isAnd() {
-		return this.isAnd;
-	}
 
 	private QueryCondition(ConditionNode root, boolean isAnd, List<QueryCondition> allJoins) {
 		//everything not initialized
@@ -112,13 +108,6 @@ public class QueryCondition {
 	/**
 	 * Below are the helper static methods
 	 * */
-	
-//	private static QueryCondition reverseQuery(QueryCondition cond) {
-//		Utils.checkNotNull(cond);
-//		Utils.checkTrue(cond.isAndJoins() || cond.isOrJoins());
-//		
-//	}
-	
 	public static QueryCondition parse(Map<String, TableColumn> columnMap, String cond) {
 		cond = eliminateMatchedPara(cond);
 		boolean needReverse = false;
@@ -287,21 +276,21 @@ public class QueryCondition {
 		if(rightColumn == null) {
 			if(leftColumn.isIntegerType()) {
 				Integer t = Utils.convertToInteger(rightPart);
-				return new ConditionNode(op, leftColumn, null, t);
+				return ConditionNode.createInstance(op, leftColumn, null, t);
 			}
-			return new ConditionNode(op, leftColumn, null, rightPart);
+			return ConditionNode.createInstance(op, leftColumn, null, rightPart);
 		} else {
-			return new ConditionNode(op, leftColumn, rightColumn, null);
+			return ConditionNode.createInstance(op, leftColumn, rightColumn, null);
 		}
 	}
 	
-	public static QueryCondition constructAllAndQueryCondition(List<ConditionNode> nodes) {
-		List<QueryCondition> conds = new LinkedList<QueryCondition>();
-		for(ConditionNode node : nodes) {
-			conds.add(new QueryCondition(node));
-		}
-		return new QueryCondition(conds, true);
-	}
+//	public static QueryCondition constructAllAndQueryCondition(List<ConditionNode> nodes) {
+//		List<QueryCondition> conds = new LinkedList<QueryCondition>();
+//		for(ConditionNode node : nodes) {
+//			conds.add(new QueryCondition(node));
+//		}
+//		return new QueryCondition(conds, true);
+//	}
 	
 //	public static QueryCondition constructAllOrQueryCondition(List<ConditionNode> nodes) {
 //		List<QueryCondition> conds = new LinkedList<QueryCondition>();

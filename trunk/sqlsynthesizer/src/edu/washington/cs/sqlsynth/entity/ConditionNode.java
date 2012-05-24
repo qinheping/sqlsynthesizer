@@ -83,7 +83,7 @@ public class ConditionNode {
     
     public static ConditionNode copy(ConditionNode node) {
     	if(node.isLeaf) {
-    		return new ConditionNode(node.op, node.leftColumn, node.rightColumn, node.rightConstant);
+    		return new ConditionNode(node.op, node.leftExpr, node.rightExpr, node.rightConstant);
     	} else {
     		return new ConditionNode(node.conj, node.leftNode, node.rightNode);
     	}
@@ -93,42 +93,52 @@ public class ConditionNode {
 	
 	//if it is a condition node, i.e., a leaf node
 	private OP op = null;
-	private TableColumn leftColumn = null;
-	private TableColumn rightColumn = null;
+	private ConditionExpr leftExpr = null;
+	private ConditionExpr rightExpr = null;
 	private Object rightConstant = null; //constant is always on the right side
 	
 	//if it is not a condition node, i.e., a non-leaf node
 	private CONJ conj = null; //"and" or "or"
 	private ConditionNode leftNode = null;
 	private ConditionNode rightNode = null;
-		
+	
+	public static ConditionNode createInstance(OP op, AggregateExpr leftAgg, TableColumn rightColumn, Object rightConstant) {
+		ConditionExpr rightExpr = rightColumn == null ? null : new ConditionExpr(rightColumn);
+		return new ConditionNode(op, new ConditionExpr(leftAgg), rightExpr, rightConstant);
+	}
+	
 	//create a leaf node
-	public ConditionNode(OP op, TableColumn leftColumn, TableColumn rightColumn, Object rightConstant) {
+	public static ConditionNode createInstance(OP op, TableColumn leftColumn, TableColumn rightColumn, Object rightConstant) {
+		ConditionExpr rightExpr = rightColumn == null ? null : new ConditionExpr(rightColumn);
+		return new ConditionNode(op, new ConditionExpr(leftColumn), rightExpr, rightConstant);
+	}
+	
+	public ConditionNode(OP op, ConditionExpr leftExpr, ConditionExpr rightExpr, Object rightConstant) {
 		this.isLeaf = true;
 		Utils.checkNotNull(op);
-		Utils.checkNotNull(leftColumn);
-		if(rightColumn == null) {
+		Utils.checkNotNull(leftExpr);
+		if(rightExpr == null) {
 			Utils.checkNotNull(rightConstant);
 			//check type compatibility
-			if(leftColumn.isIntegerType()) {
+			if(leftExpr.isIntegerType()) {
 				Utils.checkTrue(Utils.isInteger(rightConstant+""));
 			}
 		} else {
 			Utils.checkTrue(rightConstant == null);
-			Utils.checkTrue(leftColumn.getType().equals(rightColumn.getType()));
+			Utils.checkTrue(leftExpr.getType().equals(leftExpr.getType()));
 		}
 		//check the type
 		if(op.equals(OP.GT) || op.equals(OP.LE)) {
-			Utils.checkTrue(leftColumn.isIntegerType(), "Only integer can be compared using < and > .");
-			if(rightColumn != null) {
-				Utils.checkTrue(rightColumn.isIntegerType(), "Only integer can be compared using < and > .");
+			Utils.checkTrue(leftExpr.isIntegerType(), "Only integer can be compared using < and > .");
+			if(rightExpr != null) {
+				Utils.checkTrue(rightExpr.isIntegerType(), "Only integer can be compared using < and > .");
 			} else {
 				Utils.checkTrue(Utils.isInteger(rightConstant+""), "Only integer can be compared using < and > .");
 			}
 		}
 		this.op = op;
-		this.leftColumn = leftColumn;
-		this.rightColumn = rightColumn;
+		this.leftExpr = leftExpr;
+		this.rightExpr = rightExpr;
 		this.rightConstant = rightConstant;
 	}
 	
@@ -156,21 +166,21 @@ public class ConditionNode {
 		this.setOp(getOppositeOP(this.op));
 	}
 
-	public TableColumn getLeftColumn() {
-		return leftColumn;
+	public ConditionExpr getLeftColumn() {
+		return this.leftExpr;
 	}
 
-	public void setLeftColumn(TableColumn leftColumn) {
-		Utils.checkNotNull(leftColumn);
-		this.leftColumn = leftColumn;
+	public void setLeftExpr(ConditionExpr leftExpr) {
+		Utils.checkNotNull(leftExpr);
+		this.leftExpr = leftExpr;
 	}
 
-	public TableColumn getRightColumn() {
-		return rightColumn;
+	public ConditionExpr getRightExpr() {
+		return this.rightExpr;
 	}
 
-	public void setRightColumn(TableColumn rightColumn) {
-		this.rightColumn = rightColumn;
+	public void setRightExpr(ConditionExpr rightExpr) {
+		this.rightExpr = rightExpr;
 	}
 
 	public Object getRightConstant() {
@@ -215,9 +225,9 @@ public class ConditionNode {
 	//check all invariant of this class must hold
 	private void repOK() {
 		if(this.isLeaf) {
-			Utils.checkNotNull(leftColumn);
+			Utils.checkNotNull(leftExpr);
 			Utils.checkNotNull(this.op);
-			if(rightColumn == null) {
+			if(rightExpr == null) {
 				Utils.checkNotNull(rightConstant);
 			} else {
 				Utils.checkTrue(rightConstant == null);
@@ -230,10 +240,10 @@ public class ConditionNode {
 		// check the type
 		if (op != null) {
 			if (op.equals(OP.GT) || op.equals(OP.LE)) {
-				Utils.checkTrue(leftColumn.isIntegerType(),
+				Utils.checkTrue(leftExpr.isIntegerType(),
 						"Only integer can be compared using < and > .");
-				if (rightColumn != null) {
-					Utils.checkTrue(rightColumn.isIntegerType(),
+				if (rightExpr != null) {
+					Utils.checkTrue(rightExpr.isIntegerType(),
 							"Only integer can be compared using < and > .");
 				} else {
 					Utils.checkTrue(Utils.isInteger(rightConstant + ""),
@@ -246,11 +256,11 @@ public class ConditionNode {
 	public String toSQLString() {
 		this.repOK();
 		if(this.isLeaf) {
-			String leftPart = this.leftColumn.getFullName();
+			String leftPart = this.leftExpr.toSQLCode();
 			String opStr = this.op.toString();
-			String rightPart = this.rightColumn == null ? this.rightConstant.toString() : this.rightColumn.getFullName();
-			String leftPara = (this.leftColumn.isStringType() && this.rightColumn == null) ? "\'" : "";
-			String rightPara = (this.leftColumn.isStringType() && this.rightColumn == null) ? "\'" : "";
+			String rightPart = this.rightExpr == null ? this.rightConstant.toString() : this.rightExpr.toSQLCode();
+			String leftPara = (this.leftExpr.isStringType() && this.rightExpr == null) ? "\'" : "";
+			String rightPara = (this.leftExpr.isStringType() && this.rightExpr == null) ? "\'" : "";
 			return leftPart + opStr + leftPara+ rightPart + rightPara;
 //			return leftPart + opStr+ rightPart;
 		} else {

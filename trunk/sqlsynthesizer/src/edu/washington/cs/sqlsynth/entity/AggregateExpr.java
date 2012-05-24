@@ -31,6 +31,14 @@ public class AggregateExpr {
 		return column;
 	}
 	
+	public boolean isIntegerType() {
+		return this.column.isIntegerType();
+	}
+	
+	public boolean isStringType() {
+		return this.column.isStringType();
+	}
+	
 	public void setAggregateType(AggregateType t) {
 		this.t = t;
 	}
