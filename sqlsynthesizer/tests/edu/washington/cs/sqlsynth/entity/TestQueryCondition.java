@@ -1,7 +1,10 @@
 package edu.washington.cs.sqlsynth.entity;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import plume.Pair;
 
 import edu.washington.cs.sqlsynth.entity.AggregateExpr.AggregateType;
 import edu.washington.cs.sqlsynth.entity.ConditionNode.OP;
@@ -246,9 +249,14 @@ public class TestQueryCondition extends TestCase {
 		System.out.println(query.toSQLCode());
 		assertEquals("(tbl1.roomName = 'R128' and count(tbl2.room) > 1)", query.toSQLCode());
 		
+		Collection<Pair<QueryCondition, QueryCondition>> coll = query.splitSelectionAndQueryConditions();
+		System.out.println("See the results: ");
+		System.out.println(coll);
+		
 		QueryCondition revQ = QueryCondition.reverse(query);
-		System.out.println(revQ.toSQLCode());
+//		System.out.println(revQ.toSQLCode());
 		assertEquals("(tbl1.roomName != 'R128' or count(tbl2.room) <= 1)", revQ.toSQLCode());
+		
 	}
 	
 	public void testNestedComplexConditionWithAggregation() {
@@ -265,6 +273,13 @@ public class TestQueryCondition extends TestCase {
 		QueryCondition queryCond = QueryCondition.parse(columnMap, exprMap, cond);
 		System.out.println(queryCond.toSQLCode());
 		assertEquals("((count(tbl2.room) <= 1 and count(tbl2.room) > 2) and tbl.room != 'R128')", queryCond.toSQLCode());
+		
+		try {
+		  queryCond.splitSelectionAndQueryConditions();
+		  fail();
+		} catch (RuntimeException e) {
+			//ok
+		}
 	}
 	
 }
