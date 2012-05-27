@@ -38,6 +38,7 @@ public class SQLQueryCompletor {
 		//FIXME it is only 1 condition now
 		System.out.println("All conditions" + conditions);
 		
+		//FIXME
 		Utils.checkTrue(conditions.size() <= 2, "size: " + conditions.size());
 		
 		QueryCondition select = null;
