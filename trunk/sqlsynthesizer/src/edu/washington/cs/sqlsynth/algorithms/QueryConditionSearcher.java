@@ -533,8 +533,8 @@ public class QueryConditionSearcher {
 			Map<LinkedList<String>, LinkedList<Integer>> condLabelPair = parseRules(rules);
 			
 			Set<LinkedList<String>> condSet = condLabelPair.keySet();
-			System.out.println("see condition set:");
-			System.out.println(condSet);
+//			System.out.println("see condition set:");
+//			System.out.println(condSet);
 			
 			LinkedList<String> allRules = condSet.iterator().next();
 			LinkedList<Integer> allLabels = condLabelPair.get(allRules);
@@ -543,9 +543,9 @@ public class QueryConditionSearcher {
 			testTree.buildTreeFromRules(allRules, allLabels);
 			String allConditions = testTree.getRulesFromTree();
 			
-			System.out.println("all conditions: " + allConditions);
+//			System.out.println("all conditions: " + allConditions);
 			String[] lines = allConditions.split("\n");//System.getProperty("line.separator")); FIXME
-			System.out.println("line num: " + lines.length);
+//			System.out.println("line num: " + lines.length);
 			
 			for (int j = 0; j<lines.length; ++j)
 			{
@@ -578,10 +578,12 @@ public class QueryConditionSearcher {
 						exprMap.put(currentKey, forQueryTranslateAgg.get(currentKey));
 					}
 				}
-				System.out.println("lines[j]:" + lines[j]);
+//				System.out.println("lines[j]:" + lines[j]);
 				QueryCondition queryCond = QueryCondition.parse(columnMap, exprMap, lines[j]);
-				queryConditions.add(queryCond);
-				System.out.println(queryCond.toSQLCode());
+				if(queryCond != null) {
+				    queryConditions.add(queryCond);
+				    System.out.println(queryCond.toSQLCode());
+				}
 			}
 
 			

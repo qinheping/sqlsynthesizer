@@ -47,9 +47,11 @@ public class TestSQLCompletor extends TestCase {
 		completor.setOutputTable(output);
 		
 		List<SQLQuery> queries = completor.inferSQLQueries();
+		System.out.println("number of inferred queries: " + queries.size());
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		System.out.println();
 		queries = completor.validateQueriesOnDb(queries);
 		//after validating on my sql
 		System.out.println("The final output....");

@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import plume.Pair;
+
 import edu.washington.cs.sqlsynth.db.DbConnector;
 import edu.washington.cs.sqlsynth.entity.AggregateExpr;
 import edu.washington.cs.sqlsynth.entity.QueryCondition;
@@ -17,8 +19,6 @@ import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.util.Log;
 import edu.washington.cs.sqlsynth.util.Maths;
 import edu.washington.cs.sqlsynth.util.Utils;
-
-
 
 public class SQLQueryCompletor {
 
@@ -34,16 +34,37 @@ public class SQLQueryCompletor {
 		//it calls QueryConditionSearcher to infer conditions
 		QueryConditionSearcher searcher = new QueryConditionSearcher(this);
 		Collection<QueryCondition> conditions = searcher.inferQueryConditions();
+		//FIXME it is only 1 condition now
+		Utils.checkTrue(conditions.size() <= 1, "size: " + conditions.size());
+		QueryCondition select = null;
+		QueryCondition having = null;
 		
+		if(!conditions.isEmpty()) {
+		    QueryCondition q = Utils.getFirst(conditions);
+		    Collection<Pair<QueryCondition, QueryCondition>> pairs = q.splitSelectionAndQueryConditions();
+		    Pair<QueryCondition, QueryCondition> p = Utils.getFirst(pairs);
+		    select = p.a;
+		    having = p.b;
+		}
+		
+		//infer aggregates, and group by columns
 		AggregateExprInfer aggInfer = new AggregateExprInfer(this);
 		Map<Integer, List<AggregateExpr>> aggrExprs = aggInfer.inferAggregationExprs();
 		List<TableColumn> groupbyColumns = aggInfer.inferGroupbyColumns();
 		
 		//create SQL statements
-		
 		List<SQLQuery> quries = new LinkedList<SQLQuery>();
-//		quries.add(new SQLQuery(skeleton)); //FIXME incomplete
 		quries.addAll(constructQueries(skeleton, aggrExprs, groupbyColumns));
+		
+		for(SQLQuery query : quries) {
+			if(select != null) {
+			    query.setCondition(select);
+			}
+			if(having != null) {
+			    query.setHavingCondition(having);
+			}
+		}
+		
 		return quries;
 	}
 	
