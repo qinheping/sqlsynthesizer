@@ -33,6 +33,10 @@ public class QueryCondition {
 		allConds = null;
 		this.isAnd = false;
 	}
+	
+	public static QueryCondition createQueryCondition(List<QueryCondition> allJoins, boolean isAnd) {
+		return new QueryCondition(allJoins, isAnd);
+	}
 
 	private QueryCondition(ConditionNode root, boolean isAnd, List<QueryCondition> allJoins) {
 		//everything not initialized
