@@ -18,6 +18,7 @@ import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.util.Log;
 import edu.washington.cs.sqlsynth.util.Maths;
+import edu.washington.cs.sqlsynth.util.TableUtils;
 import edu.washington.cs.sqlsynth.util.Utils;
 
 public class SQLQueryCompletor {
@@ -52,6 +53,17 @@ public class SQLQueryCompletor {
 		Map<Integer, List<AggregateExpr>> aggrExprs = aggInfer.inferAggregationExprs();
 		List<TableColumn> groupbyColumns = aggInfer.inferGroupbyColumns();
 		
+		//if there is having, but no group, we need to add some group by columns
+		if(groupbyColumns.isEmpty() && having != null) {
+			if(skeleton.getOutputTable().getColumnNum() == 1) {
+				TableColumn c = skeleton.getOutputTable().getColumns().get(0);
+				c = TableUtils.findFirstMatchedColumn(c.getColumnName(), skeleton.getTables());
+				//System.out.println(c);
+				//System.out.println(groupbyColumns.getClass());
+				groupbyColumns.add(c);
+			}
+		}
+		
 		//create SQL statements
 		List<SQLQuery> quries = new LinkedList<SQLQuery>();
 		quries.addAll(constructQueries(skeleton, aggrExprs, groupbyColumns));
@@ -69,10 +81,11 @@ public class SQLQueryCompletor {
 	}
 	
 	List<SQLQuery> constructQueries(SQLSkeleton skeleton, Map<Integer, List<AggregateExpr>> aggrExprs, List<TableColumn> groupbyColumns) {
-		if(aggrExprs.isEmpty()) {
-			Utils.checkTrue(groupbyColumns.isEmpty()); //no aggregation, no group by
-			return Collections.singletonList(new SQLQuery(skeleton));
-		}
+		//may have case: select name where group by x where count(y) > 5
+//		if(aggrExprs.isEmpty()) {
+//			Utils.checkTrue(groupbyColumns.isEmpty()); //no aggregation, no group by
+//			return Collections.singletonList(new SQLQuery(skeleton));
+//		}
 		List<SQLQuery> queries = new LinkedList<SQLQuery>();
 		//construct
 		
@@ -84,7 +97,18 @@ public class SQLQueryCompletor {
 			exprList.add(aggrExprs.get(key));
 			Log.logln("key: " + key + ",  exprList: " + exprList);
 		}
-		List<List<AggregateExpr>> allCombinations = Maths.allCombination(exprList);
+		
+		List<List<AggregateExpr>> allCombinations = Collections.emptyList();
+		if(!exprList.isEmpty()) {
+			allCombinations = Maths.allCombination(exprList);
+		}
+		
+		if(allCombinations.isEmpty()) {
+			SQLQuery q = new SQLQuery(skeleton);
+			q.setGroupbyColumns(groupbyColumns);
+			queries.add(q);
+			return queries;
+		}
 		
 		for(List<AggregateExpr> list : allCombinations) {
 			Utils.checkTrue(list.size() == keyList.size());
