@@ -14,6 +14,8 @@ import edu.washington.cs.sqlsynth.util.Utils;
 
 public class SQLSkeleton {
 	
+	public static boolean REMOVE_DUPLICATE = false;
+	
 	//can have repetition
 	private List<TableInstance> tables = new LinkedList<TableInstance>();
 	//all equal join columns
@@ -109,7 +111,25 @@ public class SQLSkeleton {
 		List<TableInstance> ret = new LinkedList<TableInstance>();
 		for(TableInstance t : list) {
 			ret.add(this.getTableOnlyWithMatchedColumns(t));
+//			System.out.println("-------------------");
+//			System.out.println(t.toString());
 		}
+		
+		if(REMOVE_DUPLICATE) {
+			List<TableInstance> removes = new LinkedList<TableInstance>();
+			for(TableInstance t : ret) {
+				if(t.containDuplicateColumns()) {
+					removes.add(t);
+				}
+			}
+			ret.removeAll(removes);
+		}
+		
+//		for(TableInstance t : ret) {
+//			System.out.println("-------------------");
+//			System.out.println(t.toString());
+//		}
+//		System.exit(0);
 		
 		return ret;
 	}
