@@ -36,12 +36,23 @@ public class SQLQueryCompletor {
 		QueryConditionSearcher searcher = new QueryConditionSearcher(this);
 		Collection<QueryCondition> conditions = searcher.inferQueryConditions();
 		//FIXME it is only 1 condition now
-		Utils.checkTrue(conditions.size() <= 1, "size: " + conditions.size());
+		System.out.println("All conditions" + conditions);
+		
+		Utils.checkTrue(conditions.size() <= 2, "size: " + conditions.size());
+		
 		QueryCondition select = null;
 		QueryCondition having = null;
 		
 		if(!conditions.isEmpty()) {
-		    QueryCondition q = Utils.getFirst(conditions);
+			QueryCondition q = null;
+			if(conditions.size() == 1) {
+		      q = Utils.getFirst(conditions);
+			} else {
+			  //combine conditions
+			  List<QueryCondition> qList = new LinkedList<QueryCondition>();
+			  qList.addAll(conditions);
+			  q = QueryCondition.createQueryCondition(qList, false);
+			}
 		    Collection<Pair<QueryCondition, QueryCondition>> pairs = q.splitSelectionAndQueryConditions();
 		    Pair<QueryCondition, QueryCondition> p = Utils.getFirst(pairs);
 		    select = p.a;
