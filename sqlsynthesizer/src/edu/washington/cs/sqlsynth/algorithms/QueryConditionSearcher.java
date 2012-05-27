@@ -23,6 +23,7 @@ import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableColumn.ColumnType;
 import edu.washington.cs.sqlsynth.util.Globals;
+import edu.washington.cs.sqlsynth.util.Utils;
 
 // firstly, use simpely weka
 import weka.core.Instances;
@@ -299,7 +300,7 @@ public class QueryConditionSearcher {
 		{
 			TableInstance table = tables.get(i);
 			
-			HashSet<Integer> usedIdx = new HashSet();
+			HashSet<Integer> usedIdx = new HashSet<Integer>();
 			
 			double posWeight = 0.5;
 			double negWeight = 0.5;
@@ -531,16 +532,20 @@ public class QueryConditionSearcher {
 			
 			Map<LinkedList<String>, LinkedList<Integer>> condLabelPair = parseRules(rules);
 			
-			Set condSet = condLabelPair.keySet();
+			Set<LinkedList<String>> condSet = condLabelPair.keySet();
+			System.out.println("see condition set:");
+			System.out.println(condSet);
 			
-			LinkedList<String> allRules = (LinkedList<String>)condSet.iterator().next();
+			LinkedList<String> allRules = condSet.iterator().next();
 			LinkedList<Integer> allLabels = condLabelPair.get(allRules);
 			
 			BTree testTree = new BTree();
 			testTree.buildTreeFromRules(allRules, allLabels);
 			String allConditions = testTree.getRulesFromTree();
 			
-			String[] lines = allConditions.split(System.getProperty("line.separator"));
+			System.out.println("all conditions: " + allConditions);
+			String[] lines = allConditions.split("\n");//System.getProperty("line.separator")); FIXME
+			System.out.println("line num: " + lines.length);
 			
 			for (int j = 0; j<lines.length; ++j)
 			{
@@ -573,7 +578,7 @@ public class QueryConditionSearcher {
 						exprMap.put(currentKey, forQueryTranslateAgg.get(currentKey));
 					}
 				}
-
+				System.out.println("lines[j]:" + lines[j]);
 				QueryCondition queryCond = QueryCondition.parse(columnMap, exprMap, lines[j]);
 				queryConditions.add(queryCond);
 				System.out.println(queryCond.toSQLCode());
@@ -600,16 +605,25 @@ public class QueryConditionSearcher {
 		LinkedList<String> condList = new LinkedList<String>();
 		LinkedList<Integer> labelList = new LinkedList<Integer>();
 		
-		String[] lines = rules.split(System.getProperty("line.separator"));
+		System.out.println("rules:"  + rules);
 		
-		int startIdx = lines[lines.length - 1].lastIndexOf(":") + 3;
+		String[] lines = rules.split("\n");//System.getProperty("line.separator")); //hardcode here FIXME
+		
+		int startIdx = lines[lines.length - 1].lastIndexOf(":") + 1;
 	
-		int numRules = Integer.parseInt(lines[lines.length - 1].substring(startIdx));
+		int numRules = Integer.parseInt(lines[lines.length - 1].substring(startIdx).trim());
+		
+		System.out.println("number of rules: " + numRules);
 		
 		int ruleIdx = 0;
 		
 		
 		StringBuffer condBuffer = new StringBuffer();
+		
+		System.out.println("see lines:" + lines.length);
+		for(String str : lines) {
+			System.out.println(str);
+		}
 		
 		for (int i = 2; i<lines.length-1; ++i)
 		{
@@ -663,6 +677,8 @@ public class QueryConditionSearcher {
 		
 		Map<LinkedList<String>, LinkedList<Integer>> ret = new HashMap<LinkedList<String>, LinkedList<Integer>>();
 		ret.put(condList, labelList);
+		System.out.println("size:" + ret.size());
+		System.out.println(ret);
 		return ret;
 //		System.out.println("----------------------------------   End of parse rules   ----------------------------------");
 	}
