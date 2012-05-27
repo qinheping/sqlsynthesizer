@@ -10,10 +10,14 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import java.io.*;
 
+
+import edu.washington.cs.sqlsynth.entity.AggregateExpr.AggregateType;
 import edu.washington.cs.sqlsynth.entity.BTree;
+import edu.washington.cs.sqlsynth.entity.AggregateExpr;
 import edu.washington.cs.sqlsynth.entity.QueryCondition;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
@@ -37,13 +41,18 @@ public class QueryConditionSearcher {
 	public final SQLQueryCompletor completor;
 	
 	private List<Instances> allData;
-//	private List<Double> weight;
+	
+	private Map<String, TableColumn> forQueryTranslate;
+	private Map<String, AggregateExpr> forQueryTranslateAgg;
+	
+	private List<QueryCondition> queryConditions;
 	
 	public QueryConditionSearcher(SQLQueryCompletor completor) {
 		this.completor = completor;
 		allData = new LinkedList<Instances>();
-//		weight = new LinkedList<Double>();
-		
+		queryConditions = new LinkedList<QueryCondition>();
+		forQueryTranslate = new HashMap<String, TableColumn> ();
+		forQueryTranslateAgg = new HashMap<String, AggregateExpr> ();
 		
 		this.getConstructionInfo();
 		this.getLabelWeightInfo();
@@ -58,16 +67,18 @@ public class QueryConditionSearcher {
 		
 		//use decision tree to infer query condition
 		//throw new RuntimeException("");
-		return Collections.emptySet();
+//		return Collections.emptySet();
+		return this.queryConditions;
 	}
 	
 	private void getConstructionInfo()
 	{
-//		allData = new LinkedList<Instances>();
 		allData.clear();
+		forQueryTranslate.clear();
 		
 		List<TableInstance> tables = completor.getSkeleton().computeJoinTableWithoutUnmatches();
 		
+				
 		for (int i = 0; i < tables.size(); ++i){
 			TableInstance table = tables.get(i);
 			String relationName = table.getTableName();
@@ -88,10 +99,44 @@ public class QueryConditionSearcher {
 						}
 					}
 					attributes.addElement(new Attribute(columns.get(j).getColumnName(), tmpVector));
+					
+					if (!forQueryTranslate.containsKey(columns.get(j).getColumnName()))
+					{
+						TableColumn c = null;
+						
+						List<TableInstance> inputTables = this.completor.getInputTables();
+						for (int ii = 0; ii<inputTables.size(); ++ii)
+						{
+							if (inputTables.get(ii).hasColumn(columns.get(j).getColumnName()))
+							{
+								c = inputTables.get(ii).getColumnByName(columns.get(j).getColumnName());
+								break;
+							}
+						}
+						
+						forQueryTranslate.put(columns.get(j).getColumnName(), c);
+					}
 				}
 				else
 				{
 					attributes.addElement(new Attribute(columns.get(j).getColumnName()));
+					
+					if (!forQueryTranslate.containsKey(columns.get(j).getColumnName()))
+					{
+						TableColumn c = null;
+						
+						List<TableInstance> inputTables = this.completor.getInputTables();
+						for (int ii = 0; ii<inputTables.size(); ++ii)
+						{
+							if (inputTables.get(ii).hasColumn(columns.get(j).getColumnName()))
+							{
+								c = inputTables.get(ii).getColumnByName(columns.get(j).getColumnName());
+								break;
+							}
+						}
+						
+						forQueryTranslate.put(columns.get(j).getColumnName(), c);
+					}
 				}
 				
 			}
@@ -103,16 +148,89 @@ public class QueryConditionSearcher {
 				{
 					for (int k = 0; k< columns.size(); ++k)
 					{
+												
 						if (columns.get(k).getType() == TableColumn.ColumnType.String)
 						{
 							attributes.addElement(new Attribute(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_count"));
+							
+							if (!forQueryTranslateAgg.containsKey(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_count"))
+							{
+								TableColumn c = null;
+								
+								List<TableInstance> inputTables = this.completor.getInputTables();
+								for (int ii = 0; ii<inputTables.size(); ++ii)
+								{
+									if (inputTables.get(ii).hasColumn(columns.get(k).getColumnName()))
+									{
+										c = new TableColumn(inputTables.get(ii).getTableName(), columns.get(k).getColumnName(), ColumnType.Integer, false);
+										break;
+									}
+								}
+//								TableColumn c = new TableColumn(table.getTableName(), columns.get(k).getColumnName(), ColumnType.Integer, false);
+								AggregateExpr expr = new AggregateExpr(c, AggregateType.COUNT);
+								
+								
+								
+								
+								forQueryTranslateAgg.put(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_count", 
+										expr);
+
+							}
 						}
 						else
 						{
+							
+							
+							
 							attributes.addElement(new Attribute(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_max"));
 							attributes.addElement(new Attribute(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_min"));
 							attributes.addElement(new Attribute(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_sum"));
 							attributes.addElement(new Attribute(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_avg"));
+							
+							TableColumn c = null;
+							
+							List<TableInstance> inputTables = this.completor.getInputTables();
+							for (int ii = 0; ii<inputTables.size(); ++ii)
+							{
+								if (inputTables.get(ii).hasColumn(columns.get(k).getColumnName()))
+								{
+									c = new TableColumn(inputTables.get(ii).getTableName(), columns.get(k).getColumnName(), ColumnType.Integer, false);
+									break;
+								}
+							}
+							
+							
+							if (!forQueryTranslateAgg.containsKey(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_max"))
+							{
+//								TableColumn c = new TableColumn(table.getTableName(), columns.get(k).getColumnName(), ColumnType.Integer, false);
+								AggregateExpr expr = new AggregateExpr(c, AggregateType.MAX);
+								forQueryTranslateAgg.put(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_max", 
+										expr);
+							}
+							
+							if (!forQueryTranslateAgg.containsKey(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_min"))
+							{
+//								TableColumn c = new TableColumn(table.getTableName(), columns.get(k).getColumnName(), ColumnType.Integer, false);
+								AggregateExpr expr = new AggregateExpr(c, AggregateType.MIN);
+								forQueryTranslateAgg.put(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_min", 
+										expr);
+							}
+							
+							if (!forQueryTranslateAgg.containsKey(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_sum"))
+							{
+//								TableColumn c = new TableColumn(table.getTableName(), columns.get(k).getColumnName(), ColumnType.Integer, false);
+								AggregateExpr expr = new AggregateExpr(c, AggregateType.SUM);
+								forQueryTranslateAgg.put(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_sum", 
+										expr);
+							}
+							
+							if (!forQueryTranslateAgg.containsKey(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_avg"))
+							{
+//								TableColumn c = new TableColumn(table.getTableName(), columns.get(k).getColumnName(), ColumnType.Integer, false);
+								AggregateExpr expr = new AggregateExpr(c, AggregateType.AVG);
+								forQueryTranslateAgg.put(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_avg", 
+										expr);
+							}
 						}
 					}
 				}
@@ -146,9 +264,6 @@ public class QueryConditionSearcher {
 			{
 				if (matchType.get(i) == TableColumn.ColumnType.Integer)
 				{	
-					
-					
-					
 					if (!((tuple1.get(i)).toString()).equals(((tuple2.get(matchList.get(i))).toString())))
 					{
 						ret = false;
@@ -429,14 +544,38 @@ public class QueryConditionSearcher {
 			
 			for (int j = 0; j<lines.length; ++j)
 			{
-				Map<String, TableColumn> columnMap = new HashMap<String, TableColumn>();
+//				NOT (ID_key_ID_key_student_count <= 4.0 AND Room != R12)
 //				String cond = "NOT (ID_key_room_count > 1.0 AND NOT (room = R128))";
+				String cond = lines[j];
 				
 				
-				columnMap.put("ID_key_room_count", new TableColumn("tbl", "ID_key_room_count", ColumnType.Integer, false));
-				columnMap.put("room", new TableColumn("tbl", "room", ColumnType.String, false));
+				Map<String, TableColumn> columnMap = new HashMap<String, TableColumn>();				
+				Iterator<String> iterKey = forQueryTranslate.keySet().iterator();
 				
-				QueryCondition queryCond = QueryCondition.parse(columnMap, lines[j]);
+				while(iterKey.hasNext())
+				{
+					
+					String currentKey = iterKey.next();
+					if (cond.contains(currentKey))
+					{
+						columnMap.put(currentKey, forQueryTranslate.get(currentKey));
+					}
+				}
+				
+				Map<String, AggregateExpr> exprMap = new HashMap<String, AggregateExpr>();
+				Iterator<String> iterKeyAgg = forQueryTranslateAgg.keySet().iterator();
+				
+				while(iterKeyAgg.hasNext())
+				{
+					String currentKey = iterKeyAgg.next();
+					if (cond.contains(currentKey))
+					{
+						exprMap.put(currentKey, forQueryTranslateAgg.get(currentKey));
+					}
+				}
+
+				QueryCondition queryCond = QueryCondition.parse(columnMap, exprMap, lines[j]);
+				queryConditions.add(queryCond);
 				System.out.println(queryCond.toSQLCode());
 			}
 
