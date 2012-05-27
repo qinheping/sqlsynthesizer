@@ -155,6 +155,11 @@ public class QueryCondition {
 		return aggQuery;
 	}
 	
+	public boolean isEmpty() {
+		String sql = this.toSQLCode();
+		return sql.equals("()");
+	}
+	
 	public String toSQLCode() {
 		if(isAtom()) {
 			Utils.checkTrue(this.allConds == null);
@@ -223,6 +228,9 @@ public class QueryCondition {
 		return parse(columnMap, new HashMap<String, AggregateExpr>(), cond);
 	}
 	public static QueryCondition parse(Map<String, TableColumn> columnMap, Map<String, AggregateExpr> aggMap, String cond) {
+		if(cond.isEmpty()) {
+			return null;
+		}
 		cond = eliminateMatchedPara(cond);
 		boolean needReverse = false;
 		String NOT = "NOT";

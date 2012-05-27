@@ -98,10 +98,17 @@ public class SQLQuery {
 			sb.append(skeleton.getTables().get(i).getTableName());
 		}
 		String condition = skeleton.getAllJoinConditions();
-		if(!condition.isEmpty()) {
+		if(!condition.isEmpty() || this.condition != null) {
 		   sb.append(" where ");
-    		//wrong here FIXME
-	    	sb.append(skeleton.getAllJoinConditions());
+    		if(!condition.isEmpty()) {
+ 	    	    sb.append(skeleton.getAllJoinConditions());
+    		}
+    		if(!condition.isEmpty() && this.condition != null && !this.condition.isEmpty()) {
+    			sb.append(" and ");
+    		}
+    		if(this.condition != null && !this.condition.isEmpty()) {
+    			sb.append(this.condition.toSQLCode());
+    		}
 		}
 		if(!this.groupbyColumns.isEmpty()) {
 			sb.append(" group by ");
@@ -112,6 +119,10 @@ public class SQLQuery {
 				}
 				sb.append(c.getFullName());
 			}
+		}
+		if(this.havingCond != null) {
+			sb.append(" having ");
+			sb.append(this.havingCond.toSQLCode());
 		}
 		
 		return sb.toString();
