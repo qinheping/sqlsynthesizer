@@ -645,7 +645,7 @@ public class QueryConditionSearcher {
 				String condition = "";
 				if (idx1-3>0)
 				{
-					condition = lines[i].substring(0, idx1-3);
+					condition = lines[i].substring(0, idx1-2);
 				}
 				
 				if (condBuffer.length() != 0)
