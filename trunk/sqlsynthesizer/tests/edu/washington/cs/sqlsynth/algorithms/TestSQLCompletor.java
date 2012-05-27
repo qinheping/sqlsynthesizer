@@ -258,6 +258,8 @@ public class TestSQLCompletor extends TestCase {
 		completor.addInputTable(input1);
 		completor.setOutputTable(output);
 		
+		DbConnector.NO_ORDER_MATCHING = true;
+		
 		List<SQLQuery> queries = completor.inferSQLQueries();
 		System.out.println("number of inferred queries: " + queries.size());
 		for(SQLQuery q : queries) {
