@@ -289,6 +289,8 @@ public class TestSQLCompletor extends TestCase {
 		inputs.add(input3);
 		inputs.add(input4);
 		
+		SQLSkeleton.REMOVE_DUPLICATE = true;
+		
 		SQLSkeletonCreator creator = new SQLSkeletonCreator(inputs, output);
 		SQLSkeleton skeleton = creator.inferSQLSkeleton();
 		
@@ -396,6 +398,7 @@ public class TestSQLCompletor extends TestCase {
 	@Override
 	public void tearDown() {
 		DbConnector.NO_ORDER_MATCHING = false;
+		SQLSkeleton.REMOVE_DUPLICATE = false;
 	}
 	
 }
