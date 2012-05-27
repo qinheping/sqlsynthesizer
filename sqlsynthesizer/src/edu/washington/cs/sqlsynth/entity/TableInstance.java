@@ -88,6 +88,15 @@ public class TableInstance {
 		return this.getColumnByName(columnName) != null;
 	}
 	
+	public boolean containDuplicateColumns() {
+		int length = this.columns.size();
+		Set<String> columnNames = new HashSet<String>();
+		for(TableColumn c : this.columns) {
+			columnNames.add(c.getColumnName());
+		}
+		return length != columnNames.size();
+	}
+	
 	public TableColumn getColumnByName(String columnName) {
 		for(TableColumn c : this.columns) {
 			if(c.getColumnName().equals(columnName)) {
