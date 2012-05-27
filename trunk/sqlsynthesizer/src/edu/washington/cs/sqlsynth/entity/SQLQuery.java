@@ -19,9 +19,23 @@ public class SQLQuery {
 	
 	private QueryCondition havingCond = null;
 	
+	private List<SQLQuery> unions = new LinkedList<SQLQuery>(); 
+	
 	public SQLQuery(SQLSkeleton skeleton) {
 		Utils.checkNotNull(skeleton);
 		this.skeleton = skeleton;
+	}
+	
+	public static SQLQuery clone(SQLQuery q) {
+		SQLQuery newQ = new SQLQuery(q.skeleton);
+		
+		newQ.condition = q.condition;
+		newQ.aggregateExprs.putAll(q.aggregateExprs);
+		newQ.groupbyColumns.addAll(q.groupbyColumns);
+		newQ.havingCond = q.havingCond;
+		newQ.unions.addAll(q.unions);
+		
+		return newQ;
 	}
 	
 	public QueryCondition getCondition() {
@@ -39,6 +53,11 @@ public class SQLQuery {
 
 	public void setCondition(QueryCondition condition) {
 		this.condition = condition;
+	}
+	
+	public void addUnionQuery(SQLQuery q) {
+		Utils.checkTrue(q != this);
+		this.unions.add(q);
 	}
 
 	public Map<Integer, AggregateExpr> getAggregateExprs() {
@@ -71,6 +90,8 @@ public class SQLQuery {
 			if(count != 0) {
 				sb.append(", ");
 			}
+			//FIXME
+			sb.append(" distinct ");
 			if(this.skeleton.getProjectColumns().containsKey(i)) {
 				sb.append(this.skeleton.getProjectColumns().get(i).getFullName());
 			} else if(this.getAggregateExprs().containsKey(i)) {
@@ -123,6 +144,15 @@ public class SQLQuery {
 		if(this.havingCond != null) {
 			sb.append(" having ");
 			sb.append(this.havingCond.toSQLCode());
+		}
+		if(!this.unions.isEmpty()) {
+			Utils.checkTrue(this.unions.size() == 1);
+			sb.append(" union ");
+			sb.append("(");
+			SQLQuery append = this.unions.get(0);
+			sb.append(append.toSQLString());
+//			this.unions.get(0).toSQLString();
+			sb.append(")");
 		}
 		
 		return sb.toString();
