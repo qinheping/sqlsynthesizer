@@ -74,8 +74,8 @@ public class AggregateExprInfer {
 	
 	private List<AggregateExpr> filterUnlikelyColumns(List<AggregateExpr> possAggrExprs,
 			TableColumn outputColumn) {
-		System.err.println("+++ consider: " + outputColumn.getFullName()
-				+ ",  type: " + outputColumn.getType());
+//		System.err.println("+++ consider: " + outputColumn.getFullName()
+//				+ ",  type: " + outputColumn.getType());
 		List<AggregateExpr> filtered = new LinkedList<AggregateExpr>();
 		for(AggregateExpr expr : possAggrExprs) {
 			Utils.checkTrue(expr.isComplete());

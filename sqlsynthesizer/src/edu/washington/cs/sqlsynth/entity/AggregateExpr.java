@@ -70,7 +70,12 @@ public class AggregateExpr {
 		if(!this.isComplete()) {
 			throw new RuntimeException("The aggregate expr is not completed yet.");
 		}
-		return this.t.toString() + "(" + this.column.getFullName() + ")";
+		//FIXME by default it is distinct
+		String distinct = "";
+		if(this.t.equals(AggregateType.COUNT)) {
+			distinct = " distinct ";
+		}
+		return this.t.toString() + "(" + distinct + this.column.getFullName() + ")";
 	}
 	
 	@Override

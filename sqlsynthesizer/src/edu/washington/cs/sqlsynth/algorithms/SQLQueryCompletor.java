@@ -66,9 +66,29 @@ public class SQLQueryCompletor {
 		
 		//create SQL statements
 		List<SQLQuery> quries = new LinkedList<SQLQuery>();
+		
+		
 		quries.addAll(constructQueries(skeleton, aggrExprs, groupbyColumns));
 		
+		List<SQLQuery> replicatedQueries = new LinkedList<SQLQuery>();
+		
 		for(SQLQuery query : quries) {
+			//replicate the query
+			SQLQuery repQuery1 = SQLQuery.clone(query);
+			SQLQuery repQuery2 = SQLQuery.clone(query);
+			if(select != null) {
+			    repQuery1.setCondition(select);
+			}
+			if(having != null) {
+				repQuery2.setHavingCondition(having);
+			}
+			repQuery1.addUnionQuery(repQuery2);
+			System.err.println(repQuery1.toSQLString());
+			replicatedQueries.add(repQuery1);
+//			System.err.println(repQuery2.toSQLString());
+			
+			
+			//the other query
 			if(select != null) {
 			    query.setCondition(select);
 			}
@@ -77,8 +97,28 @@ public class SQLQueryCompletor {
 			}
 		}
 		
+		quries.addAll(replicatedQueries);
+		
 		return quries;
 	}
+	
+//	private List<SQLQuery> constructQueries(SQLSkeleton skeleton, Map<Integer, List<AggregateExpr>> aggrExprs, List<TableColumn> groupbyColumns,
+//			Collection<Pair<QueryCondition, QueryCondition>> pairs) {
+//		//create SQL statements
+//		List<SQLQuery> quries = new LinkedList<SQLQuery>();
+//		quries.addAll(constructQueries(skeleton, aggrExprs, groupbyColumns));
+//		
+//		for(SQLQuery query : quries) {
+//			if(select != null) {
+//			    query.setCondition(select);
+//			}
+//			if(having != null) {
+//			    query.setHavingCondition(having);
+//			}
+//		}
+//		
+//		return quries;
+//	}
 	
 	List<SQLQuery> constructQueries(SQLSkeleton skeleton, Map<Integer, List<AggregateExpr>> aggrExprs, List<TableColumn> groupbyColumns) {
 		//may have case: select name where group by x where count(y) > 5
