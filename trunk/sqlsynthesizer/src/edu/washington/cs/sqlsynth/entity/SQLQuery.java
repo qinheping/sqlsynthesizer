@@ -120,15 +120,21 @@ public class SQLQuery {
 		}
 		String condition = skeleton.getAllJoinConditions();
 		if(!condition.isEmpty() || this.condition != null) {
-		   sb.append(" where ");
+		    
+		    StringBuilder cond = new StringBuilder();
     		if(!condition.isEmpty()) {
- 	    	    sb.append(skeleton.getAllJoinConditions());
+    			cond.append(skeleton.getAllJoinConditions());
     		}
     		if(!condition.isEmpty() && this.condition != null && !this.condition.isEmpty()) {
-    			sb.append(" and ");
+    			cond.append(" and ");
     		}
     		if(this.condition != null && !this.condition.isEmpty()) {
-    			sb.append(this.condition.toSQLCode());
+    			cond.append(this.condition.toSQLCode());
+    		}
+    		
+    		if(!cond.toString().trim().isEmpty()) {
+    		    sb.append(" where ");
+    		    sb.append(cond.toString());
     		}
 		}
 		if(!this.groupbyColumns.isEmpty()) {
