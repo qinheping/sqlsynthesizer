@@ -123,7 +123,7 @@ public class AggregateExprInfer {
 	
 	public List<TableColumn> inferGroupbyColumns() {
 		if(!this.hasUnmatchedColumns()) {
-			return Collections.emptyList();
+			return new LinkedList<TableColumn>();
 		}
 		//columns that are not matched
 		List<TableColumn> outputColumns = this.outputTable.getColumns();
