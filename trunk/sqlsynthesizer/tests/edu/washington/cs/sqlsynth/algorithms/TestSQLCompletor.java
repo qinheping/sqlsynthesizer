@@ -23,7 +23,9 @@ public class TestSQLCompletor extends TestCase {
 	}
 
 	public void testDTree1()
-	{
+	{	
+		DbConnector.NO_ORDER_MATCHING = true;
+		
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_3/id_class_5_1_3");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_1_3/id_enroll_5_1_3");
 		TableInstance output = TableInstanceReader.readTableFromFile("./dat/5_1_3/output_5_1_3");
@@ -96,8 +98,7 @@ public class TestSQLCompletor extends TestCase {
 		}
 	}
 	
-	
-	
+	//NOTE this can not be figured by our language subset
 	public void testDTree3()
 	{
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_9/id_class_5_1_9");
@@ -226,10 +227,12 @@ public class TestSQLCompletor extends TestCase {
 		completor.addInputTable(input2);
 		completor.setOutputTable(output);
 		
+		
 		List<SQLQuery> queries = completor.inferSQLQueries();
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		DbConnector.NO_ORDER_MATCHING = true;
 		queries = completor.validateQueriesOnDb(queries);
 		//after validating on my sql
 		System.out.println("The final output....");
