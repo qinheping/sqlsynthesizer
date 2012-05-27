@@ -210,11 +210,11 @@ public class TestQueryCondition extends TestCase {
 		
 		ConditionNode node = QueryCondition.parseNode(columnMap,exprMap, cond);
 		System.out.println(node.toSQLString());
-		assertEquals("count(tbl.room) > 1", node.toSQLString());
+		assertEquals("count( distinct tbl.room) > 1", node.toSQLString());
 		
 		ConditionNode revNode = ConditionNode.reverseOp(node);
 		System.out.println(revNode.toSQLString());
-		assertEquals("count(tbl.room) <= 1", revNode.toSQLString());
+		assertEquals("count( distinct tbl.room) <= 1", revNode.toSQLString());
 	}
 	
 	public void testConditionWithAggregation2() {
@@ -247,7 +247,7 @@ public class TestQueryCondition extends TestCase {
 		
 		QueryCondition query = QueryCondition.parse(columnMap,exprMap, cond);
 		System.out.println(query.toSQLCode());
-		assertEquals("(tbl1.roomName = 'R128' and count(tbl2.room) > 1)", query.toSQLCode());
+		assertEquals("(tbl1.roomName = 'R128' and count( distinct tbl2.room) > 1)", query.toSQLCode());
 		
 		Collection<Pair<QueryCondition, QueryCondition>> coll = query.splitSelectionAndQueryConditions();
 		System.out.println("See the results: ");
@@ -255,7 +255,7 @@ public class TestQueryCondition extends TestCase {
 		
 		QueryCondition revQ = QueryCondition.reverse(query);
 //		System.out.println(revQ.toSQLCode());
-		assertEquals("(tbl1.roomName != 'R128' or count(tbl2.room) <= 1)", revQ.toSQLCode());
+		assertEquals("(tbl1.roomName != 'R128' or count( distinct tbl2.room) <= 1)", revQ.toSQLCode());
 		
 	}
 	
@@ -272,7 +272,7 @@ public class TestQueryCondition extends TestCase {
 		
 		QueryCondition queryCond = QueryCondition.parse(columnMap, exprMap, cond);
 		System.out.println(queryCond.toSQLCode());
-		assertEquals("((count(tbl2.room) <= 1 and count(tbl2.room) > 2) and tbl.room != 'R128')", queryCond.toSQLCode());
+		assertEquals("((count( distinct tbl2.room) <= 1 and count( distinct tbl2.room) > 2) and tbl.room != 'R128')", queryCond.toSQLCode());
 		
 		try {
 		  queryCond.splitSelectionAndQueryConditions();

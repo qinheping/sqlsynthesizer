@@ -91,7 +91,9 @@ public class SQLQuery {
 				sb.append(", ");
 			}
 			//FIXME
-			sb.append(" distinct ");
+			if(count == 0) {
+			    sb.append(" distinct ");
+			}
 			if(this.skeleton.getProjectColumns().containsKey(i)) {
 				sb.append(this.skeleton.getProjectColumns().get(i).getFullName());
 			} else if(this.getAggregateExprs().containsKey(i)) {
