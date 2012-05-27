@@ -280,6 +280,12 @@ public class Utils {
 		return false;
 	}
 	
+	public static <T> T getFirst(Collection<T> coll) {
+		List<T> list = new LinkedList<T>();
+		list.addAll(coll);
+		return list.get(0);
+	}
+	
 	public static <T> Collection<T> iterableToCollection(Iterable<T> ts) {
 		Collection<T> collection = new LinkedList<T>();
 		for(T t : ts) {
