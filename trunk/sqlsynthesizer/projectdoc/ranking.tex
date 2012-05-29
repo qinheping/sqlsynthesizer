@@ -1,0 +1,17 @@
+\subsection{Query Candidate Ranking}
+\label{sec:ranking}
+
+After the first two steps, several SQL queries satisfying the given input-output examples
+will be returned. To reduce the effort in selecting a desirable query, we devise a strategy
+to rank the most likely query near the top of the list.
+%Due to lacking in input-output examples we are not be able to rule out SQL
+%queries that lack in generalization ability. Instead we will provide user queries according to a rank.
+
+Here we use a simple but useful strategy based on Occam's razor to rank all inferred SQL query candidates.
+For one output query, each table appearing in it introduces a cost $C_t$ and each appearing condition 
+results in an additional cost $C_p$. The total number of cost of a query is $n_t*C_t+n_p*C_p$ in which
+$n_t$ is the number of tables and $n_p$ is the number of predicates used in the query. The algorithm
+ranks the query based on the cost in an increasing order to ensure that a simpler query often ranks higher.
+
+%If a list of multiple SQL queries satisfy the given input-output examples, how
+%to present the most likely queries to the top?

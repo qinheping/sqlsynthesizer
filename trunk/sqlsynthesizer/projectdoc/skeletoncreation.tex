@@ -1,0 +1,56 @@
+\subsection{Query Skeleton Creation}
+\label{sec:skeleton}
+
+In this step, our algorithm scans the given input-output example, aligns the output table data
+with the input table data, and infers a query skeleton that captures the basic structure
+of a desirable SQL query. The inferred query skeleton is a partial, incomplete SQL query, and
+contains possible language structure that can be yet decided.
+%, and serves as a good
+%reference for further query completion in the next step.
+
+When the algorithm scans the input-output examples, it uses the table \textit{column name}
+as the major indicator to establish the input and output table relations. It uses a technique called
+\textit{template-based} program synthesis~\cite{sttt-synthesis} to construct a query skeleton as follows:
+
+
+\begin{itemize}
+
+\item \textit{\textbf{Step 1: Determining Table Set.}} If multiple tables are provided as input, it is very likely that all
+provided tables will be used in constructing the desirable SQL query. Based on this observation, we assume that
+the minimum number of used tables is the number of all tables provided in the input example. By default, the
+table set $T$ used in SQL query contains all given tables. However, it is
+possible that a single table will be used in one SQL query for more than once, leading to a more complex query.
+Our program does not forbid this case, rather, we \textit{prefer} to use as a few tables as possible to achieve
+the same results. In some cases, if one field from a particular input table appears more than once in the
+output table, we view it as a strong indicator that this table will be joined multiple times and add it to our table
+set $T$ using an alias.
+
+
+\item \textit{\textbf{Step 2: Determining Joining Columns. }} Given two arbitrary tables, there exist many
+ways to join them. Enumerating all possible joining conditions would introduce a huge search space and thus
+become intractable. We observe that, in practice, two tables are often joined \textit{only} via the following
+three cases: first, tables are joined on their primary keys that have the same (or compatible) data types (i.e., it does not
+make any sense to join two tables on a Integer column and a String column). Second, tables are joined
+using the columns with the same column name, such as joining a \textit{Student} table with a \textit{Course} table on the
+\textit{student\_name} column. Third, two columns that have the data type, and have a large portion of
+overlapped data value in the given input can be used as a joining condition. In our tool implementation, it is trivial to check the first 
+two cases. For the third case, our algorithm scans the whole given input table to check the ``value similarity''
+between two arbitrary columns, and selects columns whose ``value similarity'' is above a fixed threshold as joining candidates.
+
+\item \textit{\textbf{Step 3: Determining Output Columns.}} After determining the table set and joining columns,
+the next step is to identify potential column names on which the result would be projected. If a
+column in the output table  does not appear in any input table's column list, this output column must
+be produced by aggregation. Our algorithm keeps track of these columns and appends a \CodeIn{group by} ... \CodeIn{having} ...
+clause to the query skeleton.
+
+\end{itemize}
+
+In summary, this step infers two parts as a query skeleton: a table set used in producing the SQL query, a set of joining conditions
+used to connect tables from the table set, and a list of columns used to project the output data.
+It is worth noting that the results obtained from the above steps are not \textit{safe} in
+terms that they may miss some valid SQL queries. We made the above assumption for the sake of tractability,
+since in theory, the bound of table number in a SQL query is $O(n_t!)$, where $n_t$ is the number of given tables;
+while the bound of possible number of join is $O(c_t^2)$ and the bound of the number of conditions is $O(n_t!n_tc_t^2)<O(n_t^3c_t^2)$.
+
+
+
