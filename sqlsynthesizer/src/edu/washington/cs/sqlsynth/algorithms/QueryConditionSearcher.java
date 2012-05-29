@@ -62,13 +62,7 @@ public class QueryConditionSearcher {
 		System.out.println("---------------------------------------------End of QueryConditionSearcherd---------------------------------------------");
 	}
 	
-	public Collection<QueryCondition> inferQueryConditions() {
-		
-		
-		
-		//use decision tree to infer query condition
-		//throw new RuntimeException("");
-//		return Collections.emptySet();
+	public Collection<QueryCondition> inferQueryConditions() {		
 		return this.queryConditions;
 	}
 	
@@ -167,7 +161,6 @@ public class QueryConditionSearcher {
 										break;
 									}
 								}
-//								TableColumn c = new TableColumn(table.getTableName(), columns.get(k).getColumnName(), ColumnType.Integer, false);
 								AggregateExpr expr = new AggregateExpr(c, AggregateType.COUNT);
 								
 								
@@ -203,7 +196,6 @@ public class QueryConditionSearcher {
 							
 							if (!forQueryTranslateAgg.containsKey(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_max"))
 							{
-//								TableColumn c = new TableColumn(table.getTableName(), columns.get(k).getColumnName(), ColumnType.Integer, false);
 								AggregateExpr expr = new AggregateExpr(c, AggregateType.MAX);
 								forQueryTranslateAgg.put(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_max", 
 										expr);
@@ -211,7 +203,6 @@ public class QueryConditionSearcher {
 							
 							if (!forQueryTranslateAgg.containsKey(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_min"))
 							{
-//								TableColumn c = new TableColumn(table.getTableName(), columns.get(k).getColumnName(), ColumnType.Integer, false);
 								AggregateExpr expr = new AggregateExpr(c, AggregateType.MIN);
 								forQueryTranslateAgg.put(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_min", 
 										expr);
@@ -219,7 +210,6 @@ public class QueryConditionSearcher {
 							
 							if (!forQueryTranslateAgg.containsKey(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_sum"))
 							{
-//								TableColumn c = new TableColumn(table.getTableName(), columns.get(k).getColumnName(), ColumnType.Integer, false);
 								AggregateExpr expr = new AggregateExpr(c, AggregateType.SUM);
 								forQueryTranslateAgg.put(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_sum", 
 										expr);
@@ -227,7 +217,6 @@ public class QueryConditionSearcher {
 							
 							if (!forQueryTranslateAgg.containsKey(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_avg"))
 							{
-//								TableColumn c = new TableColumn(table.getTableName(), columns.get(k).getColumnName(), ColumnType.Integer, false);
 								AggregateExpr expr = new AggregateExpr(c, AggregateType.AVG);
 								forQueryTranslateAgg.put(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_avg", 
 										expr);
@@ -243,6 +232,10 @@ public class QueryConditionSearcher {
 			
 			attributes.addElement(new Attribute("class", tmpVector));
 			
+			for (int ii = 0; ii<attributes.size(); ++ii)
+			{
+				System.out.println(attributes.elementAt(ii));
+			}
 			
 			Instances inputData = new Instances(relationName, attributes, table.getRowNum());
 			inputData.setClassIndex(inputData.numAttributes() - 1);
@@ -389,12 +382,21 @@ public class QueryConditionSearcher {
 										
 										for (int n = 0; n<tmpTable.getRowNum(); ++n)
 										{
+//											System.out.println("--------------line 385----------------");
+//											System.out.println(col.getValue(n).toString() + "-------------"+table.getColumn(k).getValue(j));
 											if (col.getValue(n).toString().equals(table.getColumn(k).getValue(j).toString()))
 											{
 												rowNum = n;
 												break;
 											}
 										}
+										
+//										System.out.println("---------------line 394----------------");
+//										System.out.println("k: "+k+" l: "+l+" m: "+m);
+//										if (rowNum == -1)
+//										{
+//											System.out.println("----------------stop here and check-----------------");
+//										}
 										inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getUniqueCountOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), rowNum));
 //										inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getCountOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), rowNum));
 										flag = true;
