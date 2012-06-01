@@ -29,59 +29,43 @@
     & |\ \ce \;\op\; \ce \\
 \op ::= {} &\ \ \texttt{=} \;\;|\;\; \texttt{>}  \;\;|\;\; \texttt{<}\\
 \ce ::= {} &\ \ const \;\;|\;\; \column  \;\; \\
-\e ::= {} & \ce \\
+\e ::= {} & \ce \;\;|\ count(\column) \\
     & |\ sum(\column) \;\;|\ max(\column) \;\;|\ min(\column) 
 \end{align*}
 \normalsize%
-\caption{Syntax of the supported SQL language subset.}
+\caption{Syntax of the supported SQL subset.}
 \label{fig:syntax}
 \end{figure}
 
 
-\section{Language}
+\section{Language and Example}
 \label{sec:langsubset}
 
-Before presenting our SQL query inference algorithm, we first describe
-the supported SQL language subset.
+In this section, we first present the supported SQL subset, and
+then describe a motivating example which could be expressed in the
+supported SQL subset.
+
+\subsection{Supported SQL Subset}
 
 Figure~\ref{fig:syntax} defines the syntax of the supported, which
-is a subset of the standard query language SQL. This language subset
-supports common query operations using multiple tables (i.e.,
-\CodeIn{select} ... \CodeIn{from}... \CodeIn{where}..), and standard
-boolean operators as predicates. The language
+is a subset of the standard SQL 93 language. This language subset
+supports common query operations across multiple tables (i.e.,
+\CodeIn{select} ... \CodeIn{from}... \CodeIn{where}..), and 
+conjunctive boolean operators as predicates. The language
 subset shares the same semantics with the standard SQL language.
 Different than existing work~\cite{DasSarma:2010}, this language supports
-joining operations across multiple tables.  In addition, the language includes
+joining operations across multiple tables. In addition, this subset includes
 widely used database operations such as \CodeIn{group by},
 \CodeIn{order by}, and \CodeIn{having}, as
-well as a few common aggregation functions such as \CodeIn{sum},
+well as a few common aggregation functions such as \CodeIn{count}, \CodeIn{sum},
 \CodeIn{max}, and \CodeIn{min}.
 
-Compared to the full SQL specification, this language subset is far from complete.
-However, there is a tradeoff between the completeness (or expressiveness) of a language,
-and the complexity of finding a simple consistent program (here, a SQL query)
-within that space defined by the language. In general, the more expressive
-a language, the harder the task of effectively finding an answer. When
-designing the language subset, we balanced three inter-related principles:
+As we will show in Section~\ref{sec:evaluation}, this
+subset, though far from complete, is expressive enough for answering
+most evaluated SQL exercises from a textbook and quite a few real problems
+from online forums.
 
-\begin{itemize}
+\subsection{Example}
+\label{sec:example}
 
-\item \textit{Expressiveness}. The language subset be able
-to represent a reasonable set of SQL queries in practice.
-
-\item \textit{Generality}. The language should resemble
-the existing SQL language and should not impose additional
-or different semantics.
-
-\item \textit{Tool utility}. Inferring a consistent query
-using this language subset should be easy to leverage by
-domain knowledges and other analyses.
-
-\end{itemize}
-
-As these principles stand in tension, our supported language subset
-represents a sweet spot that addressed each of them to a reasonable
-extent. As we will show in Section~\ref{sec:evaluation}, this
-language subset is expressive enough for most SQL query exercise
-after a widely-used textbook and many online forum answers.
-
+\input{example}
