@@ -13,5 +13,54 @@ results in an additional cost $C_p$. The total number of cost of a query is $n_t
 $n_t$ is the number of tables and $n_p$ is the number of predicates used in the query. The algorithm
 ranks the query based on the cost in an increasing order to ensure that a simpler query often ranks higher.
 
-%If a list of multiple SQL queries satisfy the given input-output examples, how
-%to present the most likely queries to the top?
+Figure~\ref{fig:rank} shows an example to illustrate this ranking strategy.
+
+
+\begin{figure}[t]
+
+\begin{tabular}{|l|l|}
+%\hline
+\multicolumn{2}{l}{Input table: \textbf{student}}\\\hline
+%\hline
+\textbf{name} & \textbf{score} \\\hline
+Bob & 4  \\\hline
+Dan & 5  \\\hline
+Jim & 2  \\\hline
+\end{tabular}
+\quad
+\begin{tabular}{|l|}
+%\hline
+\multicolumn{1}{l}{Query output}\\\hline
+%\hline
+\textbf{name}\\\hline
+Bob  \\\hline
+Dan  \\\hline
+\end{tabular}
+
+\vspace{2mm}
+
+
+Query 1:
+\vspace{-2mm}
+\begin{CodeOut}
+\begin{alltt}
+\textbf{select name from student where score > 3;}
+\end{alltt}
+\end{CodeOut}
+
+Query 2:
+\vspace{-2mm}
+\begin{CodeOut}
+\begin{alltt}
+\textbf{select name from student where name = `Bob` or name = `Dan`
+}
+\end{alltt}
+\end{CodeOut}
+\vspace{-5mm}
+\Caption{{\label{fig:rank} The illustration of our query candidate ranking
+strategy. Both Query 1 and Query 2 can transform the example input
+to the example output. However, according to our ranking strategy, Query 1
+contains less conditions, and thus is simpler than Query 2 and ranks higher.
+By contrast, a query containing more conditions like Query 2 is more likely
+to overfit only the given examples.}}
+\end{figure}
