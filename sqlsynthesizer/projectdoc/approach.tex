@@ -25,14 +25,14 @@ Creation(Section~\ref{sec:skeleton}), SQL Query Completion
 Specifically, our approach takes from users input-output examples. It first infers
 a partially-complete query skeleton. The inferred query skeleton, though contains
 incomplete parts as holes, serves as good guidance for synthesizing a complete SQL query.
-Our approach next uses two techniques to fulfill the SQL skeleton. It first
+Our approach next uses two techniques to fulfill a SQL skeleton. It first
 uses decision-tree learning to learn possible query conditions (Section~\ref{}), and
-then employs type-directed search to figure out possible aggregates (Section~\ref{}).
+ employs type-directed search to figure out possible aggregates (Section~\ref{}).
 After the SQL Query Completion step, our approach produces a list of syntactically-valid
 query candidates that satisfy the provided input-output examples.
-It is possible that multiple query candidates can be synthesized based on the
-provided input-output example. Our approach finally ranks all generated candidates,
-and provides users a ranked list of SQL queries with the most likely ones on the top. 
+However, it is possible that multiple query candidates can be synthesized based on the
+provided input-output example. To deal with that, our approach ranks all generated candidates,
+and provides users a ranked list of SQL queries with the most useful ones on the top. 
 %This makes our tool more usable.
 
 
