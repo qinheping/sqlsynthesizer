@@ -5,21 +5,36 @@
 
 
 We next describe our approach to infer SQL queries from 
-input-output example with a real example as described
-in Section~\ref{sec:example}. Our algorithm consists of three steps:
-Query Skeleton Creation(Section~\ref{sec:skeleton}),
-SQL Query Completion (Section~\ref{sec:completion}), and
-Query Candidate Ranking (Section~\ref{sec:ranking}).
+input-output examples with the example shown 
+in Section~\ref{sec:example}. 
 
-\input{skeletoncreation}
+\begin{figure}[t]
+  \centering
+  \includegraphics[scale=0.53]{workflow}
+  \vspace*{-5.0ex}\caption {{\label{fig:workflow} The workflow of our SQL query synthesis approach.
+}}
 
-\input{querycompletion}
+\end{figure}
 
-\input{ranking}
+\subsection{Overview}
+Figure~\ref{fig:workflow} sketches the general workflow of our approach.
 
+At a high level, our approach consists of three steps: Query Skeleton
+Creation(Section~\ref{sec:skeleton}), SQL Query Completion
+(Section~\ref{sec:completion}), and Query Candidate Ranking (Section~\ref{sec:ranking}).
+Specifically, our approach takes from users input-output examples. It first infers
+a partially-complete query skeleton. The inferred query skeleton, though contains
+incomplete parts as holes, serves as good guidance for synthesizing a complete SQL query.
+Our approach next uses two techniques to fulfill the SQL skeleton. It first
+uses decision-tree learning to learn possible query conditions (Section~\ref{}), and
+then employs type-directed search to figure out possible aggregates (Section~\ref{}).
+After the SQL Query Completion step, our approach produces a list of syntactically-valid
+query candidates that satisfy the provided input-output examples.
+It is possible that multiple query candidates can be synthesized based on the
+provided input-output example. Our approach finally ranks all generated candidates,
+and provides users a ranked list of SQL queries with the most likely ones on the top. 
+%This makes our tool more usable.
 
-\subsection{User Interactive Model}
-\label{sec:uim}
 
 End-users can use our approach to obtain SQL query to transform
 multiple, huge database tables by constructing small, representative
@@ -34,4 +49,15 @@ the user can refine the inferred SQL query by providing a more
 informative input-output example (or multiple input-output examples
 that together describe the required behavior) that demonstrate the behavior on
 which the originally-inferred SQL query behaves incorrectly.
+
+\input{skeletoncreation}
+
+\input{querycompletion}
+
+\input{ranking}
+
+
+%\subsection{User Interactive Model}
+%\label{sec:uim}
+
 
