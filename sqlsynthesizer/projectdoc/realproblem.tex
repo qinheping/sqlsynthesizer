@@ -1,0 +1,109 @@
+We start out by describing a real-world example picked up from
+an online SQL help forum, that illustrates a typical scenario
+in writing SQL queries\footnote{\url{http://forums.tutorialized.com/sql-basics-113/join-problem-147856.html}}.
+
+The thread was started by a novice user, who needed help to write a
+SQL query to get result from three input tables. In the help thread, the
+novice user described his required query in a few paragraphs of
+English, but also include several small, representative input-output
+examples as shown in Figure~\ref{fig:example}, to better express
+his intention. 
+
+The desirable SQL query, as shown in Figure~\ref{fig:answer} is
+unintuitive to write. It first needs to join three input tables
+on columns \CodeIn{T1.Column2}, \CodeIn{T2.Column2},
+\CodeIn{T2.Column1}, and \CodeIn{T3.Column1},
+then filters out tuples whose \CodeIn{Table1.Column2} value
+is not '2001'. Further, it aggregates the results based on
+the value of \CodeIn{Table2.Column3}, and returns the minimal
+values of columns \CodeIn{T1.Column1}, \CodeIn{T1.Column4}, and \CodeIn{T3.Column2}
+in each aggregated group as the results.
+
+Such help threads on online discussion forums are not rare, but the SQL
+queries needed to address them are non-trivial.
+
+\begin{figure}[t]
+
+\textbf{The input Table1:}
+
+\begin{tabular}{|c|c|c|c|}
+\hline
+ Column1 & Column2& Column3& Column4\\
+ \hline
+ 101 &  2001 &  3020 &  01-01-11\\
+\hline
+ 101 &  2001 &  3002 &  02-01-11\\
+\hline
+ 101 &  2001 &  3001 &  03-01-11\\
+\hline
+ 102 &  2002 &  3002 &  01-01-11\\
+\hline
+\end{tabular}
+
+\vspace{2mm}
+
+\textbf{The input Table2:}
+
+\begin{tabular}{|c|c|c|}
+\hline
+ Column1 & Column2& Column3 \\
+ \hline
+ 20011 &  2001 &  200131\\
+\hline
+ 20012 &  2001 &  200132\\
+\hline
+ 20013 &  2001 &  200133\\
+\hline
+\end{tabular}
+
+\vspace{2mm}
+
+\textbf{The input Table3:}
+
+\begin{tabular}{|c|c|}
+\hline
+ Column1 & Column2\\
+ \hline
+ 20011 &  Site\\
+\hline
+ 20012 &  Site\\
+\hline
+ 20013 &  Site\\
+\hline
+\end{tabular}
+
+\vspace{3mm}
+
+\textbf{The output table:}
+
+\begin{tabular}{|c|c|c|c|}
+\hline
+ 101 & 200131 & 01-01-11 & Site\\
+ \hline
+ 101 & 200132 & 01-01-11 & Site\\
+ \hline
+ 101 & 200133 & 01-01-11 & Site\\
+ \hline
+\end{tabular}
+\Caption{{\label{fig:example} Input-output example tables from
+an online SQL help forum thread. Our approach is expected to
+automatically infer a SQL query as shown in Figure~\ref{fig:answer}
+that produces the output table for the three input tables.
+}} \vspace{2mm}
+\end{figure}
+
+\begin{figure}[t]
+\begin{CodeOut}
+\begin{alltt}
+\textbf{select min(T1.Column1), T2.Column3,
+       min(T1.Column4), min(T3.Column2)
+from Table1 T1, Table2 T2, Table3 T3
+where T1.Column2 = T2.Column2 and T2.Column1 = T3.Column1
+       and T2.Column2 = '2001'
+group by T2.Column3}
+\end{alltt}
+\end{CodeOut}
+\vspace{-5mm}
+\Caption{{\label{fig:answer} The expected SQL query inferred
+by our approach for the input-output examples in Figure~\ref{fig:example}.}}
+\end{figure}
