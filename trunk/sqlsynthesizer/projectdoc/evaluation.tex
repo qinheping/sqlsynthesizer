@@ -20,10 +20,10 @@ queries that real end-users require?
 \item Can our inference algorithm efficiently find a SQL query
 from input-output examples?
 
-\item Does the inferred SQL query correctly express end-users'
-intention and produce the expected output? If not, how many
-additional examples does a user need to provide before our
-approach infers a correctly-behaved SQL query?
+%\item Does the inferred SQL query correctly express end-users'
+%intention and produce the expected output? If not, how many
+%additional examples does a user need to provide before our
+%approach infers a correctly-behaved SQL query?
 
 \end{itemize}
 
@@ -60,8 +60,50 @@ repeat this process until our tool infers a desirable SQL query.
 
 \subsection{Experimental Results}
 
+\begin{table}[t]
+\setlength{\tabcolsep}{.14\tabcolsep}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+ & \#Total& \#Solved& Time Cost (s) & Human Effort (m)\\
+ \hline
+ Textbook exercises &  6 &  5 &  30 & 3 \\
+\hline
+ Forum problems &  5 &  5  &  60 & 5\\
+\hline
+\end{tabular}
+
+\Caption{{\label{tab:results} Experimental results of synthesizing
+SQL queries for 6 exercises from a classic database textbook~\cite{cowbook},
+and 5 real problems from online forums. Column `\#Total` is the total
+number of exercises or problems. Column `\#Solved` is the solved
+number of exercises or problems by our technique. Column `Time Cost(s)`
+records the average time (in seconds) used to solve each exercise or problem.
+Column `Human Effort(m)` is the average time (in minutes) spent in writing input-output examples
+for each exercise or problem.}}
+\end{table}
+
+For each SQL synthesis scenario, we measure time cost in producing
+a desirable SQL query. For each exercise or problem, we also record
+how much time we spent in writing input-output examples.
+Table~\ref{tab:results} summarizes our experimental results.
+
+As shown in Table~\ref{tab:results}, our technique solves 10 out of 11 exercises or problems
+using a very small amount of time. The human effort spent in preparing input-output examples
+is also minimul: about less than 5 minutes per exercise (or problem).
+
 
 \subsubsection{A Real Example}
 \input{realproblem}
 
 \subsection{Experiemtnal Conclusions}
+
+Our initial evaluation shows that the supported SQL subset is
+expressive enough to describe a variety of database queries,
+including exercises from textbook and real end-users' tasks.
+
+Our SQL query synthesis technique works efficiently, produces
+desirable results even on small  input-output examples, and
+even solves problems that receive no replies from popular online
+forums.
+
+
