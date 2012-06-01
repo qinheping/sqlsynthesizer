@@ -2,7 +2,12 @@
 \section{Evaluation}
 \label{sec:evaluation}
 
-We next describe the evaluation of our SQL query synthesis tool.
+We implemented our approach as an open-source programming tool. Our tool, implemented
+in Java, uses MySQL as the backend database engine. When a SQL query is synthesized,
+our tool executes this query on the backend database, and checks whether the output
+query result matches the given example output.
+
+We next describe the evaluation of our prototype tool.
 
 \subsection{Research Questions}
 
