@@ -16,3 +16,22 @@ Query Candidate Ranking (Section~\ref{sec:ranking}).
 \input{querycompletion}
 
 \input{ranking}
+
+
+\subsection{User Interactive Model}
+\label{sec:uim}
+
+End-users can use our approach to obtain SQL query to transform
+multiple, huge database tables by constructing small, representative
+input and output example tables. On some examples, we speculate
+that our approach
+may produce a SQL query that satisfies the input and output examples
+given by the user, but does not address the intention
+that the user wants. To address this issue, we adapt a simple
+interaction model from~\cite{Harris:2011} to ask users to investigate the results of
+an output SQL query and report any discrepancy. In this case,
+the user can refine the inferred SQL query by providing a more
+informative input-output example (or multiple input-output examples
+that together describe the required behavior) that demonstrate the behavior on
+which the originally-inferred SQL query behaves incorrectly.
+
