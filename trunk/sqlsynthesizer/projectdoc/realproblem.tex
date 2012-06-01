@@ -1,4 +1,4 @@
-We start out by describing a real-world example picked up from
+We next describe a real-world example picked up from
 an online SQL help forum, that illustrates a typical scenario
 in writing SQL queries\footnote{\url{http://forums.tutorialized.com/sql-basics-113/join-problem-147856.html}}.
 
@@ -9,8 +9,13 @@ English, but also include several small, representative input-output
 examples as shown in Figure~\ref{fig:example}, to better express
 his intention. 
 
-The desirable SQL query, as shown in Figure~\ref{fig:answer} is
-unintuitive to write. It first needs to join three input tables
+This thread recevies no replies as of May 2012, and we speculated that
+joining three tables and then producing certain output result can
+be non-trivial. We ran our tool on the exact same input/output examples
+as shown in Figure~\ref{fig:example}. The tool produced 6 valid answers
+in less than 1 minutes, all of which satisfy the given examples. The
+highest ranked SQL query is shown in Figure~\ref{fig:answer}.
+This query is unintuitive to write. It first needs to join three input tables
 on columns \CodeIn{T1.Column2}, \CodeIn{T2.Column2},
 \CodeIn{T2.Column1}, and \CodeIn{T3.Column1},
 then filters out tuples whose \CodeIn{Table1.Column2} value
@@ -19,8 +24,8 @@ the value of \CodeIn{Table2.Column3}, and returns the minimal
 values of columns \CodeIn{T1.Column1}, \CodeIn{T1.Column4}, and \CodeIn{T3.Column2}
 in each aggregated group as the results.
 
-Such help threads on online discussion forums are not rare, but the SQL
-queries needed to address them are non-trivial.
+%Such help threads on online discussion forums are not rare, but the SQL
+%queries needed to address them are non-trivial.
 
 \begin{figure}[t]
 

@@ -27,41 +27,41 @@ approach infers a correctly-behaved SQL query?
 
 \end{itemize}
 
-\subsection{Evaluation Methodology}
 
-We plan to perform the evaluation as follows to answer the
-above research questions:
+\subsection{SQL Query Synthesis Scenarios}
 
-\begin{itemize}
-\item \textbf{Subjects collection.} we have collected evaluation
-subjects from two major sources: exercises from classic
-database textbooks like~\cite{cowbook}, and real-world questions
-that end-user asked on well-known online help forums. Specifically,
-we aim to apply our implemented tool solve SQL query related questions
-after Chapter 3 (SQL DML) in~\cite{cowbook}. We have also collected
-19 end-user questions from online forums, and plan to apply our
-tool to solve them.
+To evaluate our technique, we collected two types of
+SQL query synthesis scenarios. First, we picked
+up 6 SQL exercises from a classic database textbook~\cite{cowbook}.
+Those 6 SQL exercises cover a the most commonly-used SQL features,
+and can be used as golden test to check the expressiveness
+of our supported SQL subset. Second, we collected
+5 SQL problems rasied by real end-users from popular online help forums.
 
-\item{\textbf{Steps.}} For a given question, if that question
+%evaluation
+%subjects from two major sources: exercises from classic
+%database textbooks like, and real-world questions
+%that end-user asked on well-known online help forums. Specifically,
+%we aim to apply our implemented tool solve SQL query related questions
+%after Chapter 3 (SQL DML) in~\cite{cowbook}. We have also collected
+%19 end-user questions from online forums, and plan to apply our
+%tool to solve them.
+
+For a given exercise or problem, if it
 has already been associated with input-output examples (e.g.,
 those from online forums), we directly apply our tool on the examples.
 Otherwise, we manually provide a few concise and representative
 examples for our tool.
-If for a given problem, our tool inferred
+If for a given exercise or problem, our tool inferred
 a SQL query that does not behave as we expected when applied
 to other inputs, we will manually find an input on which the
 SQL query misbehaves and reapplied our tool to the new input. We
 repeat this process until our tool infers a desirable SQL query.
-\end{itemize}
-
-Finally, we hope to illustrate the expressiveness of the supported SQL
-subset language through experimenting on a diverse questions
-people raised on the help-thread requests and standard
-SQL questions a classic textbook would emphasize.
-
-\subsection{Subject Programs}
 
 \subsection{Experimental Results}
 
+
 \subsubsection{A Real Example}
 \input{realproblem}
+
+\subsection{Experiemtnal Conclusions}
