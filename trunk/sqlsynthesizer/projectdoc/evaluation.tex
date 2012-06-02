@@ -2,10 +2,12 @@
 \section{Evaluation}
 \label{sec:evaluation}
 
-We implemented our approach as an open-source programming tool. Our tool, implemented
-in Java, uses MySQL as the backend database engine. When a SQL query is synthesized,
-our tool executes this query on the backend database, and checks whether the output
-query result matches the given example output.
+We implemented our technique in an open-source programming tool.
+Our tool uses MySQL~\cite{mysql} as the backend database engine
+to check the validity of each output query.
+When a SQL query is synthesized,
+our tool executes the synthesized query on the backend database,
+and checks whether the output query result matches the given example output.
 
 We next describe the evaluation of our prototype tool.
 
@@ -17,8 +19,8 @@ We aim to investigate the following research questions:
 \item Is the supported SQL subset expressive enough to describe
 queries that real end-users require?
 
-\item Can our inference algorithm efficiently find a SQL query
-from input-output examples?
+\item Can our technique efficiently find a SQL query
+from small input-output examples?
 
 %\item Does the inferred SQL query correctly express end-users'
 %intention and produce the expected output? If not, how many
@@ -30,13 +32,15 @@ from input-output examples?
 
 \subsection{SQL Query Synthesis Scenarios}
 
-To evaluate our technique, we collected two types of
-SQL query synthesis scenarios. First, we picked
+To answer these two questions, we collected a set
+of SQL query synthesis scenarios in the following
+two ways. First, we picked
 up 6 SQL exercises from a classic database textbook~\cite{cowbook}.
-Those 6 SQL exercises cover a the most commonly-used SQL features,
-and can be used as golden test to check the expressiveness
-of our supported SQL subset. Second, we collected
-5 SQL problems rasied by real end-users from popular online help forums.
+Those 6 SQL exercises cover many commonly-used SQL features,
+which a database course instructor think would be the most useful parts,
+and expect her students to get familiar with. Second, we collected
+5 SQL problems raised by real end-users from popular online help forums
+~\cite{stackoverflow, tutorialized, dbjournal}.
 
 %evaluation
 %subjects from two major sources: exercises from classic
@@ -49,9 +53,10 @@ of our supported SQL subset. Second, we collected
 
 For a given exercise or problem, if it
 has already been associated with input-output examples (e.g.,
-those from online forums), we directly apply our tool on the examples.
-Otherwise, we manually provide a few concise and representative
-examples for our tool.
+those provided by users from online forums),
+we directly apply our tool on the existing examples.
+Otherwise, we manually provide small concise and representative
+input-output examples for our tool.
 If for a given exercise or problem, our tool inferred
 a SQL query that does not behave as we expected when applied
 to other inputs, we will manually find an input on which the
@@ -74,36 +79,46 @@ repeat this process until our tool infers a desirable SQL query.
 
 \Caption{{\label{tab:results} Experimental results of synthesizing
 SQL queries for 6 exercises from a classic database textbook~\cite{cowbook},
-and 5 real problems from online forums. Column `\#Total` is the total
-number of exercises or problems. Column `\#Solved` is the solved
-number of exercises or problems by our technique. Column `Time Cost(s)`
+and 5 real problems from online forums. Column `\#Total' is the total
+number of exercises or problems used in the experiments. Column
+`\#Solved' is the number of solved
+exercises or problems by our technique. Column `Time Cost(s)'
 records the average time (in seconds) used to solve each exercise or problem.
-Column `Human Effort(m)` is the average time (in minutes) spent in writing input-output examples
-for each exercise or problem.}}
+Column `Human Effort(m)' is the average time (in minutes) spent in
+preparing input-output examples for each exercise or problem without
+existing examples.}}
 \end{table}
 
-For each SQL synthesis scenario, we measure time cost in producing
-a desirable SQL query. For each exercise or problem, we also record
-how much time we spent in writing input-output examples.
+For each SQL synthesis scenario, we measured two results.
+The time cost in producing
+a desirable SQL query by our tool, and
+the time we spent in writing input-output examples.
+%For each exercise or problem, we also record
+%how much time we spent in writing input-output examples.
 Table~\ref{tab:results} summarizes our experimental results.
 
-As shown in Table~\ref{tab:results}, our technique solves 10 out of 11 exercises or problems
-using a very small amount of time. The human effort spent in preparing input-output examples
-is also minimul: about less than 5 minutes per exercise (or problem).
+As shown in Table~\ref{tab:results}, our technique synthesized
+expected SQL queries for 10 out of 11 scenarios
+within a very small amount of time (less than 1 minute each).
+The human effort spent in providing input-output examples
+is also very limited: it took us less than 5 minutes for one scenario.
+%per exercise (or problem).
 
 
 \subsubsection{A Real Example}
 \input{realproblem}
 
-\subsection{Experiemtnal Conclusions}
+\subsection{Experimental Conclusions}
 
-Our initial evaluation shows that the supported SQL subset is
-expressive enough to describe a variety of database queries,
-including exercises from textbook and real end-users' tasks.
+Our initial experimental results are promising.
+It shows that the supported SQL subset is
+expressive enough to describe a variety of useful database queries.
+It also demonstrates the usefulness of our SQL query
+synthesis technique.  In particular, our SQL query synthesis technique only requires a small amount of
+human effort and small input-output examples. It infers 
+desirable SQL queries on both database textbook exercises
+and online forum problems, even solving problems that receive no replies from popular online forums.
 
-Our SQL query synthesis technique works efficiently, produces
-desirable results even on small  input-output examples, and
-even solves problems that receive no replies from popular online
-forums.
+
 
 
