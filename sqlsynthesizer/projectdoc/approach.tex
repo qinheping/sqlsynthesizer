@@ -4,9 +4,10 @@
 
 
 
-We next describe our approach to infer SQL queries from 
-input-output examples with the example shown 
-in Section~\ref{sec:example}. 
+We next describe our SQL query synthesis technique in details.
+How to infer the desirable query for the examples
+shown in Section~\ref{sec:example} will
+be discussed thoroughly in this section.
 
 \begin{figure}[t]
   \centering
@@ -17,9 +18,9 @@ in Section~\ref{sec:example}.
 \end{figure}
 
 \subsection{Overview}
-Figure~\ref{fig:workflow} sketches the general workflow of our approach.
+Figure~\ref{fig:workflow} sketches the general workflow of our technique.
 
-At a high level, our approach consists of three steps: Query Skeleton
+At a high level, our technique consists of three major steps: Query Skeleton
 Creation(Section~\ref{sec:skeleton}), SQL Query Completion
 (Section~\ref{sec:completion}), and Query Candidate Ranking (Section~\ref{sec:ranking}).
 Specifically, our approach takes from users input-output examples. It first infers
