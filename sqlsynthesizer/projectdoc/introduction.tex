@@ -23,7 +23,7 @@ data and use the answer to support their business decisions.
 %query databases to obtain relevant data to support their business decisions.
 
 
-\subsection{Problem Statement}
+\subsection{End-users' Difficulties in Using SQL}
 
 Although the relational database management system (RDBMS) and the
 de facto language (SQL) are perfectly adequate for many end-users'
@@ -37,21 +37,22 @@ collectively produce the bulk of scientific knowledge. Similarly, other end-user
 such as business analysts who query databases frequently often
 do not have significant SQL expertise.
 
-For a large number of end-users, they use SQL queries in
+For a large number of end-users, they learn and use SQL queries in
 the following typical ways: they browse textbook or online resources to learn basic
-idioms of SQL. They try to write small examples and execute them
-on real databases to explore the data itself. They modify
-them to derive new queries by adding or removing snippets:
+idioms of SQL. They try to write experimental SQL queries and execute them
+on sample databases to explore the data itself. They modify
+the written queries to derive new queries by adding or removing snippets:
 predicates in the \CodeIn{where} clause,
-tables in the \CodeIn{from} clause, columns in the \CodeIn{select} clauses.
+tables in the \CodeIn{from} clause, or columns in the \CodeIn{select} clauses.
 However, such practice is inefficient and time-consuming.
 A key challenge is that many end-users can clearly understand
-their goals but often can not easily get a correct SQL query for
-their tasks, either due to the syntax complexity of the SQL language,
-or the structure complexity of the underlying database tables, or others.
-For most end-users, they need a ``computer'' to assist them to perform
-complex and critical tasks. A highly accessible tool
-that end-users can use to connect their intentions to executable
+their goals but simply can not write a correct SQL query for
+their tasks, either due to the syntax complexity of the language itself,
+or the structure complexity of the underlying databases, or others.
+For many end-users, they need an \textit{intelligent} tool
+to assist them to perform database query tasks. A highly accessible tool
+that end-users can describe their needs, and use to connect their
+intentions to executable
 SQL queries would be best.
 
 
@@ -62,22 +63,23 @@ SQL queries would be best.
 are two state-of-the-art approaches in helping end-users perform
 database queries. However, both of them are far from satisfactory.
 
-Many RDBMS come with a well-designed GUI.
+Many RDBMS come with a well-designed GUI with tons of features.
 However, 
 %as a database management system often comes with tons
 %of features, end-users struggle to find the correct feature or
 %succession of commands to use from a maze of features to accomplish
 %their tasks.
-a GUI often do not permit users to personalize
+a GUI often does not permit users to personalize
 a database's functionality for user-specific tasks. On the other hand,
 as a GUI supports more and more customization features, users
 may struggle to discover those features, which can significantly
 degrade its usability. 
 
-General programming languages, such as SQL
-or Java (with JDBC), serve as a fully expressive medium  for
+General programming languages, such as SQL,
+Java (with JDBC), or other domain specific languages, 
+serve as a fully expressive medium  for
 communicating a user's intention to a database. However, learning
-a practical programming language (even a high-level domain
+a practical programming language (even a simplified, high-level domain
 specific language) often requires a substantial amount
 of time and energy that a typical end-user would not prefer,
 and should not be expected, to invest. 
@@ -95,16 +97,17 @@ serve as a straightforward way of describing \textit{what} the
 task is and a natural interface that a tool can provide assistance.
 
 
-In this work, we present an  approach for synthesizing a SQL query
-from input-output examples. In particular, our approach takes an example input
+In this work, we present a technique for synthesizing a SQL query
+from input-output examples. In particular, our technique takes an example input
 table(s) and output table from the end-users, and then automatically
-infers a SQL query (or multiple queries, if existed) that implements
-a transformation that satisfies the example. If the SQL query is applied
+infers a SQL query (or multiple queries, if exist) that implements
+a transformation that satisfies the given example. If the inferred
+SQL query is applied
 to the example input, then it produces the example output, and if the
-SQL query is applied to other similar tables (potentially much larger),
-then SQL query produces a corresponding output.
+SQL query is applied to other similar inputs (potentially much larger tables),
+then the SQL query produces a corresponding output.
 
-Our approach follows a general methodology for designing
+Our technique follows a general methodology for designing
 systems supporting programming by examples~\cite{Harris:2011}.
 It includes the following three major steps:
 (1) identify a language subset (of SQL) that is expressive to
@@ -112,12 +115,12 @@ describe a large proportion of operations that users need to perform
 database querying tasks. (2) design an algorithm that
 can efficiently infers programs in the language from input-output
 examples. and (3) develop a ranking strategy that presents
-the most likely program to the user, if multiple solutions exist.
+the most likely program to the users, when multiple solutions exist.
 
 \vspace{1mm}
 \noindent \textbf{\textit{Supported SQL Subset.}}
 The full SQL 93 specification contains over 1000 pages, and it is
-impractical and unnecessary to support all language features.
+infeasible and unnecessary to support all language features in practice.
 When selecting a supported SQL subset, there is a tradeoff
 between the expressiveness of the selected language subset,
 and the complexity of finding simple consistent solutions
@@ -125,12 +128,12 @@ within that language's search space.  In general, the more expressive a search
 space, the harder the task of finding consistent hypotheses within
 that search space. 
 
-During our study of end-user's real problems from online help forums, we also carefully studied what would
+During our study of end-user's real problems, we also carefully studied what would
 be the solution to users' desired query, and found that the most common
 desired queries can be composed by a handful of basic SQL constructs,
 which form the target language of this work (Section~\ref{sec:langsubset}).
 
-The supported subset, though far from complete, is expressive
+As shown in our experiments (Section~\ref{sec:evaluation}), the supported subset, though far from complete, is expressive
 enough to describe many query tasks succinctly, while at the same time concise
 enough to be amenable for efficient inference. 
 
@@ -140,26 +143,27 @@ enough to be amenable for efficient inference.
 \noindent \textbf{\textit{SQL Query Inference Algorithm.}} Our inference
 algorithm, as described in Section~\ref{sec:approach}, consists of two
 major steps. The first step, called \textit{SQL Skeleton Creation}, scans
-the example input and output, and then \textit{guesses} what a desirable
-SQL query may look like. The output of this step is a set of all possible \textit{incomplete} SQL
-query skeletons, each of which contains unfilled parts. The second step,
-called \textit{SQL Query Completion} takes as inputs the created
-SQL skeletons, fulfills unknown parts with possible answers, and then produces a set of
+the example input and output, and \textit{guesses} what a desirable
+SQL query may look like. The output of this step is a set of \textit{incomplete} SQL
+query skeletons. A SQL query skeleton is an incomplete SQL query,
+which contains unknown parts. The second step,
+called \textit{SQL Query Completion} takes as inputs a created
+SQL skeleton, fills unknown parts with possible solutions, and then produces a set of
 syntactically-valid SQL queries. In particular, when performing
-SQL query completion, our technique uses a decision-tree learning algorithm~\cite{}
-(Section~\ref{}) to infer the conditions, and uses 
-type-directed search (Section~\ref{}) to infer possible aggregates in a query.
+SQL query completion, our technique uses a rule-based learning algorithm~\cite{}
+to infer the conditions, and uses 
+type-directed search to infer possible aggregates in a query.
 
 \vspace{1mm}
 \noindent \textbf{\textit{Query Candidate Ranking Strategy.}}
 Input-output examples provided by end-users are likely to
-be under-specififed. It is entirely possible that multiple
-queries can be synthensized to satisfy the provided examples.
+be under-specified. It is entirely possible that multiple
+queries can be synthesized to satisfy the provided examples.
 We address this problem by developing a ranking scheme that 
 ranks the possibly multiple queries
 that are consistent with the given input-output
 examples. Our ranking scheme, detailed in Section~\ref{sec:ranking}
-is inspired by the Occam’s razor principle, prefers a smaller and
+is inspired by the Occam's razor principle, prefers a smaller and
 simpler solution if other aspects being equal.
 
 %is usually the correct one. 
@@ -179,18 +183,21 @@ which not only removes a human from the loop, but also enables
 end-users to solve their problems in a few seconds as opposed to a few days
 (while waiting for an expert's reply). 
 
-Thus, we evalaute our technique in two ways. First, we pick up 6 SQL
+Thus, we implemented our technique in an open-source tool
+and evaluated it in two ways. First, we picked up 6 SQL
 exercises from a classic database textbook~\cite{cowbook}. SQL exercises
-from a database textbook covers a large part of practically useful SQL constructs
-a constructor wishes students to master, and can be served as golden test
+from a database textbook often covers
+the most widely-used SQL features 
+that a course instructor wishes students to master.
+Those exercises can be served as golden test
 to evaluate the expressiveness of our supported SQL subset. Second,
-we chose 5 non-trival SQL problems rasied by real end-users on online
-help forums, and test whether our technique can effectively infer desirable
+we collected 5 non-trivial SQL problems raised by real end-users on online
+help forums, and test whether our technique can effectively synthesize desirable
 SQL queries.
 
-As a result, our technique successfully synthesizes 5 out of 6
-textbook exercises and solves all 5 forum problems, with time cost of
-1 minute per each exercise (or problem).
+As a result, our technique successfully synthesized 5 out of 6
+textbook exercises and solves all 5 forum problems, within a very
+small amount of time (1 minute per each exercise/problem, on average).
 
 \subsection{Contributions}
 
@@ -203,10 +210,10 @@ tables.
 %An approach to automatically synthesizing SQL
 %queries from input-output examples (Section~\ref{sec:approach}).
 
-\item \textbf{Technique.} An approach to automatically synthesizing SQL
+\item \textbf{Technique.} We show to automatically synthesize SQL
 queries from input-output examples (Section~\ref{sec:approach}).
 
-\item \textbf{Tool.} A practical tool that implements the proposed approach (available at:
+\item \textbf{Tool.} A practical tool that implements the proposed technique (available at:
 \url{http://sqlsynthesizer.googlecode.com}).
 
 \item \textbf{Evaluation.} An empirical evaluation of the tool implementation

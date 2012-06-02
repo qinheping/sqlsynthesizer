@@ -47,22 +47,25 @@ supported SQL subset.
 
 \subsection{Supported SQL Subset}
 
-Figure~\ref{fig:syntax} defines the syntax of the supported, which
+Figure~\ref{fig:syntax} defines the syntax of the supported language,
+which
 is a subset of the standard SQL 93 language. This language subset
 supports common query operations across multiple tables (i.e.,
-\CodeIn{select} ... \CodeIn{from}... \CodeIn{where}..), and 
-conjunctive boolean operators as predicates. The language
+\CodeIn{select} ... \CodeIn{from} ... \CodeIn{where}..), and 
+conjunctive predicates. The language
 subset shares the same semantics with the standard SQL language.
-Different than existing work~\cite{DasSarma:2010}, this language supports
-joining operations across multiple tables. In addition, this subset includes
-widely used database operations such as \CodeIn{group by},
+Differing from language subsets used in the
+existing work~\cite{DasSarma:2010}, our language subset
+supporting
+joining operations across multiple tables, and includes
+widely-used database operations such as \CodeIn{group by},
 \CodeIn{order by}, and \CodeIn{having}, as
 well as a few common aggregation functions such as \CodeIn{count}, \CodeIn{sum},
 \CodeIn{max}, and \CodeIn{min}.
 
 As we will show in Section~\ref{sec:evaluation}, this
 subset, though far from complete, is expressive enough for answering
-most evaluated SQL exercises from a textbook and quite a few real problems
+many evaluated SQL exercises from a textbook and some real problems
 from online forums.
 
 \subsection{Example}
