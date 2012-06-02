@@ -1,35 +1,35 @@
 \subsection{Query Skeleton Creation}
 \label{sec:skeleton}
 
-Our technique first scans the provided input and output examples, guesses
+In this step, our technique scans the provided input and output examples, guesses
 what a target SQL query might look like, and infers a set of query skeletons
-that capture the basic query structure.
+that capture the basic query structures.
 
 A query skeleton is an incomplete SQL query, which
 captures three basic query structures that could
-be decided after scanning the examples: tables used in the SQL
-queries, columns used to join input tables, and the projected
-table columns. Other parts in a SQL query such as conditions
+often be decided after a simple scan over the examples:
+tables used in a result SQL
+query, table columns used to join input tables, and table
+columns for projecting the query results. Other parts in a SQL query such as conditions
 (including selection and having conditions), and aggregates
-will be determinated in the next step (Section~\ref{sec:completion}).
+are left as unkown, and will be determinated in the next step (Section~\ref{sec:completion}).
 
-%A query skeleton is an incomplete SQL query, containing
-%SQL structures that can be yet decided and also including
-%unknown structures as holes.
 
 
 %\begin{itemize}
 
 %\item
 \vspace{1mm}
-\noindent \textit{\textbf{Step 1: Determining the Table Set.}} If multiple tables are provided as inputs,
-it is very likely that all provided tables will be used in constructing the desirable SQL query.
-Based on this observation, we assume that
-the minimum number of used tables is the number of all provided input tables. By default, the
-table set $T$ used in SQL query contains all given tables. However, it is
-possible that a single table will be used for multiple times.%, leading to a more complex query.
-Our technique does not forbid this case, rather, we \textit{use} a single heuristic
-to estimate the used tables: if the same column from one input table appears more than once in the
+\noindent \textit{\textbf{Step 1: Determining the Table Set.}} 
+In practice, end-users are unwilling to provide more than enough
+inputs. Therefore, every input table specified in the example
+is expected to be used to construct a desirable SQL query.
+Based on this observation, we assume that every input table
+should be used as least once in the query. By default, the
+table set $T$ used in the result SQL query contains all given input tables.
+However, it is possible that a single table will be used for multiple times.
+Our technique does not forbid this case, rather, we adopt a single heuristic
+to estimate the used table set: if the same column from an input table appears more than once in the
 example output, we add the input table the same number of times to the used table set.
 
 %we view it as a strong indicator that this table will be joined multiple times and add it to our table
@@ -39,24 +39,25 @@ example output, we add the input table the same number of times to the used tabl
 %\item
 \vspace{1mm}
 \noindent\textit{\textbf{Step 2: Determining Joining Columns. }} Given two arbitrary tables, there exist many
-ways to join them. Enumerating all possible joining conditions would introduce a huge number of joining
-conditions and would quickly become intractable. We observe that, in practice, two tables are often joined \textit{only} via the following
-three cases: (1) tables are joined on their primary keys that have the same (or compatible) data types (i.e., it does not
-make any sense to join two tables on a Integer column and a String column). (2) tables are joined
-using the columns with the same column name, such as joining a \textit{Student} table with a \textit{Course} table on the
+ways to join them. Enumerating all possible joining conditions may introduce a huge number of joining
+conditions and would quickly become intractable. We observe that, in practice, two tables are often joined via the following
+three cases: (1) tables are joined on their primary keys with the same (or compatible) data types, such
+as joining a \textit{student} table with an \textit{enrollment} table with the \textit{student\_id} column. It does not
+make any sense to join two tables on a Integer column and a String column. (2) tables are joined
+using columns with the same name, such as joining a \textit{student} table with a \textit{enrollment} table on the
 \textit{student\_name} column. and (3) two columns that have the data type, and have a large portion of
-overlapped data value in its input table can be used as a joining condition. In our tool implementation, it is trivial to check the first 
-two cases. For the third case, our algorithm scans the whole given input table to check the ``value similarity''
-between two arbitrary columns, and selects columns whose ``value similarity'' is above a fixed threshold as joining candidates.
+overlapped values in their corresponding input tables can be used as a joining condition. It is straightforward to check the first 
+two cases to identify possible joining columns. For the third case, our technique scans the given input tables to check ``value similarity''
+between two arbitrary columns, and selects columns whose ``value similarity'' is above a fixed threshold as joining columns.
 
 %\item
 \vspace{1mm}
 \noindent \textit{\textbf{Step 3: Determining Output Columns.}} To identify output table columns on
-which the joined result would be projected, our technique checks whether each output
-table column name appears in one of the input tables. If so, we assume the matched column
-from the input table is used as the output column. Otherwise, the output column
+which the querying result would be projected, our technique checks whether each output
+table column name appears in any input tables. If so, we used the matched column
+from the input table as the output column. Otherwise, the output column
 must be produced by using aggregation. Our technique keeps track of those aggregation columns
-and search for proper aggregates in the next phases (Section~\ref{}). 
+and search for proper aggregates in the next phase (Section~\ref{}). 
 
 %After determining the table set and joining columns,
 %the next step is to identify potential column names on which the result would be projected. If a
@@ -67,10 +68,11 @@ and search for proper aggregates in the next phases (Section~\ref{}).
 %\end{itemize}
 \vspace{1mm}
 
-In summary, this step infers two parts as a query skeleton: a table set used in producing the SQL query, a set of joining conditions
-used to connect tables from the table set, and a list of columns used to project the output data.
-It is worth noting that the results obtained from the above steps are not \textit{safe} in
-terms that they may miss some valid SQL queries. 
+In summary, this step infers three parts as a query skeleton: tables used in constructing a SQL query, joining conditions
+to connect the input tables, and a list of columns to project the output results.
+
+%It is worth noting that the results obtained from the above steps are not \textit{safe} in
+%terms that they may miss some valid SQL queries. 
 
 %We made the above assumption for the sake of tractability,
 %since in theory, the bound of table number in a SQL query is $O(n_t!)$, where $n_t$ is the number of given tables;
