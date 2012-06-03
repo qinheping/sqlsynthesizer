@@ -57,7 +57,7 @@ which the querying result would be projected, our technique checks whether each 
 table column name appears in any input tables. If so, we used the matched column
 from the input table as the output column. Otherwise, the output column
 must be produced by using aggregation. Our technique keeps track of those aggregation columns
-and search for proper aggregates in the next phase (Section~\ref{}). 
+and search for proper aggregates in the next phase (Section~\ref{sec:agg_search}). 
 
 %After determining the table set and joining columns,
 %the next step is to identify potential column names on which the result would be projected. If a

@@ -29,9 +29,9 @@ incomplete parts that can not be yet decided, serves as a good reference
 for further synthesizing a complete SQL query.
 After that, our technique uses two techniques to complete a SQL skeleton.
 In particular, it 
-uses rule-based learning to infer query conditions (Section~\ref{}), and
+uses rule-based learning to infer query conditions (Section~\ref{sec:decision_tree}), and
  employs type-directed search to figure out possible aggregation
-expressions (Section~\ref{}).
+expressions (Section~\ref{sec:agg_search}).
 The SQL Query Completion step produces a list of syntactically-valid
 query candidates that satisfy the provided input-output examples.
 However, it is possible that multiple query candidates can be synthesized based on the
