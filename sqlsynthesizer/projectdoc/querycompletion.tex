@@ -84,8 +84,8 @@ needed in a SQL query.
 \vspace{1mm}
 %\noindent {\textbf{\textit{Solution 1. Encoding prior knowledge.}}}
 We encode existing domain knowledge about SQL query as additional
-features, such as, (1) Aggregation, including \textsf{COUNT}, \textsf{MAX},
-\textsf{MIN} and \textsf{AVG}, whose results might be used in query condition;
+features, such as, (1) Aggregation, including \CodeIn{COUNT}, \CodeIn{MAX},
+\CodeIn{MIN} and \CodeIn{AVG}, whose results might be used in query condition;
 and (2) Comparison results between two comparable columns.
 The above two additional knowledge encoding permits our technique
 to make use of correlations between columns, rather than only values
@@ -101,7 +101,7 @@ We add two types of new attributes into feature representation of tuples.
 \begin{enumerate}
 
 \item \textit{\textbf{Aggregation Features}}. Aggregation
-features are the aggregation results grouped by each \textsf{String} type column
+features are the aggregation results grouped by each \CodeIn{String} type column
 over every other columns. Table~\ref{tbl:agg} shows an example.
 
 
@@ -223,4 +223,4 @@ in the output column must have appeared in the input table.
 \end{enumerate}
 
 In our experience, the type-directed searching strategy significantly reduces the
-searching space and make our tool find the desirable aggregates faster.
+searching space and makes our tool find the desirable aggregates faster.

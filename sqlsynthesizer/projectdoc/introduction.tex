@@ -7,8 +7,19 @@ in significant advances in digitization of massive amounts
 of data and accessibility of computational devices to massive
 proportions of the population. A perennial challenge faced by many
 enterprise nowadays is the management
-of their increasing large and complex databases, which can contain
+of their increasingly large and complex databases, which can contain
 hundreds and even thousands of tables. 
+
+
+%but they often need to
+%query databases to obtain relevant data to support their business decisions.
+
+
+\subsection{End-users' Difficulties in Using SQL}
+Although the relational database management system (RDBMS) and the
+de facto language (SQL) are perfectly adequate for many end-users'
+needs~\cite{Howe:2011}, the costs associated with deployment and
+use of database software and SQL are prohibitive. 
 
 The problem is exacerbated by the fact that many end-users
 have myriad diverse backgrounds including research scientists,
@@ -18,24 +29,16 @@ those end-users who need to query databases to analyze the
 data are not professional programmers, but are experts in some
 other domains. They need to ask a variety of questions on their
 data and use the answer to support their business decisions.
-
-%but they often need to
-%query databases to obtain relevant data to support their business decisions.
-
-
-\subsection{End-users' Difficulties in Using SQL}
-
-Although the relational database management system (RDBMS) and the
-de facto language (SQL) are perfectly adequate for many end-users'
-needs~\cite{Howe:2011}, the costs associated with deployment and
-use of database software and SQL are prohibitive. For example, as pointed out
+For example, as pointed out
 by~\cite{Gray:2005}, conventional RDBMS software remains underused
 in the long tail of science: the large number of users, such as the
 research scientists who are in relatively small labs and individual
 researchers, have limited IT funding, staff and infrastructure yet
-collectively produce the bulk of scientific knowledge. Similarly, other end-users
-such as business analysts who query databases frequently often
-do not have significant SQL expertise.
+collectively produce the bulk of scientific knowledge. 
+
+%Similarly, other end-users
+%such as business analysts who query databases frequently often
+%do not have significant SQL expertise.
 
 For a large number of end-users, they learn and use SQL queries in
 the following typical ways: they browse textbook or online resources to learn basic
@@ -97,11 +100,11 @@ serve as a straightforward way of describing \textit{what} the
 task is and a natural interface that a tool can provide assistance.
 
 
-In this work, we present a technique for synthesizing a SQL query
-from input-output examples. In particular, our technique takes an example input
+In this work, we present a technique for synthesizing SQL queries
+from input-output examples. In particular, our technique takes example input
 table(s) and output table from the end-users, and then automatically
-infers a SQL query (or multiple queries, if exist) that implements
-a transformation that satisfies the given example. If the inferred
+infers a SQL query (or multiple queries, if exist) that queries
+the input database and returns the output example. If the inferred
 SQL query is applied
 to the example input, then it produces the example output, and if the
 SQL query is applied to other similar inputs (potentially much larger tables),
@@ -111,9 +114,9 @@ Our technique follows a general methodology for designing
 systems supporting programming by examples~\cite{Harris:2011}.
 It includes the following three major steps:
 (1) identify a language subset (of SQL) that is expressive to
-describe a large proportion of operations that users need to perform
-database querying tasks. (2) design an algorithm that
-can efficiently infers programs in the language from input-output
+describe a large proportion of %operations that users need to perform
+database queries. (2) design an algorithm that
+can efficiently infer programs in the language from input-output
 examples. and (3) develop a ranking strategy that presents
 the most likely program to the users, when multiple solutions exist.
 
@@ -133,7 +136,7 @@ be the solution to users' desired query, and found that the most common
 desired queries can be composed by a handful of basic SQL constructs,
 which form the target language of this work (Section~\ref{sec:langsubset}).
 
-As shown in our experiments (Section~\ref{sec:evaluation}), the supported subset, though far from complete, is expressive
+As shown in our experiments (Section~\ref{sec:evaluation}), the supported subset, though far from completion, is expressive
 enough to describe many query tasks succinctly, while at the same time concise
 enough to be amenable for efficient inference. 
 
@@ -150,7 +153,7 @@ which contains unknown parts. The second step,
 called \textit{SQL Query Completion} takes as inputs a created
 SQL skeleton, fills unknown parts with possible solutions, and then produces a set of
 syntactically-valid SQL queries. In particular, when performing
-SQL query completion, our technique uses a rule-based learning algorithm
+SQL query completion, our technique uses a rule learning algorithm
 to infer the conditions (Section~\ref{sec:decision_tree}), and uses 
 type-directed search to infer possible aggregates in a query (Section~\ref{sec:agg_search}).
 
@@ -161,7 +164,7 @@ be under-specified. It is entirely possible that multiple
 queries can be synthesized to satisfy the provided examples.
 We address this problem by developing a ranking scheme that 
 ranks the possibly multiple queries
-that are consistent with the given input-output
+consistent with the given input-output
 examples. Our ranking scheme, detailed in Section~\ref{sec:ranking}
 is inspired by the Occam's razor principle, prefers a smaller and
 simpler solution if other aspects being equal.
@@ -179,25 +182,25 @@ simpler solution if other aspects being equal.
 The goal of this work is developing a practical SQL query synthesis technique that is capable of
 helping end-users writing a wide range of SQL queries.
 The technique aims to replace the role of the forum expert,
-which not only removes a human from the loop, but also enables
+which not only removes human from the loop, but also enables
 end-users to solve their problems in a few seconds as opposed to a few days
 (while waiting for an expert's reply). 
 
 Thus, we implemented our technique in an open-source tool
 and evaluated it in two ways. First, we picked up 6 SQL
 exercises from a classic database textbook~\cite{cowbook}. SQL exercises
-from a database textbook often covers
+from a database textbook often cover
 the most widely-used SQL features 
 that a course instructor wishes students to master.
 Those exercises can be served as golden test
 to evaluate the expressiveness of our supported SQL subset. Second,
 we collected 5 non-trivial SQL problems raised by real end-users on online
-help forums, and test whether our technique can effectively synthesize desirable
+help forums, and tested whether our technique can effectively synthesize desirable
 SQL queries.
 
 As a result, our technique successfully synthesized 5 out of 6
-textbook exercises and solves all 5 forum problems, within a very
-small amount of time (1 minute per each exercise/problem, on average).
+textbook exercises and solved all 5 forum problems, within a very
+small amount of time (1 minute per exercise/problem, on average).
 
 \subsection{Contributions}
 
