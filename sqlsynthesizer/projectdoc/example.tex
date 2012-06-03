@@ -1,6 +1,139 @@
 %\section{A Motivating Example}
 %\label{sec:example}
 
-Describe the motivating example in details as shown in our presentation slides.
+Consider the following SQL question picked up from a classic
+database textbook~\cite{cowbook}: \textit{given a \CodeIn{student} table (Figure~\ref{tbl:student})
+and an \CodeIn{enrolled} table (Figure~\ref{tbl:enrolled}), find out the name and max score of the
+students whose level is senior and enrolled in more than 3 courses}.
 
-Draw input output tables, show the desirable query, and briefly describe it.
+
+
+\begin{figure}[t]
+	\centering
+\begin{tabular}{|c|c|c|}
+\hline
+ Student\_key& Student\_name & Level\\
+\hline
+ 0001 & Adam & senior \\
+ \hline
+ 0002 & Bob & junior \\
+ \hline
+ 0003 & Erin & senior \\
+ \hline
+ 0004 & Rob & junior\\
+ \hline
+ 0005 & Dan & senior \\
+ \hline
+ 0006 & Peter & senior \\
+ \hline
+ 0007 & Sai & senior \\
+ \hline
+\end{tabular}
+	\caption{The example input table: student
+for the motivating example described in
+Section~\ref{sec:example}.}
+	\label{tbl:student}
+\end{figure}
+
+
+\begin{figure}[t]
+	\centering
+\begin{tabular}{|c|c|c|}
+\hline
+ Student\_key& Course\_key& Score \\
+\hline
+ 0001 & 001 & 4 \\
+\hline
+ 0001 & 002 & 2 \\
+\hline
+ 0002 & 001 & 3 \\
+\hline
+ 0002 & 002 & 2 \\
+\hline
+ 0002 & 003 & 3 \\
+\hline
+ 0003 & 002 & 1 \\
+\hline
+ 0004 & 001 & 4 \\
+\hline
+ 0004 & 003 & 4 \\
+\hline
+ 0005 & 002 & 5 \\
+\hline
+ 0005 & 003 & 2 \\
+\hline
+ 0005 & 004 & 1 \\
+\hline
+ 0006 & 002 & 4 \\
+\hline
+ 0006 & 004 & 5 \\
+\hline
+ 0007 & 001 & 2 \\
+\hline
+ 0007 & 003 & 3 \\
+\hline
+ 0007 & 004 & 4 \\
+ \hline
+\end{tabular}
+	\caption{The example input table: enrolled
+for the motivating example described in
+Section~\ref{sec:example}.}
+	\label{tbl:enrolled}
+\end{figure}	
+
+\begin{figure}[t]
+	\centering
+\begin{tabular}{|c|c|}
+\hline
+ Student\_name & Max\_score \\
+\hline
+ Dan & 5 \\
+\hline
+ Sai & 5 \\
+ \hline
+\end{tabular}
+	\caption{An example output for the motivating example described in
+Section~\ref{sec:example}.}
+	\label{tbl:output}
+\vspace{3mm}
+\end{figure}		
+
+
+\begin{figure}[t]
+\begin{CodeOut}
+\begin{alltt}
+\textbf{select student.Student\_name, max(enrolled.Score)
+from student, enrolled
+where student.Student\_key = course.Student\_key
+      and student.Level = `senior'
+group by student.Student\_key
+having count(enrolled.course) > 3}
+\end{alltt}
+\end{CodeOut}
+\vspace{-5mm}
+	\caption{The expected for the motivating example described in
+Section~\ref{sec:example}.}
+	\label{fig:expected_sql}
+\end{figure}
+
+The problem's description is simple.
+For a novice user, although they have a clear
+intention of what the query should do, the answer (Figure~\ref{fig:expected_sql}) may
+not be that straightforward. 
+
+Despite the possible difficult in writing the SQL query, the user still could draw
+two input tables (Figure~\ref{tbl:student} and Figure~\ref{tbl:enrolled})
+as well as the output table (Figure~\ref{tbl:output}).
+
+In the \CodeIn{student} table, {\CodeIn{Student\_key}} with the \textsf{String} type
+is the primary key. Columns {\CodeIn{Student\_name}} and {\CodeIn{Level}} are \textsf{String}-type.
+In the \CodeIn{enrolled} table, both columns {\CodeIn{Student\_key}} and
+{\CodeIn{Course\_key}} are two foreign keys, and column {\CodeIn{Score}}
+is \textsf{Integer} type.
+
+In the output table (Figure \ref{tbl:output}), the first column  {\CodeIn{Student\_name}}
+come from table \textit{student}, and another column {\CodeIn{Max\_score}} is a aggregation
+attribute with type of \textsf{Integer}.
+
+Having the input and output examples, our technique successfully synthesizes
+the desirable SQL query as shown in Figure~\ref{fig:expected_sql}.
