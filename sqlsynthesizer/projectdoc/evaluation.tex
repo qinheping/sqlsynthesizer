@@ -3,7 +3,8 @@
 \label{sec:evaluation}
 
 We implemented our technique in an open-source programming tool.
-Our tool uses MySQL~\cite{mysql} as the backend database engine
+Our tool employs WEKA \cite{Hall:2009} to implement the PART learning algorithm
+ to extract rules, and uses MySQL~\cite{mysql} as the backend database engine
 to check the validity of each output query.
 When a SQL query is synthesized,
 our tool executes the synthesized query on the backend database,
