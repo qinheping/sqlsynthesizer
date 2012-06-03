@@ -14,15 +14,15 @@ queries with lower costs.
 %queries in the increasing order of their costs.
 For a SQL query, each table appearing in it introduces a cost $C_t$ and each appearing condition 
 introduces an additional cost $C_p$. The total cost of a query is
-computed by: $n_t*C_t+n_p*C_p$, where
+computed by: $n_t \cdot C_t+n_p \cdot C_p$, where
 $n_t$ is the number of tables and $n_p$ is the number of predicates used in the query. Our technique 
 ranks queries based on their costs in an increasing order to ensure that a simpler query often ranks higher.
-
 Figure~\ref{fig:rank} shows an example to illustrate this ranking strategy.
 
 
 \begin{figure}[t]
 
+\centering
 \begin{tabular}{|l|l|}
 %\hline
 \multicolumn{2}{l}{Input table: \textbf{student}}\\\hline
@@ -46,17 +46,19 @@ Dan  \\\hline
 
 
 Query 1:
-\vspace{-2mm}
+\vspace{-4mm}
 \begin{CodeOut}
 \begin{alltt}
+\centering
 \textbf{select name from student where score > 3;}
 \end{alltt}
 \end{CodeOut}
 
 Query 2:
-\vspace{-2mm}
+\vspace{-4mm}
 \begin{CodeOut}
 \begin{alltt}
+\centering
 \textbf{select name from student where name = `Bob` or name = `Dan`
 }
 \end{alltt}
