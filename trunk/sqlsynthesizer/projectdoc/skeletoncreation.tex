@@ -11,7 +11,7 @@ often be decided after a simple scan over the examples:
 tables used in a result SQL
 query, table columns used to join input tables, and table
 columns for projecting the query results. Other parts in a SQL query such as conditions
-(including selection and having conditions), and aggregates
+(including selection and having conditions), and aggregations
 are left as unkown, and will be determinated in the next step (Section~\ref{sec:completion}).
 
 
@@ -42,9 +42,9 @@ example output, we add the input table the same number of times to the used tabl
 ways to join them. Enumerating all possible joining conditions may introduce a huge number of joining
 conditions and would quickly become intractable. We observe that, in practice, two tables are often joined via the following
 three cases: (1) tables are joined on their primary keys with the same (or compatible) data types, such
-as joining a \textit{student} table with an \textit{enrollment} table with the \textit{student\_id} column. It does not
+as joining a \textit{student} table with an \textit{enrolled} table with the \textit{student\_id} column. It does not
 make any sense to join two tables on a Integer column and a String column. (2) tables are joined
-using columns with the same name, such as joining a \textit{student} table with a \textit{enrollment} table on the
+using columns with the same name, such as joining a \textit{student} table with a \textit{enrolled} table on the
 \textit{student\_name} column. and (3) two columns that have the data type, and have a large portion of
 overlapped values in their corresponding input tables can be used as a joining condition. It is straightforward to check the first 
 two cases to identify possible joining columns. For the third case, our technique scans the given input tables to check ``value similarity''

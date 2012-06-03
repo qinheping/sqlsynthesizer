@@ -4,7 +4,7 @@
 
 
 
-We next describe our SQL query synthesis technique in details.
+We next describe our SQL query synthesis technique in detail.
 How to infer the desirable query for the examples
 shown in Section~\ref{sec:example} will
 be discussed thoroughly in this section.
@@ -28,8 +28,8 @@ a partially-complete query skeleton. The inferred query skeleton, though contain
 incomplete parts that can not be yet decided, serves as a good reference
 for further synthesizing a complete SQL query.
 After that, our technique uses two techniques to complete a SQL skeleton.
-In particular, it 
-uses rule-based learning to infer query conditions (Section~\ref{sec:decision_tree}), and
+In particular, it uses an advanced rule learning algorithm from the machine
+learning community to infer query conditions (Section~\ref{sec:decision_tree}), and
  employs type-directed search to figure out possible aggregation
 expressions (Section~\ref{sec:agg_search}).
 The SQL Query Completion step produces a list of syntactically-valid

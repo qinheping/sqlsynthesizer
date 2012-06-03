@@ -29,8 +29,8 @@ students whose level is senior and enrolled in more than 3 courses}.
  0007 & Sai & senior \\
  \hline
 \end{tabular}
-	\caption{The example input table: student
-for the motivating example described in
+	\caption{An example input table `student'
+for the SQL question described in
 Section~\ref{sec:example}.}
 	\label{tbl:student}
 \end{figure}
@@ -75,8 +75,8 @@ Section~\ref{sec:example}.}
  0007 & 004 & 4 \\
  \hline
 \end{tabular}
-	\caption{The example input table: enrolled
-for the motivating example described in
+	\caption{An example input table  `enrolled'
+for the SQL question described in
 Section~\ref{sec:example}.}
 	\label{tbl:enrolled}
 \end{figure}	
@@ -92,7 +92,7 @@ Section~\ref{sec:example}.}
  Sai & 5 \\
  \hline
 \end{tabular}
-	\caption{An example output for the motivating example described in
+	\caption{An example output table for the SQL question described in
 Section~\ref{sec:example}.}
 	\label{tbl:output}
 \vspace{3mm}
@@ -104,36 +104,41 @@ Section~\ref{sec:example}.}
 \begin{alltt}
 \textbf{select student.Student\_name, max(enrolled.Score)
 from student, enrolled
-where student.Student\_key = course.Student\_key
+where student.Student\_key = enrolled.Student\_key
       and student.Level = `senior'
 group by student.Student\_key
-having count(enrolled.course) > 3}
+having count(enrolled.Course\_key) > 3}
 \end{alltt}
 \end{CodeOut}
 \vspace{-5mm}
-	\caption{The expected for the motivating example described in
-Section~\ref{sec:example}.}
+	\caption{A SQL query to solve the SQL question described in
+Section~\ref{sec:example}. When applied to the input tables in
+Figure~\ref{tbl:student} and Figure~\ref{tbl:enrolled}, it produces the result table
+in Figure~\ref{tbl:output}.}
 	\label{fig:expected_sql}
 \end{figure}
 
-The problem's description is simple.
+The question's description is quite simple.
 For a novice user, although they have a clear
 intention of what the query should do, the answer (Figure~\ref{fig:expected_sql}) may
 not be that straightforward. 
 
-Despite the possible difficult in writing the SQL query, the user still could draw
+Despite the possible difficult in writing a correct SQL query,
+a user could still easily draw
 two input tables (Figure~\ref{tbl:student} and Figure~\ref{tbl:enrolled})
-as well as the output table (Figure~\ref{tbl:output}).
+and one output table (Figure~\ref{tbl:output}) that fulfill the
+SQL question.
 
-In the \CodeIn{student} table, {\CodeIn{Student\_key}} with the \textsf{String} type
-is the primary key. Columns {\CodeIn{Student\_name}} and {\CodeIn{Level}} are \textsf{String}-type.
+In the \CodeIn{student} table, column {\CodeIn{Student\_key}} with
+\CodeIn{String} type serves as the primary key. 
+%Columns {\CodeIn{Student\_name}} and {\CodeIn{Level}} are \textsf{String}-type.
 In the \CodeIn{enrolled} table, both columns {\CodeIn{Student\_key}} and
 {\CodeIn{Course\_key}} are two foreign keys, and column {\CodeIn{Score}}
-is \textsf{Integer} type.
+with \CodeIn{Integer} type keeps students' scores on their enrolled courses.
 
-In the output table (Figure \ref{tbl:output}), the first column  {\CodeIn{Student\_name}}
-come from table \textit{student}, and another column {\CodeIn{Max\_score}} is a aggregation
-attribute with type of \textsf{Integer}.
+In the output table, the first column  {\CodeIn{Student\_name}}
+comes from table \textit{student}, and the second column {\CodeIn{Max\_score}}
+is a aggregation attribute.% summarizing the with type of \CodeIn{Integer}.
 
 Having the input and output examples, our technique successfully synthesizes
 the desirable SQL query as shown in Figure~\ref{fig:expected_sql}.

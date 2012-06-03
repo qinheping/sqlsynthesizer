@@ -18,7 +18,7 @@ writing database queries, which is completely different than ours.
 
 The problem of \textit{Query By Output} (QBO)~\cite{Tran:2009} shares a similar
 goal with QBE, but takes a quite different approach.
-In QBO, we are given $V$ and $R_1, R_2, ..., R_n$ and asked to
+In QBO, we are given a view: $V$ and $n$ relations: $R_1, R_2, ..., R_n$ and asked to
 return a query $Q$ such that $Q(R_1, R_2, ..., R_n)$ = $V$. However, QBO is cast as
 a classification problem (into two classes: tuples in $V$, and tuples not in $V$)
 and decision trees are used to find a compact query. A decision tree is constructed
