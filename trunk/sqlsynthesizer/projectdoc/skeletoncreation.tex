@@ -84,5 +84,32 @@ to connect the input tables, and a list of columns to project the output results
 
 \subsubsection{Example}
 
-an example
+For our motivating example, from the output table (Figure~\ref{tbl:output}), our technique identifies that
+column {\CodeIn{Student\_name}} comes from table \CodeIn{student} and
+column {\CodeIn{Max\_Score}} is a new one which must be created by using aggregation.
+% which indicates aggregation and group by.
 
+%while the bound of possible number of join is $O(c_t^2)$ and the bound of the number of conditions is $O(n_t!n_tc_t^2)<O(n_t^3c_t^2)$.
+
+\begin{figure}[t]
+	\centering
+%\begin{CodeOut}
+%\begin{alltt}
+%\textbf{select student.Student\_name, $\color{blue}{<Aggregate>}$ 
+%from student, enrolled
+%where student.Student\_key = course.Student\_key
+%      and \color{red}{<Conditions>}
+%group by student.Student\_key
+%having \color{red}{<Conditions>}}
+%\end{alltt}
+%\end{CodeOut}
+%\vspace{-5mm}
+		\includegraphics[width=0.4\textwidth]{sql_skeleton.pdf}
+	\caption{The SQL skeleton created for the motivating example
+in Section~\ref{sec:example}.}
+	\label{fig:skeleton}
+\end{figure}
+
+The created query skeleton  is shown in Figure \ref{fig:skeleton}.
+As we can see from Figure \ref{fig:skeleton},  there are three unknown structures represented
+by $<$Aggregation$>$ or $<$Conditions$>$ in red color, which will be filled in the next phase.
