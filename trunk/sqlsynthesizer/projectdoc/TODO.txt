@@ -1,0 +1,5 @@
+improve the sql rank
+
+refactor the code, making NotExistStmt a subclass of ConditionNode
+
+use visitor pattern to traverse the SQL tree
