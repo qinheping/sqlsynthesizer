@@ -52,6 +52,7 @@ public class TestDatabaseConnection extends TestCase {
 	      System.out.println("Disconnected from database");
 	    } catch (Exception e) {
 	      e.printStackTrace();
+	      throw new Error(e);
 	    }
 	}
 	
