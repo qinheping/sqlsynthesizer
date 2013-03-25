@@ -13,7 +13,10 @@ public class TableInstanceReader {
 	public static String SEP = ",";
 	public static String KEY = "_key";
 	
+	public static String COLUMN_NAME_TBD = "COLUMN_NAME_TBD";
+	
 	public final String fileName;
+	private boolean withSchema = true;
 	private TableInstance instance = null;
 	
 	public static TableInstance readTableFromFile(String fileName) {
@@ -22,8 +25,19 @@ public class TableInstanceReader {
 		return table;
 	}
 	
+	public static TableInstance readTableFromFileWithoutSchema(String fileName) {
+		TableInstanceReader reader = new TableInstanceReader(fileName);
+		reader.setSchema(true);
+		TableInstance table = reader.getTableInstance();
+		return table;
+	}
+	
 	public TableInstanceReader(String fileName) {
 		this.fileName = fileName;
+	}
+	
+	public void setSchema(boolean schema) {
+		this.withSchema = schema;
 	}
 	
 	public TableInstance getTableInstance() {
@@ -35,8 +49,19 @@ public class TableInstanceReader {
 	
 	private TableInstance parseFile() {
 		List<String> contents = Files.readWholeNoExp(this.fileName);
+		if(contents.isEmpty()) {
+			throw new Error("The file: " + this.fileName + " should not be empty.");
+		}
 		String tableName = new File(this.fileName).getName();
 		String[] columnNames = null;
+		//if without schema, we create some dummy schema names 
+		if(!this.withSchema) {
+			columnNames = new String[contents.get(0).trim().split(SEP).length];
+			//some dummy column names
+			for(int i = 0; i < columnNames.length; i++) {
+				columnNames[i] = COLUMN_NAME_TBD;
+			}
+		}
 		List<String[]> tuples = new LinkedList<String[]>();
 		for(String content : contents) {
 			if(content.trim().isEmpty()) {

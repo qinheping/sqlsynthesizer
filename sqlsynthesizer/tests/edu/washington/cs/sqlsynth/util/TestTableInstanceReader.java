@@ -13,13 +13,20 @@ public class TestTableInstanceReader extends TestCase {
 	}
 
 	public void testIDNameSalary() {
-		showTables("./dat/id_name");
-		showTables("./dat/id_name_salary");
-		showTables("./dat/id_salary");
+		showTables("./dat/id_name", true);
+		showTables("./dat/id_name_salary", true);
+		showTables("./dat/id_salary", true);
 	}
 	
-	public void showTables(String fileName) {
+	public void testIDNameSalary_NoSchema() {
+		showTables("./dat/id_name", false);
+		showTables("./dat/id_name_salary", false);
+		showTables("./dat/id_salary", false);
+	}
+	
+	public void showTables(String fileName, boolean withSchema) {
 		TableInstanceReader reader = new TableInstanceReader(fileName);
+		reader.setSchema(withSchema);
 		TableInstance table = reader.getTableInstance();
 		System.out.println(table);
 		
