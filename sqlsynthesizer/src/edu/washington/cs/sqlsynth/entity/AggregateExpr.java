@@ -3,6 +3,9 @@ package edu.washington.cs.sqlsynth.entity;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * This class represents a column, like ... sum(Column_Name)...
+ * */
 public class AggregateExpr {
 	public enum AggregateType {
         COUNT { public String toString() { return "count"; }},
@@ -16,7 +19,15 @@ public class AggregateExpr {
 	
 	private AggregateType t = null;
 	
+	/**
+	 * Allows max or min on string column? 
+	 * */
 	public static boolean moreStringOp = false;
+	
+	/**
+	 * Add distinct key word before the column name, like, count(distinct column)
+	 * */
+	public static boolean distinctColumn = true;
 	
 	public  AggregateExpr(TableColumn column) {
 		this.column = column;
@@ -70,9 +81,9 @@ public class AggregateExpr {
 		if(!this.isComplete()) {
 			throw new RuntimeException("The aggregate expr is not completed yet.");
 		}
-		//FIXME by default it is distinct
+		//add distinct before column or not
 		String distinct = "";
-		if(this.t.equals(AggregateType.COUNT)) {
+		if(this.t.equals(AggregateType.COUNT) && distinctColumn) {
 			distinct = " distinct ";
 		}
 		return this.t.toString() + "(" + distinct + this.column.getFullName() + ")";
