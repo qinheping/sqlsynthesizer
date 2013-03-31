@@ -59,6 +59,10 @@ public class TableColumn {
 		return tableName + "." + columnName;
 	}
 	
+	/**
+	 * This is MySQL specific, since the backend database
+	 * of the current implementation is MySQL.
+	 * */
 	public String getMySQLColumnType() {
 		if(this.isIntegerType()) {
 			return "Integer";
@@ -81,8 +85,11 @@ public class TableColumn {
 		return this.values.size();
 	}
 	
+	/**
+	 * Must use quoate to generate legal sql queries. For example,
+	 * select * from table where name = 'jack' (the quoate must be here)
+	 * */
 	public Object getValueWithQuoate(int index) {
-//		return this.values.get(index);
 		String v = this.values.get(index) + "";
 		if(this.isStringType()) {
 			return "\'" + v + "\'";
