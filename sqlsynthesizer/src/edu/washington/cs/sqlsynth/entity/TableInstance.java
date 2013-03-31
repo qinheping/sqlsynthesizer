@@ -74,11 +74,11 @@ public class TableInstance {
 					"The given column's row num: " + column.getRowNumber()
 					+ " != rowNum: " + rowNum);
 		}
-		//check no columns with the same name has been added
-		Set<String> existingColumns = new HashSet<String>();
-		for(TableColumn c : this.columns) {
-			existingColumns.add(c.getColumnName());
-		}
+		//XXX should I check no columns with the same name has been added?
+//		Set<String> existingColumns = new HashSet<String>();
+//		for(TableColumn c : this.columns) {
+//			existingColumns.add(c.getColumnName());
+//		}
 //		Utils.checkTrue(!existingColumns.contains(column.getColumnName()),
 //				"You can not have two columns with the same name: " + column.getColumnName());
 		this.columns.add(column);
@@ -106,6 +106,9 @@ public class TableInstance {
 		return null;
 	}
 	
+	/**
+	 * Only 1 key column per table is allowed.
+	 * */
 	public TableColumn getKeyColumn() {
 		List<TableColumn> cs = this.getKeyColumns();
 		if(cs.isEmpty()) {
@@ -123,16 +126,35 @@ public class TableInstance {
 				keys.add(c);
 			}
 		}
-		//FIXME
+		//FIXME only 1 key column per table is allowed.
 		Utils.checkTrue(keys.size() < 2, "At most 1 key is allowed, but table: " + this.tableName
 				+ " has: " + keys.size() + " keys");
 		return keys;
 	}
 	
 	/**
-	 * A few utility methods for computing statistics
-	 * Note that the rowNum is 0-based. You can use the same column name for the 1st, 2nd
-	 * arguments
+	 * Some utility methods for computing extra features of the table.
+	 * Note that the rowNum is 0-based. You can use the same column name
+	 * for the 1st, 2nd arguments.
+	 * 
+	 * Note, columnName and keyColumnName can be the SAME column.
+	 * 
+	 * Refer to class: TestTableInstance.java for more examples to understand.
+	 * */
+	
+	/**
+	 * Here is an example:
+	 * 
+	 * Here is the sample table:
+	   Column1,Column2,Column3
+       1,      Tom,    200
+       2,      Tim,    300
+       2,      Bob,    600
+       
+       getUniqueCountOfSameKey(Column2, Column1, 1) returns 2
+       
+       since both Tim and Bob has the same key id. This has the same effect of
+       count(unique Column2)
 	 * */
 	public int getUniqueCountOfSameKey(String columnName, String keyColumnName, int rowNum) {
 		checkColumnsExistence(columnName, keyColumnName);
@@ -151,6 +173,10 @@ public class TableInstance {
 		return set.size();
 	}
 	
+	/**
+	 * The only difference to the above method is this method does not
+	 * filter duplicated records.
+	 * */
 	public int getCountOfSameKey(String columnName, String keyColumnName, int rowNum) {
 		checkColumnsExistence(columnName, keyColumnName);
 //		Utils.checkTrue(!columnName.equals(keyColumnName));
@@ -241,6 +267,9 @@ public class TableInstance {
     	return sum/count;
 	}
     
+    /**
+     * Throw exception if one of the given column names does not exist in the table
+     * */
     private void checkColumnsExistence(String...columnNames) {
     	Set<String> cNames = new HashSet<String>();
     	for(TableColumn column : this.columns) {
