@@ -5,10 +5,15 @@ import edu.washington.cs.sqlsynth.entity.TableColumn.ColumnType;
 import edu.washington.cs.sqlsynth.util.Utils;
 
 /**
- * A wrapper class.
+ * A wrapper class, indicating that a condition expression can
+ * either be an aggregate expression like sum(column_name) or
+ * just a column name.
  * */
 public class ConditionExpr {
 
+	/**
+	 * Only one of them can be non-null
+	 * */
 	public final AggregateExpr expr;
 	public final TableColumn column;
 	
@@ -49,7 +54,6 @@ public class ConditionExpr {
 	}
 	
 	public ColumnType getType() {
-		
 		if(this.isTableColumn()) {
 			return this.column.getType();
 		} else if (this.isAggregateExpr()) {
