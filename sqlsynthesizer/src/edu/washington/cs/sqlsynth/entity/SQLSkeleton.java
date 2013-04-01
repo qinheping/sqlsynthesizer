@@ -18,6 +18,7 @@ public class SQLSkeleton {
 	
 	//can have repetition
 	private List<TableInstance> tables = new LinkedList<TableInstance>();
+	
 	//all equal join columns
 	private List<Pair<TableColumn, TableColumn>> joinColumns = new LinkedList<Pair<TableColumn, TableColumn>>();
 	
@@ -134,6 +135,9 @@ public class SQLSkeleton {
 		return ret;
 	}
 	
+	/**
+	 * The total number of table columns
+	 * */
 	public int getNumOfProjectColumns() {
 		return this.numberOfProjectColumns;
 	}

@@ -17,7 +17,10 @@ public class TestNotExistStmt extends TestCase {
 		return new TestSuite(TestNotExistStmt.class);
 	}
 	
-	public void testSimpleExistStmtCase() {
+	/**
+	 * Generate a fake one, illegal SQL
+	 * */
+	public void testSingleExistStmtCase() {
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/id_name");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/id_salary");
 		TableInstance output = TableInstanceReader.readTableFromFile("./dat/id_name_salary_full");
@@ -33,7 +36,6 @@ public class TestNotExistStmt extends TestCase {
 		completor.addInputTable(input2);
 		completor.setOutputTable(output);
 		
-		
 		List<SQLQuery> queries = completor.inferSQLQueries();
 		for(SQLQuery q : queries) {
 			NotExistStmt stmt = new NotExistStmt(q);
@@ -41,5 +43,12 @@ public class TestNotExistStmt extends TestCase {
 			System.out.println(sql);
 			assertTrue(sql.startsWith("NOT EXISTS ("));
 		}
+	}
+	
+	/**
+	 * A legal SQL generated
+	 * */
+	public void testCompoundStmtCase() {
+		
 	}
 }

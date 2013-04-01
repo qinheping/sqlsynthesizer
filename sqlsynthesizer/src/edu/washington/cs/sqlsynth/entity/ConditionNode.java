@@ -74,6 +74,7 @@ public class ConditionNode {
 		throw new Error("invalid op: " + op);
 	}
     
+    //FIXME it only work for 1 level
     public static ConditionNode reverseOp(ConditionNode node) {
     	ConditionNode revNode = copy(node);
     	revNode.reverseOp();
@@ -81,6 +82,7 @@ public class ConditionNode {
     	return revNode;
     }
     
+    //FIXME should return a deep copy
     public static ConditionNode copy(ConditionNode node) {
     	if(node.isLeaf) {
     		return new ConditionNode(node.op, node.leftExpr, node.rightExpr, node.rightConstant);
