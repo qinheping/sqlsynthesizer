@@ -1,0 +1,31 @@
+\begin{abstract}
+
+In the age of big data, a large number of computer end-users, such as
+research scientists and business analysts, need to frequently query
+a database, yet lack the programming knowledge to do such tasks smoothly.
+In this paper, we present a \textit{programming by example} technique
+that permits end-users to automate such querying tasks.
+Our technique takes from users an input and output example of how the
+database should be queried, and synthesizes a SQL query that
+reproduces the example output from the example input. Later, when the synthesized
+SQL query is applied to another, potentially larger, database with a
+similar schema as the example input, the synthesized SQL query produces
+a corresponding result that is similar to the example output. Our technique
+has several notable features: it only needs small input-output examples
+to infer a desirable SQL query, it is fully automated and does not require
+users to provide annotations/hints of any form, and it can rank multiple
+possible solutions to provide to users the most likely result.
+
+
+Our technique has been implemented as an open-source programming
+tool. In our preliminary evaluation, our prototype tool has synthesized correct
+answers for 5 out of 6 SQL exercises from a classic database textbook,
+and has been used to solve 5 non-trivial problems raised by real-world
+users from popular online forums, including ones that receive no human replies.
+
+%This opens up an amazing
+%set of possibilities in the context of making classroom teaching
+%interactive
+
+
+\end{abstract}

@@ -1,0 +1,133 @@
+\relax 
+\citation{Howe:2011}
+\citation{Gray:2005}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}}
+\newlabel{sec:introduction}{{I}{1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {I-A}}End-users' Difficulties in Using SQL}{1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {I-B}}Existing Solutions}{1}}
+\citation{Harris:2011}
+\citation{cowbook}
+\citation{cowbook}
+\citation{DasSarma:2010}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {I-C}}Synthesizing SQL Queries from Examples}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {I-D}}Technique Evaluation}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {I-E}}Contributions}{2}}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Language and Example}{2}}
+\newlabel{sec:langsubset}{{II}{2}}
+\citation{cowbook}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Syntax of the supported SQL subset.}}{3}}
+\newlabel{fig:syntax}{{1}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces An example input table `student' for the SQL question described in Section\nobreakspace  {}\unhbox \voidb@x \hbox {II-B}\hbox {}.}}{3}}
+\newlabel{tbl:student}{{2}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {II-A}}Supported SQL Subset}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {II-B}}Motivating Example}{3}}
+\newlabel{sec:example}{{\unhbox \voidb@x \hbox {II-B}}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces An example input table `enrolled' for the SQL question described in Section\nobreakspace  {}\unhbox \voidb@x \hbox {II-B}\hbox {}.}}{3}}
+\newlabel{tbl:enrolled}{{3}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces An example output table for the SQL question described in Section\nobreakspace  {}\unhbox \voidb@x \hbox {II-B}\hbox {}.}}{3}}
+\newlabel{tbl:output}{{4}{3}}
+\@writefile{toc}{\contentsline {section}{\numberline {III}Technique}{3}}
+\newlabel{sec:approach}{{III}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {III-A}}Overview}{3}}
+\citation{Harris:2011}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces A SQL query to solve the SQL question described in Section\nobreakspace  {}\unhbox \voidb@x \hbox {II-B}\hbox {}. When applied to the input tables in Figure\nobreakspace  {}2\hbox {} and Figure\nobreakspace  {}3\hbox {}, it produces the result table in Figure\nobreakspace  {}4\hbox {}.}}{4}}
+\newlabel{fig:expected_sql}{{5}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces { The workflow of our SQL query synthesis approach. }}}{4}}
+\newlabel{fig:workflow}{{6}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {III-B}}Query Skeleton Creation}{4}}
+\newlabel{sec:skeleton}{{\unhbox \voidb@x \hbox {III-B}}{4}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\unhbox \voidb@x \hbox {III-B}1}Example}{4}}
+\citation{Quinlan:1993,Cohen:1995,Frank:1998}
+\citation{Quinlan:1993}
+\citation{Pagallo:1990}
+\citation{Frank:1998}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces The SQL skeleton created for the motivating example in Section\nobreakspace  {}\unhbox \voidb@x \hbox {II-B}\hbox {}.}}{5}}
+\newlabel{fig:skeleton}{{7}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {III-C}}SQL Query Completion}{5}}
+\newlabel{sec:completion}{{\unhbox \voidb@x \hbox {III-C}}{5}}
+\newlabel{sec:decision_tree}{{\unhbox \voidb@x \hbox {III-C}1}{5}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\unhbox \voidb@x \hbox {III-C}1}Learning Conditions}{5}}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces The generated aggregation features for a table with 3 columns: $C_1$, $C_2$, and $C_3$, in which columns $C_1$ and $C_2$ are \textsf  {String} type and column $C_3$ is \textsf  {Integer} type.}}{5}}
+\newlabel{tbl:agg}{{I}{5}}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces The generated comparison features for a table with 4 columns: $C_1$, $C_2$, $C_3$, and $C_4$, in which columns $C_1$ and $C_2$ are \textsf  {String} type, and columns $C_3$ and $C_4$ are \textsf  {Integer} type. Columns with the same type are comparable, such as $C_1$ and $C_2$, and $C_3$ and $C_4$. }}{5}}
+\newlabel{tbl:com}{{II}{5}}
+\citation{Hall:2009}
+\citation{mysql}
+\citation{cowbook}
+\citation{stackoverflow,tutorialized,dbjournal}
+\newlabel{sec:agg_search}{{\unhbox \voidb@x \hbox {III-C}2}{6}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\unhbox \voidb@x \hbox {III-C}2}Searching for Aggregates}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {III-D}}Query Candidate Ranking}{6}}
+\newlabel{sec:ranking}{{\unhbox \voidb@x \hbox {III-D}}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces { The illustration of our query candidate ranking strategy. Both Query 1 and Query 2 can transform the example input to the example output. However, based on our ranking strategy, Query 1 is ranked higher, since it contains less conditions and is simpler than Query 2. An inferred query containing more conditions like Query 2 is more likely to overfit the given examples.}}}{6}}
+\newlabel{fig:rank}{{8}{6}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Evaluation}{6}}
+\newlabel{sec:evaluation}{{IV}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-A}}Research Questions}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-B}}SQL Query Synthesis Scenarios}{6}}
+\citation{abs-1208-2013}
+\citation{Zloof:1975,Tran:2009,DasSarma:2010}
+\citation{Zloof:1975}
+\citation{Tran:2009}
+\citation{Tran:2009}
+\citation{DasSarma:2010}
+\citation{DasSarma:2010}
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces { Subject programs and their configuration problems.}}}{7}}
+\newlabel{tab:results}{{III}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-C}}Experimental Results}{7}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\unhbox \voidb@x \hbox {IV-C}1}A Real Example}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-D}}Experimental Conclusions}{7}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Related Work}{7}}
+\newlabel{sec:related}{{V}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces { Input-output examples taken from an online SQL help forum thread. Our technique automatically synthesizes a SQL query as shown in Figure\nobreakspace  {}10\hbox {} that produces the output table from the three input tables. }}}{7}}
+\newlabel{fig:example}{{9}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces { The highest ranked SQL query inferred by our technique from the input-output examples in Figure\nobreakspace  {}9\hbox {}.}}}{7}}
+\newlabel{fig:answer}{{10}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {V-A}}Reverse Query Processing}{7}}
+\citation{Ramakrishnan:2004}
+\citation{Khoussainova:2010}
+\citation{Howe:2011}
+\citation{Harris:2011,singh:2012,Gulwani:2011}
+\citation{Gulwani:2010:DPS}
+\citation{Kandel:2011,Fisher:2008,Fisher08Pads,Lau:2003:PDU,Lau:2000:VSA,Barbosa:2010:MLA,Arasu:2009:LST}
+\citation{singh:2012,Gulwani:2011}
+\citation{Harris:2011}
+\citation{Gulwani:2011:SGC}
+\citation{Kandel:2011}
+\citation{Gulwani:2010:DPS}
+\bibstyle{abbrv}
+\bibdata{sqlsynthesis}
+\bibcite{Arasu:2009:LST}{1}
+\bibcite{Barbosa:2010:MLA}{2}
+\bibcite{abs-1208-2013}{3}
+\bibcite{Cohen:1995}{4}
+\bibcite{DasSarma:2010}{5}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {V-B}}Automated Program Synthesis }{8}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Conclusions and Future Work}{8}}
+\newlabel{sec:conclusion}{{VI}{8}}
+\@writefile{toc}{\contentsline {section}{References}{8}}
+\bibcite{dbjournal}{6}
+\bibcite{Fisher08Pads}{7}
+\bibcite{Fisher:2008}{8}
+\bibcite{Frank:1998}{9}
+\bibcite{Gray:2005}{10}
+\bibcite{Gulwani:2010:DPS}{11}
+\bibcite{Gulwani:2011}{12}
+\bibcite{Gulwani:2011:SGC}{13}
+\bibcite{Hall:2009}{14}
+\bibcite{Harris:2011}{15}
+\bibcite{Howe:2011}{16}
+\bibcite{Kandel:2011}{17}
+\bibcite{Khoussainova:2010}{18}
+\bibcite{Lau:2003:PDU}{19}
+\bibcite{Lau:2000:VSA}{20}
+\bibcite{mysql}{21}
+\bibcite{Quinlan:1993}{22}
+\bibcite{Ramakrishnan:2004}{23}
+\bibcite{cowbook}{24}
+\bibcite{singh:2012}{25}
+\bibcite{stackoverflow}{26}
+\bibcite{Tran:2009}{27}
+\bibcite{tutorialized}{28}
+\bibcite{Pagallo:1990}{29}
+\bibcite{Zloof:1975}{30}
