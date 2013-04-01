@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import edu.washington.cs.sqlsynth.entity.NotExistStmt;
+import edu.washington.cs.sqlsynth.entity.QueryCondition;
 import edu.washington.cs.sqlsynth.entity.SQLQuery;
 import edu.washington.cs.sqlsynth.util.Utils;
 
@@ -24,7 +26,16 @@ public class SQLQueryRanker {
 		return rankedQueries;
 	}
 	
+	//simply count the number of each element
 	public static double calculateSQLQueryCost (SQLQuery query) {
-		return (double)query.toSQLString().length();
+		int queryLength = query.toSQLString().length();
+		
+//		int numOfTables = query.getSkeleton().getTables().size();
+//		
+//		QueryCondition queryCondition = query.getCondition();
+//		QueryCondition havingCondition = query.getHavingCond();
+//		NotExistStmt notExitStmt = query.getNotExistStmt();
+		
+		return (double)queryLength;
 	}
 }
