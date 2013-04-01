@@ -1,0 +1,68 @@
+
+\section{Technique}
+\label{sec:approach}
+
+
+
+We next describe our SQL query synthesis technique in detail.
+How to infer the desirable query for the examples
+shown in Section~\ref{sec:example} will
+be discussed thoroughly in this section.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[scale=0.50]{workflow}
+  \vspace*{-5.0ex}\caption {{\label{fig:workflow} The workflow of our SQL query synthesis approach.
+}}
+
+\end{figure}
+
+\subsection{Overview}
+Figure~\ref{fig:workflow} sketches the general workflow of our technique.
+At a high level, our technique consists of three major steps: Query Skeleton
+Creation(Section~\ref{sec:skeleton}), SQL Query Completion
+(Section~\ref{sec:completion}), and Query Candidate Ranking (Section~\ref{sec:ranking}).
+Specifically, our approach takes from users input-output examples. It first infers
+a partially-complete query skeleton. The inferred query skeleton, though contains
+incomplete parts that can not be yet decided, serves as a good reference
+for further synthesizing a complete SQL query.
+After that, our technique uses two techniques to complete a SQL skeleton.
+In particular, it uses an advanced rule learning algorithm from the machine
+learning community to infer query conditions (Section~\ref{sec:decision_tree}), and
+ employs type-directed search to figure out possible aggregation
+expressions (Section~\ref{sec:agg_search}).
+The SQL Query Completion step produces a list of syntactically-valid
+query candidates that satisfy the provided input-output examples.
+However, it is possible that multiple query candidates can be synthesized based on the
+provided input-output example. To deal with that, our technique
+ranks all generated candidates,
+and provides users a ranked list of SQL queries with the
+simplest ones on the top. 
+%This makes our tool more usable.
+
+
+End-users can use our approach to obtain SQL query to transform
+multiple, huge database tables by constructing small, representative
+input and output example tables. On some examples, we speculate
+that our approach
+may produce a SQL query that satisfies the input and output examples
+given by the user, but does not address the intention
+that the user wants. To address this issue, we adapt a simple
+interaction model from~\cite{Harris:2011} to ask users to investigate the results of
+an output SQL query and report any discrepancy. In this case,
+the user can refine the inferred SQL query by providing a more
+informative input-output example (or multiple input-output examples
+that together describe the required behavior) that demonstrate the behavior on
+which the originally-inferred SQL query behaves incorrectly.
+
+\input{skeletoncreation}
+
+\input{querycompletion}
+
+\input{ranking}
+
+
+%\subsection{User Interactive Model}
+%\label{sec:uim}
+
+

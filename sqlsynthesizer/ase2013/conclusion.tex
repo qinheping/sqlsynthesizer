@@ -1,0 +1,64 @@
+\section{Conclusions and Future Work}
+\label{sec:conclusion}
+
+General purpose programming platforms have never been easy. Many end-users
+who are non-professional programmers are still mostly stucked with the process
+of \textit{how} to accomplish a certain task by receiving 
+step-by-step, detailed, and syntactically correct instructions, instead of simply describing
+\textit{what} the task is. \textit{Programming by examples} has the potential
+to change this landscape, when targeted for the right set of people for the
+right set of problems.
+
+In this paper, we studied the problem of automated SQL query synthesis
+from simple input-output examples, presented a practical technique to 
+infer desirable SQL queries that fulfill end-users' intentions, and
+developed a usable programming tool.
+To demonstrate usefulness of our technique, we applied our tool
+to 6 SQL exercises from a classic database textbook as well as
+5 non-trivial SQL problems from online forums by real end-users. 
+The results are promising, showing that our technique can automate a variety of database
+query tasks.
+
+The source code of our tool implementation is available at: \\
+\url{http://sqlsynthesizer.googlecode.com}
+
+\vspace{1mm}
+
+Besides general issues such as performance and ease of use, our future
+work will concentrate on the following topics:
+
+\textbf{Enrich the supported SQL subset.} The technique 
+presented in this paper focuses on a widely-used SQL subset.
+It may miss some important language features such as
+nested queries, and thus fail to infer meaningful queries
+in some scenarios when such missing features must be used.
+We plan to remedy this problem by enriching the
+supported SQL subset, and designing a corresponding algorithm
+to synthesize more general solutions.
+
+\textbf{Illustration of the synthesis steps.} Besides
+producing a final result, end-users may also be interested in knowing
+how a SQL query is inferred.  Showing detailed inference steps (visually) not
+only makes the tool more usable, but only permits
+end-users to better understand the whole process and spot possible errors earlier.
+To do so, we plan to investigate how to apply recent advance in data
+visualization~\cite{Kandel:2011}
+to the context of program synthesis.
+
+\textbf{Noise detection and tolerance in users' inputs.} The current technique
+requires users to provide noise-free input-output examples.
+Even in the presence of a small amount of user-input noises (e.g., a typo),
+the inference algorithm will declare failure when it fails to learn
+a valid SQL query.
+To overcome this limitation, we plan to design a more robust inference
+algorithm that can attempt to identify and tolerate user-input noises,
+and even suggest a fix to the noisy example.
+
+
+
+\textbf{Generalization.}
+We have applied our synthesis technique to one specific, but
+important problem.  There is a rich history of end-user programming
+problems being cast as program synthesis (e.g.,~\cite{Gulwani:2010:DPS}).  In future
+work, we plan to formulate other tasks, such as repetitive file operations, and to apply our technique to them.
+
