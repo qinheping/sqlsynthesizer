@@ -102,7 +102,7 @@ public class SQLQuery {
 		
 		sb.append(" select ");
 		int count = 0;
-		for(int i = 0; i < this.skeleton.getNumOfProjectColumns(); i++) {
+		for(int i = 0; i < this.skeleton.getOutputColumnNum(); i++) {
 			if(count != 0) {
 				sb.append(", ");
 			}

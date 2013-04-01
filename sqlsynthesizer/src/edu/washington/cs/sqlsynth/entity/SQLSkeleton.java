@@ -19,13 +19,17 @@ public class SQLSkeleton {
 	//can have repetition
 	private List<TableInstance> tables = new LinkedList<TableInstance>();
 	
-	//all equal join columns
+	//FIXME currently only supporting equal join
 	private List<Pair<TableColumn, TableColumn>> joinColumns = new LinkedList<Pair<TableColumn, TableColumn>>();
 	
 	//the projections, also zero based
+	//that is directly project the columnName to the output table without aggregation operator
 	private Map<Integer, TableColumn> projectColumns = new LinkedHashMap<Integer, TableColumn>();
 	
-	private final int numberOfProjectColumns;
+	//the total number of output columns, including column names and the aggregation operators.
+	private final int outputColumnNumber;
+	
+	//the data of input/output tables
 	private final List<TableInstance> inputTables;
 	private final TableInstance outputTable;
 	
@@ -34,7 +38,7 @@ public class SQLSkeleton {
 		Utils.checkTrue(outputColumnNum > 0);
 		Utils.checkNotNull(outputTable);
 		Utils.checkTrue(inputTables.size() > 0);
-		this.numberOfProjectColumns = outputColumnNum;
+		this.outputColumnNumber = outputColumnNum;
 		this.outputTable = outputTable;
 		this.inputTables = inputTables;
 	}
@@ -111,6 +115,8 @@ public class SQLSkeleton {
 		
 		List<TableInstance> ret = new LinkedList<TableInstance>();
 		for(TableInstance t : list) {
+			//after joining two tables (before filtering), there would be columns
+			//not in the output table, so need to remove such tables.
 			ret.add(this.getTableOnlyWithMatchedColumns(t));
 //			System.out.println("-------------------");
 //			System.out.println(t.toString());
@@ -138,8 +144,8 @@ public class SQLSkeleton {
 	/**
 	 * The total number of table columns
 	 * */
-	public int getNumOfProjectColumns() {
-		return this.numberOfProjectColumns;
+	public int getOutputColumnNum() {
+		return this.outputColumnNumber;
 	}
 	
 	public String getAllJoinConditions() {
