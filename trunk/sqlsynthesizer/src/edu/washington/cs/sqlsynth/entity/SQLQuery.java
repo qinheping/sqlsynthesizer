@@ -19,7 +19,14 @@ public class SQLQuery {
 	
 	private QueryCondition havingCond = null;
 	
+	/**
+	 * SQL union (SQL Query)
+	 * FIXME currently, the union list only contains 1 SQLQuery, see
+	 * toSQLString() method.
+	 * */
 	private List<SQLQuery> unions = new LinkedList<SQLQuery>(); 
+	
+	private NotExistStmt notExistQuery;
 	
 	public SQLQuery(SQLSkeleton skeleton) {
 		Utils.checkNotNull(skeleton);
@@ -80,6 +87,15 @@ public class SQLQuery {
 		return skeleton;
 	}
 	
+	public void setNotExistStmt(NotExistStmt stmt) {
+		Utils.checkNotNull(stmt);
+		this.notExistQuery = stmt;
+	}
+	
+	public NotExistStmt getNotExistStmt() {
+		return this.notExistQuery;
+	}
+	
 	//FIXME definitely not complete yet
 	public String toSQLString() {
 		StringBuilder sb = new StringBuilder();
@@ -121,7 +137,7 @@ public class SQLQuery {
 			sb.append(skeleton.getTables().get(i).getTableName());
 		}
 		String condition = skeleton.getAllJoinConditions();
-		if(!condition.isEmpty() || this.condition != null) {
+		if(!condition.isEmpty() || this.condition != null || this.notExistQuery != null) {
 		    
 		    StringBuilder cond = new StringBuilder();
     		if(!condition.isEmpty()) {
@@ -132,6 +148,15 @@ public class SQLQuery {
     		}
     		if(this.condition != null && !this.condition.isEmpty()) {
     			cond.append(this.condition.toSQLCode());
+    		}
+    		
+    		if(this.notExistQuery != null) {
+    			if(condition.isEmpty() && this.condition == null) {
+    				//do nothing, do not need an and here
+    			} else {
+    			    cond.append(" and "); //has condition node above
+    			}
+    			cond.append(this.notExistQuery.toSQLString());
     		}
     		
     		if(!cond.toString().trim().isEmpty()) {
