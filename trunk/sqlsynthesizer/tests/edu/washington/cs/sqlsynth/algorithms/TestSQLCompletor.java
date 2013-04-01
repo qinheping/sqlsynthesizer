@@ -7,6 +7,7 @@ import java.util.Map;
 
 import edu.washington.cs.sqlsynth.db.DbConnector;
 import edu.washington.cs.sqlsynth.entity.AggregateExpr;
+import edu.washington.cs.sqlsynth.entity.NotExistStmt;
 import edu.washington.cs.sqlsynth.entity.SQLQuery;
 import edu.washington.cs.sqlsynth.entity.SQLSkeleton;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
@@ -474,8 +475,16 @@ public class TestSQLCompletor extends TestCase {
 		DbConnector.NO_ORDER_MATCHING = true;
 		queries = completor.validateQueriesOnDb(queries);
 		//after validating on my sql
+		//rank it
+		queries = SQLQueryRanker.rankSQLQueries(queries);
 		System.out.println("The final output....");
 		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+		
+		//add the not-exist stmt, meaningless code below
+		for(SQLQuery q : queries) {
+			q.setNotExistStmt(new NotExistStmt(SQLQuery.clone(q)));
 			System.out.println(q.toSQLString());
 		}
 	}

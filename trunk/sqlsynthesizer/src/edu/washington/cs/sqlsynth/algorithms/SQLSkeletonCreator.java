@@ -12,6 +12,13 @@ import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.util.TableUtils;
 import edu.washington.cs.sqlsynth.util.Utils;
 
+/**
+ * Infer possible columns by inspecting:
+ * (1) key info
+ * (2) column names
+ * (3) types
+ * (4) content
+ * */
 public class SQLSkeletonCreator {
 
 	public final List<TableInstance> inputTables;

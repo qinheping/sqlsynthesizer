@@ -26,7 +26,7 @@ public class SQLQuery {
 	 * */
 	private List<SQLQuery> unions = new LinkedList<SQLQuery>(); 
 	
-	private NotExistStmt notExistQuery;
+	private NotExistStmt notExistQuery = null;
 	
 	public SQLQuery(SQLSkeleton skeleton) {
 		Utils.checkNotNull(skeleton);
