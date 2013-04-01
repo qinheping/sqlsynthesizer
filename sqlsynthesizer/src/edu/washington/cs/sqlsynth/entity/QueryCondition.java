@@ -57,8 +57,9 @@ public class QueryCondition {
 		this.root = root;
 		this.isAnd = isAnd;
 		//create a new list
-		this.allConds = new LinkedList<QueryCondition>();
-		this.allConds.addAll(allJoins);
+		this.allConds = allJoins;
+//		this.allConds = new LinkedList<QueryCondition>();
+//		this.allConds.addAll(allJoins);
 	}
 	
 	private QueryCondition(List<QueryCondition> allJoins, boolean isAnd) {
@@ -67,8 +68,9 @@ public class QueryCondition {
 		Utils.checkTrue(!allJoins.isEmpty());
 		this.isAnd = isAnd;
 		//create a new list
-		this.allConds = new LinkedList<QueryCondition>();
-		this.allConds.addAll(allJoins);
+		this.allConds = allJoins;
+//		this.allConds = new LinkedList<QueryCondition>();
+//		this.allConds.addAll(allJoins);
 	}
 	
 	/**
