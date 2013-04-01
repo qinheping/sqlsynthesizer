@@ -20,6 +20,8 @@ import edu.washington.cs.sqlsynth.util.Utils;
  * (4) content
  * */
 public class SQLSkeletonCreator {
+	
+	public static boolean matchingName = true;
 
 	public final List<TableInstance> inputTables;
 	public final TableInstance outputTable;
@@ -50,8 +52,14 @@ public class SQLSkeletonCreator {
 		Utils.checkTrue(skeleton.getTables().size() >= this.inputTables.size());
 		
 		//all possible joining conditions
+		//join with keys
 		List<Pair<TableColumn, TableColumn>> p1list = this.getKeyPairs(tables);
+		//join by columns, with name
 		List<Pair<TableColumn, TableColumn>> p2list = this.getNameMatchedPairs(tables);
+		
+		//FIXME whether we should add columns with different names
+		//but the same type? controlled by the flag of matchingNames.
+		
 		if(p1list != null && !p1list.isEmpty()) {
 			for(Pair<TableColumn, TableColumn> p1 : p1list) {
 			    skeleton.addJoinColumns(p1);
@@ -66,6 +74,7 @@ public class SQLSkeletonCreator {
 		//all projection columns
 		int index = 0;
 		for(TableColumn column : outputColumns) {
+			//the first column with the same name
 			TableColumn c = TableUtils.findFirstMatchedColumn(column.getColumnName(), this.inputTables);
 			if(c != null) {
 				skeleton.setProjectColumn(index, c);
@@ -76,7 +85,9 @@ public class SQLSkeletonCreator {
 		return skeleton;
 	}
 	
-	//FIXME, already extended to multi tables
+	/**
+	 * Return all pairs of columns with the same type, and both are keys.
+	 * */
 	private List<Pair<TableColumn, TableColumn>> getKeyPairs(List<TableInstance> tables) {
 		List<Pair<TableColumn, TableColumn>> pairList = new LinkedList<Pair<TableColumn, TableColumn>>();
 		if(tables.size() == 1) {
@@ -102,7 +113,10 @@ public class SQLSkeletonCreator {
 		return pairList;
 	}
 	
-	//FIXME, already extends to multiple tables
+	/**
+	 * Return all pairs that is not in the same table but with the same type
+	 * and the same column name
+	 * */
 	private List<Pair<TableColumn, TableColumn>> getNameMatchedPairs(List<TableInstance> tables) {
 		if(tables.size() == 1) {
 			return null;
@@ -134,6 +148,9 @@ public class SQLSkeletonCreator {
 	
 	private boolean columnMatched(TableColumn c1, TableColumn c2) {
 		Utils.checkTrue(!c1.getFullName().equals(c2.getFullName()));
-		return c1.getColumnName().equals(c2.getColumnName());
+		if(matchingName) {
+		    return c1.getColumnName().equals(c2.getColumnName());
+		}
+		return true;
 	}
 }
