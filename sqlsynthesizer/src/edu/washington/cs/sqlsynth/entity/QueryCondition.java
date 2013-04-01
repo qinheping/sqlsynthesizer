@@ -21,10 +21,24 @@ public class QueryCondition {
 		OR { public String toString() { return " or "; }}
 		};
 	
+	/**
+	 * The query condition can either be a single root condition node
+	 * or a combination of all query conditions.
+	 * 
+	 * If root is not null, allConds must be null.
+	 * */
 	private final ConditionNode root;
 	
+	/**
+	 * concatenating the condition node with & or ||
+	 * */
 	private final boolean isAnd;
 	
+	/**
+	 * A list of query conditions.
+	 * 
+	 * If allConds is not null, root must be null.
+	 * */
 	private final List<QueryCondition> allConds;
 	
 	public QueryCondition(ConditionNode root) {
@@ -42,7 +56,9 @@ public class QueryCondition {
 		//everything not initialized
 		this.root = root;
 		this.isAnd = isAnd;
-		this.allConds = allJoins;
+		//create a new list
+		this.allConds = new LinkedList<QueryCondition>();
+		this.allConds.addAll(allJoins);
 	}
 	
 	private QueryCondition(List<QueryCondition> allJoins, boolean isAnd) {
@@ -50,9 +66,14 @@ public class QueryCondition {
 		this.root = null;
 		Utils.checkTrue(!allJoins.isEmpty());
 		this.isAnd = isAnd;
-		this.allConds = allJoins;
+		//create a new list
+		this.allConds = new LinkedList<QueryCondition>();
+		this.allConds.addAll(allJoins);
 	}
 	
+	/**
+	 * If the root is not null, the condition list must be null.
+	 * */
 	private boolean isAtom() {
 		if(this.root != null) {
 			Utils.checkTrue(this.allConds == null);
@@ -62,7 +83,7 @@ public class QueryCondition {
 	
 	//Pair<SelectionCondition, QueryCondition>, use null if absent
 	//XXX FIXME, the other parts
-	//also jsut use shallow copy
+	//also just use shallow copy
 	public Collection<Pair<QueryCondition, QueryCondition>> splitSelectionAndQueryConditions() {
 		QueryCondition having = getMostOneAggregation();
 		if(having != null) {
@@ -194,6 +215,9 @@ public class QueryCondition {
 	 * Below are the helper static methods
 	 **************************************/
 	
+	/**
+	 * Reverse the query condition by returning a new query condition object.
+	 * */
 	public static QueryCondition reverse(QueryCondition cond) {
 		if(cond.isAtom()) {
 			QueryCondition revQuery = copy(cond);
@@ -231,6 +255,7 @@ public class QueryCondition {
 	public static QueryCondition parse(Map<String, TableColumn> columnMap, String cond) {
 		return parse(columnMap, new HashMap<String, AggregateExpr>(), cond);
 	}
+	
 	public static QueryCondition parse(Map<String, TableColumn> columnMap, Map<String, AggregateExpr> aggMap, String cond) {
 		if(cond.isEmpty()) {
 			return null;
