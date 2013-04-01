@@ -1,0 +1,27 @@
+
+refer to layoutexample.java
+
+javaviewer.java for menu
+
+imageanalyzer
+
+addressbook.java
+
+accessibletableexample.java for table manipulation
+
+|--------------------------------------------------------------
+| a pull-down, editable button
+|  -- the pull-down button shows all input column names
+|  -- users can deicde whether this column is key or not
+|  -- also permits ppl to input new column names
+|  -- a little panel showing below, indicating it is a key or not (hovering
+|     above a key)
+|  -- adding multiple columns / deleting multiple columns (a button)
+|
+|adding multiple tables
+|
+|a synthesize button, and pops up a new frame, showing the list
+|
+|a saving button (save all to a directory)
+|  -- table names (editable)
+|---------------------------------------------------------------
