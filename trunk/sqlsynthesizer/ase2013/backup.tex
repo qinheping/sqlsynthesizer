@@ -1,0 +1,60 @@
+
+Our technique follows a general methodology for designing
+systems supporting programming by examples~\cite{Harris:2011}.
+It includes the following three major steps:
+(1) identify a language subset (of SQL) that is expressive to
+describe a large proportion of %operations that users need to perform
+database queries; (2) design an algorithm that
+can efficiently infer programs in the language from input-output
+examples; and (3) develop a ranking strategy that presents
+the most likely program to the users, when multiple solutions exist.
+
+\vspace{1mm}
+\noindent \textbf{\textit{Supported SQL Subset.}}
+The full SQL 93 specification contains over 1000 pages, and it is
+infeasible and unnecessary to support all language features in practice.
+When selecting a supported SQL subset, there is a tradeoff
+between the expressiveness of the selected language subset,
+and the complexity of finding simple consistent solutions
+within that language's search space.  In general, the more expressive a search
+space, the harder the task of finding consistent hypotheses within
+that search space. 
+
+During our study of end-user's real problems, we also carefully studied what would
+be the solution to users' desired query, and found that the most common
+desired queries can be composed by a handful of basic SQL constructs,
+which form the target language of this work (Section~\ref{sec:langsubset}).
+
+As shown in our experiments (Section~\ref{sec:evaluation}), the supported subset, though far from completion, is expressive
+enough to describe many query tasks succinctly, while at the same time concise
+enough to be amenable for efficient inference. 
+
+
+
+\vspace{1mm}
+\noindent \textbf{\textit{SQL Query Inference Algorithm.}} Our inference
+algorithm, as described in Section~\ref{sec:approach}, consists of two
+major steps. The first step, called \textit{SQL Skeleton Creation}, scans
+the example input and output, and \textit{guesses} what a desirable
+SQL query may look like. The output of this step is a set of \textit{incomplete} SQL
+query skeletons. A SQL query skeleton is an incomplete SQL query,
+which contains unknown parts. The second step,
+called \textit{SQL Query Completion} takes as inputs a created
+SQL skeleton, fills unknown parts with possible solutions, and then produces a set of
+syntactically-valid SQL queries. In particular, when performing
+SQL query completion, our technique uses a rule learning algorithm
+to infer the conditions (Section~\ref{sec:decision_tree}), and uses 
+type-directed search to infer possible aggregates in a query (Section~\ref{sec:agg_search}).
+
+\vspace{1mm}
+\noindent \textbf{\textit{Query Candidate Ranking Strategy.}}
+Input-output examples provided by end-users are likely to
+be under-specified. It is entirely possible that multiple
+queries can be synthesized to satisfy the provided examples.
+We address this problem by developing a ranking scheme that 
+ranks the possibly multiple queries
+consistent with the given input-output
+examples. Our ranking scheme, detailed in Section~\ref{sec:ranking}
+is inspired by the Occam's razor principle, prefers a smaller and
+simpler solution if other aspects being equal.
+
