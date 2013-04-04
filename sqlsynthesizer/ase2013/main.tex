@@ -76,22 +76,29 @@
 \renewenvironment{enumerate}{\Enumerate\Nospacing}{\endlist}
 \renewenvironment{description}{\Description\Nospacing}{\endlist}
 
-\newcommand{\todo}[1]{{TODO #1}}
+%\newcommand{\todo}[1]{{TODO #1}}
+\newcommand{\todo}[1]{{\color{red}\bfseries [[{#1}]]}}
 \newcommand{\sai}[1]{{\color{blue}\todo{for Sai: #1}}}
 \newcommand{\yuyin}[1]{{\color{red}\todo{for Yuyin: #1}}}
+
+\newcommand{\ourtool}{SQLSynthesizer\xspace}
+
+\newcommand{\exnum}{XXX\xspace}
+\newcommand{\solexnum}{XXX\xspace}
+
+\newcommand{\pnum}{XXX\xspace}
+\newcommand{\solpnum}{XXX\xspace}
 
 \begin{document}
 
 \title{Automatically Synthesizing SQL Queries from \\Input-Output Examples}
-%\subtitle{[CSE 544, Course Project Milestone Report, Spring 2012]}
-%\titlenote{This work is sponsored by}
 
 
 
 \author{\IEEEauthorblockN{Sai Zhang\quad Yuyin Sun}
 \IEEEauthorblockA{Computer Science \& Engineering\\
 University of Washington, USA\\
-\{szhang, sunyuyin\}@washington.edu}}
+\{szhang, sunyuyin\}@cs.washington.edu}}
 
 
 \maketitle
@@ -100,7 +107,7 @@ University of Washington, USA\\
 
 \input{introduction}
 
-%\input{example}
+\input{example}
 
 \input{langsubset}
 

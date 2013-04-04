@@ -1,27 +1,40 @@
 \begin{abstract}
 
-In the age of big data, a large number of computer end-users, such as
+Many computer end-users, such as
 research scientists and business analysts, need to frequently query
 a database, yet lack the programming knowledge to do such tasks smoothly.
-In this paper, we present a \textit{programming by example} technique
+To alleviate this problem, we present
+a \textit{programming by example} technique
+(and its tool implementation, called \ourtool)
 that permits end-users to automate such querying tasks.
 Our technique takes from users an input and output example of how the
-database should be queried, and synthesizes a SQL query that
-reproduces the example output from the example input. Later, when the synthesized
+database should be queried, and then synthesizes a SQL query that
+reproduces the example output from the example input.
+Later, when the synthesized
 SQL query is applied to another, potentially larger, database with a
 similar schema as the example input, the synthesized SQL query produces
-a corresponding result that is similar to the example output. Our technique
+a corresponding result that is similar to the example output. 
+
+\todo{may delay this paragraph later}
+Our technique
 has several notable features: it only needs small input-output examples
 to infer a desirable SQL query, it is fully automated and does not require
 users to provide annotations/hints of any form, and it can rank multiple
 possible solutions to provide to users the most likely result.
 
+\todo{num is missing here}
+We evaluated \ourtool on \exnum SQL exercises from a classic
+database textbook and \pnum non-trivial SQL questions raised by
+real-world users from popular online forums.
+As a result, \ourtool infers correct SQL queries for 
+\solexnum textbook exericses and \solpnum forum questions,
+including those that receive no human replies.
 
-Our technique has been implemented as an open-source programming
-tool. In our preliminary evaluation, our prototype tool has synthesized correct
-answers for 5 out of 6 SQL exercises from a classic database textbook,
-and has been used to solve 5 non-trivial problems raised by real-world
-users from popular online forums, including ones that receive no human replies.
+%Our technique has been implemented as an open-source programming
+%tool. In our preliminary evaluation, our prototype tool has synthesized correct
+%answers for 5 out of 6 SQL exercises from a classic database textbook,
+%and has been used to solve 5 non-trivial problems raised by real-world
+%users from popular online forums, 
 
 %This opens up an amazing
 %set of possibilities in the context of making classroom teaching
