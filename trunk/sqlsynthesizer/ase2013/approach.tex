@@ -2,45 +2,45 @@
 \section{Technique}
 \label{sec:approach}
 
+This section explains \ourtool's 3 steps, as introduced
+in Section~\ref{sec:introduction} and illustrated
+in Figure~\ref{fig:workflow}.
 
 
-We next describe our SQL query synthesis technique in detail.
-How to infer the desirable query for the examples
-shown in Section~\ref{sec:example} will
-be discussed thoroughly in this section.
-
-\begin{figure}[t]
+\begin{figure*}[t]
   \centering
-  \includegraphics[scale=0.50]{workflow}
-  \vspace*{-5.0ex}\caption {{\label{fig:workflow} The workflow of our SQL query synthesis approach.
+  \includegraphics[scale=0.70]{workflow}
+  \vspace*{-1.0ex}\caption {{\label{fig:workflow} Illustration
+  of \ourtool's workflow in inferring SQL queries from input-output examples. \ourtool consists of 3 steps: (1) The ``Skeleton Creation'' step (Section~\ref{sec:skeleton})
+infers a partially-complete SQL query as a skeleton from the given
+examples, (2) The ``Query Completion'' step (Section~\ref{sec:completion}) uses
+a rule-learning algorithm~\cite{} and type-directed search to
+produces a list of syntactically-valid query candidates that satisfy
+the provided input-output examples.
+, and (3) The ``Candidate Ranking'' step (Section~\ref{sec:ranking})
+ranks all inferred SQL query candidates and provides users a
+ranked list of SQL queries with the likely ones on the top. 
+Users select the
+desirable SQL queries from the produced ranked query list. On some
+examples, if \ourtool produces SQL queries that satisfy the input and
+output examples, but does not address the intention that the user wants;
+\ourtool can be used interactively by asking users to provide more
+informative examples and then refine the SQL queries.
 }}
 
-\end{figure}
-
-\subsection{Overview}
-Figure~\ref{fig:workflow} sketches the general workflow of our technique.
-At a high level, our technique consists of three major steps: Query Skeleton
-Creation(Section~\ref{sec:skeleton}), SQL Query Completion
-(Section~\ref{sec:completion}), and Query Candidate Ranking (Section~\ref{sec:ranking}).
-Specifically, our approach takes from users input-output examples. It first infers
-a partially-complete query skeleton. The inferred query skeleton, though contains
-incomplete parts that can not be yet decided, serves as a good reference
-for further synthesizing a complete SQL query.
-After that, our technique uses two techniques to complete a SQL skeleton.
-In particular, it uses an advanced rule learning algorithm from the machine
-learning community to infer query conditions (Section~\ref{sec:decision_tree}), and
- employs type-directed search to figure out possible aggregation
-expressions (Section~\ref{sec:agg_search}).
-The SQL Query Completion step produces a list of syntactically-valid
-query candidates that satisfy the provided input-output examples.
-However, it is possible that multiple query candidates can be synthesized based on the
-provided input-output example. To deal with that, our technique
-ranks all generated candidates,
-and provides users a ranked list of SQL queries with the
-simplest ones on the top. 
-%This makes our tool more usable.
+\end{figure*}
 
 
+\input{skeletoncreation}
+
+\input{querycompletion}
+
+\input{ranking}
+
+
+
+\subsection{Discussions}
+\label{sec:uim}
 End-users can use our approach to obtain SQL query to transform
 multiple, huge database tables by constructing small, representative
 input and output example tables. On some examples, we speculate
@@ -55,14 +55,5 @@ informative input-output example (or multiple input-output examples
 that together describe the required behavior) that demonstrate the behavior on
 which the originally-inferred SQL query behaves incorrectly.
 
-\input{skeletoncreation}
-
-\input{querycompletion}
-
-\input{ranking}
-
-
-%\subsection{User Interactive Model}
-%\label{sec:uim}
 
 

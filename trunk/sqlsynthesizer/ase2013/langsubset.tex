@@ -21,6 +21,7 @@
 	& \texttt{ SELECT } \e^+ \texttt{ FROM } \dbtable^+ \\
         & \texttt{ WHERE } \cond^+ \\ 
 	&  \texttt{ GROUP BY } \column^+ \texttt{ HAVING } \cond^+\\
+	&  \texttt{ ORDER BY } \column^+ \\
 \dbtable::= {} &\ atom \\
 \column ::= {} &\ \dbtable.atom\\
 \cond ::= {} &\ \ \cond \;\texttt{\&\&}\; \cond \\ 
@@ -39,14 +40,27 @@
 \end{figure}
 
 
-\section{Language and Example}
+\section{Supported SQL Subset}
 \label{sec:langsubset}
 
 In this section, we first present the supported SQL subset, and
 then describe a motivating example which could be expressed in the
 supported SQL subset.
 
-\subsection{Supported SQL Subset}
+discard some vendor-specific grammars, like top in Microsoft,
+
+discard fuzzy matching part for example, like " ... ", wildcards,
+
+exclude delete, update query statement, because we focus on query
+
+Omit distinct, in (which can be replaced by NOT EXIST, or condition query)
+
+omit between, discard Left Joint, Right Join, only remaining Full Join
+
+Not Null
+
+Nested query can always be re-written using conditions
+
 
 Figure~\ref{fig:syntax} defines the syntax of the supported language,
 which

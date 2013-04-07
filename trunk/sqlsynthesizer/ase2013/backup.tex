@@ -58,3 +58,25 @@ examples. Our ranking scheme, detailed in Section~\ref{sec:ranking}
 is inspired by the Occam's razor principle, prefers a smaller and
 simpler solution if other aspects being equal.
 
+
+
+Figure~\ref{fig:workflow} sketches the general workflow of our technique.
+At a high level, our technique consists of three major steps: Query Skeleton
+Creation(Section~\ref{sec:skeleton}), SQL Query Completion
+(Section~\ref{sec:completion}), and Query Candidate Ranking (Section~\ref{sec:ranking}).
+Specifically, our approach takes from users input-output examples. It first infers
+a partially-complete query skeleton. The inferred query skeleton, though contains
+incomplete parts that can not be yet decided, serves as a good reference
+for further synthesizing a complete SQL query.
+After that, our technique uses two techniques to complete a SQL skeleton.
+In particular, it uses an advanced rule learning algorithm from the machine
+learning community to infer query conditions (Section~\ref{sec:decision_tree}), and
+ employs type-directed search to figure out possible aggregation
+expressions (Section~\ref{sec:agg_search}).
+The SQL Query Completion step produces a list of syntactically-valid
+query candidates that satisfy the provided input-output examples.
+However, it is possible that multiple query candidates can be synthesized based on the
+provided input-output example. To deal with that, our technique
+
+%This makes our tool more usable.
+
