@@ -106,9 +106,9 @@ implementation, called \ourtool) to automatically synthesize SQL queries
 from input-output examples. \ourtool takes example input
 table(s) and output table from the end-users, and then automatically
 infers a SQL query (or multiple queries, if exist) that queries
-the input database and returns the output example. If the inferred
+against the input tables and returns the output example. If the inferred
 SQL query is applied
-to the example input, then it produces the example output, and if the
+to the example input, then it produces the example output; and if the
 SQL query is applied to other similar inputs (potentially much larger tables),
 then the SQL query produces a corresponding output.
 
@@ -118,14 +118,28 @@ input-output examples may lead to underspecification, they
 serve as a straightforward way of describing \textit{what} the
 task is and a natural interface that a tool can provide assistance.
 
-Our technique is designed to be used by non-professional
+Our technique is designed to be used by non-professional \todo{beginner}
 database end-users when they do not know how to write a desirable SQL query.
 It aims to replace the role of the forum expert, \todo{also trainers?}
 which not only removes human from the loop, but also enables
 end-users to solve their problems in a few seconds as opposed to a few days
 (while waiting for an expert's reply). 
+\todo{right place?}
+We also envision this technique to be useful in an online education
+setting. Recently, several education initiatives such as EdX, Coursera,
+and Udacity are teaming up with experts to provide high quality online courses
+to several thousands of students worldwide.
+One challenge, which is not present in a traditional classroom
+setting, is to provide answers on questions raised by a large
+number of students.
+\todo{explain why SQLSynthesier is useful.}
 
-It uses three steps to link a user's intention to
+%on practice exercises and assignments to a large number of students. 
+
+
+
+
+\ourtool uses three steps to link a user's intention to
 a desirable SQL query:
 
 
