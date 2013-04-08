@@ -50,7 +50,9 @@ Learning rules via decision-tree learning is restricted to conjunctive rules,
 which is insufficient for many real scenarios. On the
 other hand, the generalization ability of the ``divide-and-conquer'' strategy
 is quite limited due to overpruning and covering heuristic.
+\todo{The above paragraphs are not clear.}
 
+\todo{need to illustrate more on PART}
 To overcome these two limitations, in our technique, we adapt
 the PART learning algorithm~\cite{Frank:1998}, which combines both
 rule learning paradigms above. Notably, PART is capable of giving an more
@@ -69,6 +71,7 @@ there are two challenges when applying it to our problem:
 
 %We customized PART in the following two aspects to make it applicable
 %to our problem:
+\todo{summarize the features.}
 
 %\begin{itemize}
 %\item
@@ -213,6 +216,7 @@ searching space includes all possible combinations of table columns and the five
 aggregates (see Figure~\ref{fig:syntax}). In type-directed search, we leverage the following
 information to prune the potential space:
 
+\todo{remove the notation of type-directed search}
 \begin{enumerate}
 \item The output values' type in the result column must be compatible with the aggregate's return
 type. For instance, if an output column is String type, it must not use aggregates that always
