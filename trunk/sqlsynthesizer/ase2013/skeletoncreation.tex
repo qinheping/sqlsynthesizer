@@ -49,6 +49,8 @@ using columns with the same name, such as joining a \textit{student} table with 
 overlapped values in their corresponding input tables can be used as a joining condition. It is straightforward to check the first 
 two cases to identify possible joining columns. For the third case, our technique scans the given input tables to check ``value similarity''
 between two arbitrary columns, and selects columns whose ``value similarity'' is above a fixed threshold as joining columns.
+\todo{need to implement above.}
+\todo{mention how many skeletons will be created}
 
 %\item
 \vspace{1mm}
@@ -58,6 +60,7 @@ table column name appears in any input tables. If so, we used the matched column
 from the input table as the output column. Otherwise, the output column
 must be produced by using aggregation. Our technique keeps track of those aggregation columns
 and search for proper aggregates in the next phase (Section~\ref{sec:agg_search}). 
+\todo{check the values in the output column}
 
 %After determining the table set and joining columns,
 %the next step is to identify potential column names on which the result would be projected. If a
