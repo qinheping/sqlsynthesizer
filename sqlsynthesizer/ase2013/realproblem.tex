@@ -1,3 +1,16 @@
+
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[scale=0.70]{example2}
+  \vspace*{-1.0ex}\caption {{\label{fig:example2} Input-output
+  examples ((a) and (c)) taken from an online SQL help forum
+  thread. \ourtool automatically sythensizes 6 SQL queries that
+  can produce the output table from the three input tables.
+  (b) shows the highest ranked SQL query.
+}}
+\end{figure*}
+
 We next describe a real SQL problem picked up from
 an online SQL help forum\footnote{\url{http://forums.tutorialized.com/sql-basics-113/join-problem-147856.html}}.
 The thread was started by a novice user, who needed help to write a
@@ -26,87 +39,3 @@ from each aggregated group as the results.
 %Such help threads on online discussion forums are not rare, but the SQL
 %queries needed to address them are non-trivial.
 
-\begin{figure}[t]
-\centering
-\textbf{The input Table1:}
-
-\begin{tabular}{|c|c|c|c|}
-\hline
- Column1 & Column2& Column3& Column4\\
- \hline
- 101 &  2001 &  3020 &  01-01-11\\
-\hline
- 101 &  2001 &  3002 &  02-01-11\\
-\hline
- 101 &  2001 &  3001 &  03-01-11\\
-\hline
- 102 &  2002 &  3002 &  01-01-11\\
-\hline
-\end{tabular}
-
-\vspace{2mm}
-
-\textbf{The input Table2:}
-
-\begin{tabular}{|c|c|c|}
-\hline
- Column1 & Column2& Column3 \\
- \hline
- 20011 &  2001 &  200131\\
-\hline
- 20012 &  2001 &  200132\\
-\hline
- 20013 &  2001 &  200133\\
-\hline
-\end{tabular}
-
-\vspace{2mm}
-
-\textbf{The input Table3:}
-
-\begin{tabular}{|c|c|}
-\hline
- Column1 & Column2\\
- \hline
- 20011 &  Site\\
-\hline
- 20012 &  Site\\
-\hline
- 20013 &  Site\\
-\hline
-\end{tabular}
-
-\vspace{3mm}
-
-\textbf{The output table:}
-
-\begin{tabular}{|c|c|c|c|}
-\hline
- 101 & 200131 & 01-01-11 & Site\\
- \hline
- 101 & 200132 & 01-01-11 & Site\\
- \hline
- 101 & 200133 & 01-01-11 & Site\\
- \hline
-\end{tabular}
-\Caption{{\label{fig:example} Input-output examples taken from
-an online SQL help forum thread. Our technique 
-automatically synthesizes a SQL query as shown in Figure~\ref{fig:answer}
-that produces the output table from the three input tables.
-}} \vspace{2mm}
-\end{figure}
-
-\begin{figure}[t]
-\begin{CodeOut}
-\begin{alltt}
-\textbf{select min(T1.Column1), T2.Column3,
-       min(T1.Column4), min(T3.Column2)
-from Table1 T1, Table2 T2, Table3 T3
-where T1.Column2 = T2.Column2 and T2.Column1 = T3.Column1
-group by T2.Column3}
-\end{alltt}
-\end{CodeOut}
-\vspace{-5mm}
-\Caption{{\label{fig:answer} The highest ranked SQL query inferred
-by our technique from the input-output examples in Figure~\ref{fig:example}.}}
-\end{figure}

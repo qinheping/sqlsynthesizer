@@ -7,116 +7,13 @@ and an \CodeIn{enrolled} table (Figure~\ref{tbl:enrolled}), find out the name an
 students whose level is senior and enrolled in more than 3 courses}.
 
 
+\begin{figure*}[t]
+  \centering
+  \includegraphics[scale=0.70]{motivating}
+  \vspace*{-1.0ex}\caption {{\label{fig:motivating} ss.
+}}
+\end{figure*}
 
-\begin{figure}[t]
-	\centering
-\begin{tabular}{|c|c|c|}
-\hline
- Student\_key& Student\_name & Level\\
-\hline
- 0001 & Adam & senior \\
- \hline
- 0002 & Bob & junior \\
- \hline
- 0003 & Erin & senior \\
- \hline
- 0004 & Rob & junior\\
- \hline
- 0005 & Dan & senior \\
- \hline
- 0006 & Peter & senior \\
- \hline
- 0007 & Sai & senior \\
- \hline
-\end{tabular}
-	\caption{An example input table `student'
-for the SQL question described in
-Section~\ref{sec:example}.}
-	\label{tbl:student}
-\end{figure}
-
-
-\begin{figure}[t]
-	\centering
-\begin{tabular}{|c|c|c|}
-\hline
- Student\_key& Course\_key& Score \\
-\hline
- 0001 & 001 & 4 \\
-\hline
- 0001 & 002 & 2 \\
-\hline
- 0002 & 001 & 3 \\
-\hline
- 0002 & 002 & 2 \\
-\hline
- 0002 & 003 & 3 \\
-\hline
- 0003 & 002 & 1 \\
-\hline
- 0004 & 001 & 4 \\
-\hline
- 0004 & 003 & 4 \\
-\hline
- 0005 & 002 & 5 \\
-\hline
- 0005 & 003 & 2 \\
-\hline
- 0005 & 004 & 1 \\
-\hline
- 0006 & 002 & 4 \\
-\hline
- 0006 & 004 & 5 \\
-\hline
- 0007 & 001 & 2 \\
-\hline
- 0007 & 003 & 3 \\
-\hline
- 0007 & 004 & 4 \\
- \hline
-\end{tabular}
-	\caption{An example input table  `enrolled'
-for the SQL question described in
-Section~\ref{sec:example}.}
-	\label{tbl:enrolled}
-\end{figure}	
-
-\begin{figure}[t]
-	\centering
-\begin{tabular}{|c|c|}
-\hline
- Student\_name & Max\_score \\
-\hline
- Dan & 5 \\
-\hline
- Sai & 5 \\
- \hline
-\end{tabular}
-	\caption{An example output table for the SQL question described in
-Section~\ref{sec:example}.}
-	\label{tbl:output}
-\vspace{3mm}
-\end{figure}		
-
-
-\begin{figure}[t]
-\begin{CodeOut}
-\begin{alltt}
-\textbf{select student.Student\_name, max(enrolled.Score)
-from student, enrolled
-where student.Student\_key = enrolled.Student\_key
-      and student.Level = `senior'
-group by student.Student\_key
-having count(enrolled.Course\_key) > 3}
-\end{alltt}
-\end{CodeOut}
-\vspace{-5mm}
-	\caption{A SQL query to solve the SQL question described in
-Section~\ref{sec:example}. When applied to the input tables in
-Figure~\ref{tbl:student} and Figure~\ref{tbl:enrolled}, it produces the result table
-in Figure~\ref{tbl:output}.}
-	\label{fig:expected_sql}
-\end{figure}
 
 The question's description is quite simple.
 For a novice user, although they have a clear
