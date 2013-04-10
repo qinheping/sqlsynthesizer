@@ -2,12 +2,10 @@
 \section{Related Work}
 \label{sec:related}
 
-Our work can be differentiated from existing work in three major ways: the scope
-of the problem addressed, the technique used, and the evaluation methodology.
-We next discuss two categories of closely-related work on reverse query processing
-and automated program synthesis.
+This section discusses two categories
+of closely-related work on on reverse query processing methods
+and automated program synthesis techniques.
 
-Add this as related work~\cite{abs-1208-2013}
 
 \subsection{Reverse Query Processing}
 
@@ -16,11 +14,15 @@ work~\cite{Zloof:1975, Tran:2009, DasSarma:2010} that share the same broad princ
 of ``reverse query processing''. Zloof's work on \textit{Query by Example} (QBE)
 ~\cite{Zloof:1975} provided an intuitive form-based Graphical User Interface for
 writing database queries, which is completely different than ours.
+\todo{add why it is different}
 
-The problem of \textit{Query By Output} (QBO)~\cite{Tran:2009} shares a similar
-goal with QBE, but takes a quite different approach.
+\todo{mention the difference} Tran et al.~\cite{Tran:2009} studied the
+problem of \textit{Query By Output} (QBO). QBO shares a similar
+goal with QBE, but is significantly different than \ourtool.
 In QBO, we are given a view: $V$ and $n$ relations: $R_1, R_2, ..., R_n$ and asked to
-return a query $Q$ such that $Q(R_1, R_2, ..., R_n)$ = $V$. However, QBO is cast as
+return a query $Q$ such that $Q(R_1, R_2, ..., R_n)$ = $V$. 
+\todo{what's the difference between?}
+However, QBO is cast as
 a classification problem (into two classes: tuples in $V$, and tuples not in $V$)
 and decision trees are used to find a compact query. A decision tree is constructed
 in a greedy fashion by determining a ``good'' predicate to split the tuples into two
@@ -28,45 +30,54 @@ classes, which form the root nodes of two decisions trees (each of which is
 constructed in a recursive fashion).  The QBO technique presented in~\cite{Tran:2009}
 infers select-project-join queries. Such queries can only be applied to
 satisfy a limited number of examples, and cannot be applied to many of the other
-real world cases that we studied (e.g., a query with an aggregation operator
-like our motivating example in Figure~\ref{fig:example}).
+real world cases that we studied (e.g., queries with aggregation operators
+such the examples in Figure~\ref{fig:motivating} and~\ref{fig:example2}).
 
-Recently, the \textit{View Definitions Problem} (VDP) has been addressed
-by Sarma et al.~\cite{DasSarma:2010}.
-VDP is restricted to find the most succinct and accurate view definition, when
-the view query is restricted to a specific family of queries. VDP is the special
+Recently, Sarma et al.~\cite{DasSarma:2010} proposed a technique
+to address the \textit{View Definitions Problem} (VDP).
+\todo{explain more here}
+With a rather different goal than \ourtool,
+VDP aims to to find the most succinct and accurate view definition, when
+the view query is restricted to a specific family of queries.
+VDP can be treated as a special
 case of QBO where $n = 1$ and there are no joins nor projections.
-The high-level goal of this work is similar to our approach, but there
-are some key differences: (1) VDP techniques infer a relation from a large representative
-example view, while we infer a SQL query from a set of few input-output examples
+Compared to \ourtool, there are three key differences:
+(1) VDP aims to infer a relation from a large representative
+example view, while \ourtool attempts to infer a SQL query from a
+set of few input-output examples \todo{revise below}
 (which is a critical usability aspect for end-users who lack adequate
-SQL experience). (2) the VDP technique in~\cite{DasSarma:2010} does
+SQL experience). (2) the technique proposed by Sarma et al.~\cite{DasSarma:2010} does
 not consider join or projection
 operations and assumes the output view to be a strict subset of the input
-database with the same schema, while our work considers both join and
-projection operations.
+database with the same schema\todo{revise}, while our work eliminates these
+assumptions, and considers both join and projection operations.\todo{revise above}
 
 
-In the data mining community, a slightly related problem to ours is
-the \textit{redescription mining} problem~\cite{Ramakrishnan:2004}.
-At an abstract level, our work is different from these redescription mining
-techniques in several ways.
+In the data mining community, a slightly related problem,
+called the \textit{redescription mining problem}~\cite{Ramakrishnan:2004},
+has been recently studied by researchers.
+\todo{explain the problem}
+However, \ourtool is significantly
+%ours is the \textit{redescription mining} problem~\cite{Ramakrishnan:2004}.
+%At an abstract level, our work is 
+different from existing redescription mining techniques~\cite{} in several ways.
 First, the goal of redescription mining is to find different subsets of
 data that afford multiple descriptions across multiple vocabularies
-covering the same dataset, while our goal is to infer a SQL statement
-to obtain the desirable querying behavior.
+covering the same dataset, while our goal is to infer a SQL query 
+to achieve the desirable output. 
 Second, we are concerned with a fixed subset of the data (i.e., the output example table).
-Third, none of the existing approaches for redescription mining account for
-structural (relational) information in the data. 
+\todo{explain}
+Third, none of the existing redescription mining techniques account for
+structural (relational) information in the data. \todo{revise}
 
-Other query recommendation systems proposed in the literature may achieve
-a similar goal of helping end-users write better SQL queries, but they rely on information
-that we cannot assume access to in many realistic scenarios: a query log~\cite{Khoussainova:2010},
-or user history and preferences~\cite{Howe:2011}.
+\todo{what is the limitation of non program sythesis, why
+sythensis would be useful.}
 
 \subsection{Automated Program Synthesis }
 
-Program synthesis is the problem of creating a program
+
+
+Program synthesis aims to create an executable program
 in some underlying language from specifications that can range
 from logical declarative specifications to examples or
 demonstrations~\cite{Harris:2011, singh:2012, Gulwani:2011}.
@@ -75,8 +86,9 @@ Programming Language communities with the goal of easing the burden of
 algorithm designers, software developers, or end-users.
 Interest in it has grown rapidly in recent years~\cite{Gulwani:2010:DPS},
 and many approaches have been proposed.
-
-Example-based program synthesis techniques~\cite{Kandel:2011, Fisher:2008,
+\todo{need to inspect}
+Closely-related to \ourtool, example-based program synthesis
+techniques~\cite{Kandel:2011, Fisher:2008,
 Fisher08Pads,Lau:2003:PDU, Lau:2000:VSA, Barbosa:2010:MLA, Arasu:2009:LST}
 take textual input-output examples and infer programs that transform text.
 However, existing techniques focused on synthesizing programs for string
@@ -84,4 +96,16 @@ expressions~\cite{singh:2012, Gulwani:2011}, spreadsheet layout transformation~\
 , geometry constructions~\cite{Gulwani:2011:SGC}, thus
 can not be directly applied to our SQL query synthesis domain,
 due to different abstractions, granularities, and tasks.
+\todo{explain the difference between excel work}
 
+There is few work for inferring SQL queries for database end-users.
+Query recommendation systems, such as SQLShare~\cite{} and SQLSnippet~\cite{},
+\todo{explain}
+may achieve a similar goal of helping end-users write better SQL
+queries, but they rely on information
+that we cannot assume access to in many realistic scenarios: a query log~\cite{Khoussainova:2010},
+or user history and preferences~\cite{Howe:2011}.
+\todo{inferring SQL from code, for performance}
+Add this as related work~\cite{abs-1208-2013}
+
+%also cite this~\cite{Cheung:2012:UPS}, combining machine learning with program synthesis.
