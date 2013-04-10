@@ -1,48 +1,49 @@
 \section{Conclusions and Future Work}
 \label{sec:conclusion}
 
-General purpose programming platforms have never been easy. Many end-users
-who are non-professional programmers are still mostly stucked with the process
+\todo{move to somewhere else}
+General purpose programming platforms have never been easy for
+end-users who are not professional programmers.
+Users are often stucked with the process
 of \textit{how} to accomplish a certain task by receiving 
-step-by-step, detailed, and syntactically correct instructions, instead of simply describing
-\textit{what} the task is. \textit{Programming by examples} has the potential
-to change this landscape, when targeted for the right set of people for the
-right set of problems.
+step-by-step, detailed, and syntactically correct instructions, 
+instead of simply describing
+\textit{what} the task is. 
 
-In this paper, we studied the problem of automated SQL query synthesis
-from simple input-output examples, presented a practical technique to 
-infer desirable SQL queries that fulfill end-users' intentions, and
-developed a usable programming tool.
-To demonstrate usefulness of our technique, we applied our tool
-to 6 SQL exercises from a classic database textbook as well as
-5 non-trivial SQL problems from online forums by real end-users. 
-The results are promising, showing that our technique can automate a variety of database
-query tasks.
+%\textit{Programming by examples} has the potential
+%to change this landscape, when targeted for the right set of people for the
+%right set of problems.
+
+This paper studied the problem of automated SQL query synthesis
+from simple input-output examples, and presented a
+practical technique (and its tool implementation, called \ourtool)
+that can infer desirable SQL queries that fulfill end-users' intentions.
+Our experimental results show that \ourtool is
+effective in automating a variety of database query tasks,
+and it does so with small input-output examples.
 
 The source code of our tool implementation is available at: \\
 \url{http://sqlsynthesizer.googlecode.com}
 
 \vspace{1mm}
 
-Besides general issues such as performance and ease of use, our future
-work will concentrate on the following topics:
+Our future work will concentrate on the following topics:
 
-\textbf{Enrich the supported SQL subset.} The technique 
-presented in this paper focuses on a widely-used SQL subset.
-It may miss some important language features such as
-nested queries, and thus fail to infer meaningful queries
-in some scenarios when such missing features must be used.
-We plan to remedy this problem by enriching the
-supported SQL subset, and designing a corresponding algorithm
-to synthesize more general solutions.
+\textbf{Enrich the supported SQL subset.} \ourtool supports
+a SQL subset containing some widely-used language features.
+\todo{miss some corner cases}
+We plan to enrich the
+supported SQL subset, and design a corresponding algorithm
+to synthesize more general queries.
 
-\textbf{Illustration of the synthesis steps.} Besides
+\textbf{Illustration of synthesis steps.} Besides
 producing a final result, end-users may also be interested in knowing
-how a SQL query is inferred.  Showing detailed inference steps (visually) not
-only makes the tool more usable, but only permits
-end-users to better understand the whole process and spot possible errors earlier.
-To do so, we plan to investigate how to apply recent advance in data
-visualization~\cite{Kandel:2011}
+how a SQL query is inferred step by step.
+Showing detailed inference steps not
+only makes \ourtool more usable, but also permits
+end-users to better understand the whole process and
+spot possible errors earlier.
+We plan to apply recent advance in data visualization~\cite{Kandel:2011}
 to the context of program synthesis.
 
 \textbf{Noise detection and tolerance in users' inputs.} The current technique
@@ -56,9 +57,9 @@ and even suggest a fix to the noisy example.
 
 
 
-\textbf{Generalization.}
-We have applied our synthesis technique to one specific, but
-important problem.  There is a rich history of end-user programming
-problems being cast as program synthesis (e.g.,~\cite{Gulwani:2010:DPS}).  In future
-work, we plan to formulate other tasks, such as repetitive file operations, and to apply our technique to them.
+%\textbf{Generalization.}
+%We have applied our synthesis technique to one specific, but
+%important problem.  There is a rich history of end-user programming
+%problems being cast as program synthesis (e.g.,~\cite{Gulwani:2010:DPS}).  In future
+%work, we plan to formulate other tasks, such as repetitive file operations, and to apply our technique to them.
 
