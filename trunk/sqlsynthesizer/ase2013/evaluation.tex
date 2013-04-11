@@ -2,36 +2,23 @@
 \section{Evaluation}
 \label{sec:evaluation}
 
-We implemented our technique in an open-source programming tool.
-Our tool employs WEKA \cite{Hall:2009} to implement the PART learning algorithm
- to extract rules, and uses MySQL~\cite{mysql} as the backend database engine
-to check the validity of each output query.
-When a SQL query is synthesized,
-our tool executes the synthesized query on the backend database,
-and checks whether the output query result matches the given example output.
-
-We next describe the evaluation of our prototype tool.
-
-\subsection{Research Questions}
-
-We aim to investigate the following research questions:
+Our evaluation evaluates \ourtool's
+effectiveness in the following our aspects:
 
 \begin{itemize}
 \item Is the supported SQL subset expressive enough to describe
-queries that real end-users require?
-
-\item Can our technique efficiently find a SQL query
-from small input-output examples?
-
-%\item Does the inferred SQL query correctly express end-users'
-%intention and produce the expected output? If not, how many
-%additional examples does a user need to provide before our
-%approach infers a correctly-behaved SQL query?
-
+a variety of queries?
+\item the time cost of \ourtool in sythesizing SQL queries
+(Section~\ref{sec:performance}).
+\item c
 \end{itemize}
 
 
-\subsection{SQL Query Synthesis Scenarios}
+
+
+
+
+\subsection{Benchmarks}
 
 To answer these two questions, we collected a set
 of SQL query synthesis scenarios in the following
@@ -64,21 +51,54 @@ to other inputs, we will manually find an input on which the
 SQL query misbehaves and reapplied our tool to the new input. We
 repeat this process until our tool infers a desirable SQL query.
 
-\subsection{Experimental Results}
+\subsection{Evaluation Procedure}
+\todo{describe how to perform evaluation}
 
-\begin{table}[t]
+Our experiments were run on a 2.67GHz Intel Core PC
+with 4GB physical memory (2GB was allocated for the JVM),
+running Windows 7.
+
+
+\subsection{Results}
+
+\begin{figure*}[t]
 \setlength{\tabcolsep}{.14\tabcolsep}
-\begin{tabular}{|c|c|}
+\begin{tabular}{|c|c|c|}
 \hline
- & \#Total\\
+ ID & Source & Short description \\
  \hline
- Textbook exercises &  6 \\
+ 1 & Textbook &  Find all students that registrate \\
+ 2 & Textbook &   \\
+ 3 & Textbook &   \\
+ 4 & Textbook &   \\
+ 5 & Textbook &   \\
+ 6 & Textbook &   \\
+ 7 & Textbook &   \\
+ 8 & Textbook &   \\
+ 9 & Textbook &   \\
+ 10 & Textbook &   \\
+ 11 & Textbook &   \\
+ 12 & Textbook &   \\
+ 13 & Textbook &   \\
+ 14 & Textbook &   \\
+ 15 & Textbook &   \\
+ 16 & Textbook &   \\
+ 17 & Textbook &   \\
+ 18 & Textbook &   \\
+ 19 & Textbook &   \\
+ 20 & Textbook &   \\
+ 21 & Textbook &   \\
+ 22 & Textbook &   \\
+ 23 & Textbook &   \\
+ 24 & Textbook &   \\
+ 25 & Textbook &   \\
 \hline
 \end{tabular}
 
-\Caption{{\label{tab:results} Subject programs and their
-configuration problems.}}
-\end{table}
+\Caption{{\label{tab:results} lack a title.}}
+\end{figure*}
+
+\subsubsection{Success Ratio}
 
 For each SQL synthesis scenario, we measured two results.
 The time cost in producing
@@ -88,6 +108,7 @@ the time we spent in writing input-output examples.
 %how much time we spent in writing input-output examples.
 Table~\ref{tab:results} summarizes our experimental results.
 
+\todo{need to edit}
 As shown in Table~\ref{tab:results}, our technique synthesized
 expected SQL queries for 10 out of 11 scenarios
 within a very small amount of time (less than 1 minute each).
@@ -95,21 +116,96 @@ The human effort spent in providing input-output examples
 is also very limited: it took us less than 5 minutes for one scenario.
 %per exercise (or problem).
 
-
 \subsubsection{A Real Example}
 \input{realproblem}
 
-\subsection{Experimental Conclusions}
+\subsubsection{Performance}
 
-Our initial experimental results are promising.
-It shows that the supported SQL subset is
-expressive enough to describe a variety of useful database queries.
-It also demonstrates the usefulness of our SQL query
-synthesis technique.  In particular, our SQL query synthesis technique only requires a small amount of
-human effort and small input-output examples. It infers 
-desirable SQL queries on both database textbook exercises
-and online forum problems, even solving problems that receive no reply
-from popular online forums.
+We measured \ourtool’s performance by recording the average
+time cost in producing a ranked list of SQL queries. 
+As shown in Figure~\ref{}, the performance of \ourtool is
+reasonable. On average, it uses less than XX minutes to
+produce the results in one interative round.
+Most of the time is spent querying the backend
+database to validate the correctness of each sythesized SQL query.
+\todo{caching might be helpful}
+
+
+
+\subsubsection{Number of Interactive Rounds}
+This is a measure of the generalization power of
+the conditional learning part of the algorithm and
+the ranking scheme. We observed that the tool typically requires
+just \todo{XXX} round of interaction, when the user is smart
+enough to give an example for each input format (which
+typically range from 1 to
+3) to start with. This was indeed the case
+for most scenarios in our benchmarks, even though our algorithm
+can function robustly without this assumption. The maximum number
+of interactive rounds required in any scenario was \todo{XXX}
+(with 2 to 3 being a more typical number). \todo{the largest table}
+The maximum number of examples
+required in any scenario over all possible interactions was 10.
+
+\subsubsection{Comparison with a Previous Technique}.
+\todo{not ready yet}
+
+\subsection{Initial Experience}
+
+We deployed the beta-test version of \ourtool
+to a small number of developers and have been
+using it ourselves, and refining it, since
+early May 2012. Designing and deploying \ourtool, along with
+feedback from the handful of users, has helped
+us to better understand the issues and to improve
+the tool's design.
+
+Here is one example piece of feedback from an
+external user, via private communication:
+
+\todo{some quote from users}
+
+Prior to developing \ourtool, we studied
+over 100 forum posts about common problems
+about writing correct SQL queries.
+\todo{most of them use examples}
+We anticipate that future user studies will
+identify additional strengths and weaknesses that will allow us to
+further improve \ourtool.
+
+
+
+
+\subsection{Experimental Discussion}
+
+\noindent \textbf{\textit{Limitations.}}
+The experiments indicate several limitations
+of our technique. First, XXX Second, XXX..
+\todo{fill above}
+
+\vspace{1mm}
+\noindent \textbf{\textit{Threats to Validity.}}
+There are three major threats to validity
+in our evaluation. First, the \exnum textbook exercises
+and \pnum forum problems may not be representative. Thus,
+we can not claim the results can be generalized to an
+arbitrary scenario. Second, we only compared
+\ourtool with \todo{comparison results}. Using
+other query inference and recommendation techniques~\cite{}
+might achieve different results. Third, \todo{about user study}
+
+
+\vspace{1mm}
+\noindent \textbf{\textit{Experimental Conclusions.}}
+We have three chief findings: \textbf{(1)}
+The supported SQL subset in \ourtool is
+expressive enough to describe a variety of database queries.
+\textbf{(2)} \ourtool efficiently synthesizes desirable SQL
+queries on \todo{how many} for both textbook exercises
+and online forum problems, with a small amount of human
+effort small input-output examples.
+\textbf{(3)} \ourtool infers more SQL queries
+than existing techniques~\cite{}. \todo{edit}
 
 
 
