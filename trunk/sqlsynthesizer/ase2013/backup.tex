@@ -275,3 +275,36 @@ group by T2.Column3}
 \Caption{{\label{fig:answer} The highest ranked SQL query inferred
 by our technique from the input-output examples in Figure~\ref{fig:example}.}}
 \end{figure}
+
+
+Techniques to efficiently find rules from data has been studied extensively
+by many machine learning researchers~\cite{Quinlan:1993, Cohen:1995, Frank:1998}.
+Generally, in the machine learning community, there are major two paradigms of
+rule learning:
+
+%\begin{itemize}
+%\item
+\vspace{1mm}
+\noindent\textbf{\textit{1. Decision-tree learning~\cite{Quinlan:1993}}}. Given
+the positive and negative examples, one can generate a decision
+tree, and then extract decision-tree-splitting conditions from the root to
+all positive leaf. The extracted conditions can be viewed as the selection
+criteria that isolates the output data from the input searching space.
+
+
+%\item
+\vspace{1mm}
+\noindent\textbf{\textit{2.``Divide-and-conquer'' strategy~\cite{Pagallo:1990}}}. 
+Unlike decision-tree learning, instead of learning a full tree,
+this methodology repeatedly determines the most powerful rules for the dataset
+that can maximally separate the positive examples from the negative ones, until
+no more positive examples are available.
+
+\vspace{1mm}
+
+However, for our problem, both methodologies can not be directly applied.
+Learning rules via decision-tree learning is restricted to conjunctive rules,
+which is insufficient for many real scenarios. On the
+other hand, the generalization ability of the ``divide-and-conquer'' strategy
+is quite limited due to overpruning and covering heuristic.
+\todo{The above paragraphs are not clear.}
