@@ -1,11 +1,3 @@
-\section{Illustrating Example}
-\label{sec:example}
-
-Consider the following SQL question picked up from a classic
-database textbook~\cite{cowbook}: \textit{given a \CodeIn{student} table (Figure~\ref{tbl:student})
-and an \CodeIn{enrolled} table (Figure~\ref{tbl:enrolled}), find out the name and max score of the
-students whose level is senior and enrolled in more than 3 courses}.
-
 
 \begin{figure*}[t]
   \centering
@@ -19,31 +11,36 @@ students whose level is senior and enrolled in more than 3 courses}.
 }}
 \end{figure*}
 
+\section{Illustrating Example}
+\label{sec:example}
 
-The question's description is quite simple.
-For a novice user, although they have a clear
-intention of what the query should do, the answer (Figure~\ref{fig:expected_sql}) may
-not be that straightforward. 
+We use a SQL exercise from a classic database textbook~\cite{cowbook} (Chapter 5, Exercise \todo{xx})
+as an example to illustrate the use of \ourtool.
 
-Despite the possible difficult in writing a correct SQL query,
-a user could still easily draw
-two input tables (Figure~\ref{tbl:student} and Figure~\ref{tbl:enrolled})
-and one output table (Figure~\ref{tbl:output}) that fulfill the
-SQL question.
+\begin{quote}
+\textit{Find out the name and max score of the students whose
+level is senior and enrolled in more than 3 courses.}\footnote{
+As described in the textbook, there is a \CodeIn{student} table
+having two columns: \CodeIn{student\_id} and \CodeIn{nameA}, and
+a \CodeIn{enrolled} table having three columns:
+\CodeIn{student\_id}, \CodeIn{course\_id}, and \CodeIn{score}.}
+\end{quote}
 
-In the \CodeIn{student} table, column {\CodeIn{Student\_key}} with
-\CodeIn{String} type serves as the primary key. 
-%Columns {\CodeIn{Student\_name}} and {\CodeIn{Level}} are \textsf{String}-type.
-In the \CodeIn{enrolled} table, both columns {\CodeIn{Student\_key}} and
-{\CodeIn{Course\_key}} are two foreign keys, and column {\CodeIn{Score}}
-with \CodeIn{Integer} type keeps students' scores on their enrolled courses.
 
-In the output table, the first column  {\CodeIn{Student\_name}}
-comes from table \textit{student}, and the second column {\CodeIn{Max\_score}}
-is a aggregation attribute.% summarizing the with type of \CodeIn{Integer}.
+Although the problem description is quite clear and
+most end-users have a clear idea of what the desirable
+query should do, they \todo{still have difficult ...}
 
-Having the input and output examples, our technique successfully synthesizes
-the desirable SQL query as shown in Figure~\ref{fig:expected_sql}.
+As an alternative solution, end-users can use \ourtool
+to solve this peroblem. As depicted in Figure~\ref{fig:motivating},
+a user provides \ourtool two input tables and one expected
+output table. \ourtool automatically inferred the desirable
+SQL query (Figure~\ref{fig:motivating}(b)) to produce the output from the input tables.
+
+
+The synthesized query by \ourtool first joins the student, then ... \todo{project, and
+aggregation}
+
 
 \todo{add the following justification}
 To the best of our knowledge, none of the

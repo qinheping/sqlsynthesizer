@@ -1,3 +1,12 @@
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[scale=0.50]{survey}
+  \vspace*{-1.0ex}\caption {{\label{fig:survey} Survey results...
+}}
+
+\end{figure}
+
 \newcommand{\q}{\langle query\rangle}
 \newcommand{\db}{\langle db\rangle}
 \newcommand{\pat}{\langle pat\rangle}
@@ -46,14 +55,53 @@
 This section presents the design of
 a supported SQL subset in \ourtool.
 
-\subsection{Eliciting Design Requirements}
+The first step is to ... \todo{}
+However, no systematic study has ever been conducted to this end, 
+and little empirical knowledge has ever been provided. Without 
+such study or empirical knowledge, understanding XXX
+ remains difficult.
+
+To address this issue, we conduct a online survey
+and a series of follow-up email interviews.
+
+\subsection{Online Survey: Eliciting Design Requirements}
 
 \todo{Explain why a survey is needed (the langauge is
 too big). It will become intractable. And how}
 
-Took a different way than existing work in eliciting
-design requirement.
+Decide the important
+\todo{Took a different way than existing work in eliciting
+design requirement.}
 
+Our online survey consists of 6 questions that can be
+divided into three parts. The first part includes
+simple demographic questions about participants.
+In the second part, participants were asked to select
+their most-often \todo{most important?} used SQL language features. 
+Instead of directly asking participants about the SQL
+features, which might be vague and difficult to respond,
+we presented them a list of \textit{all} standard
+SQL features in writing a query.
+Additionally, participants were asked to report their 
+own experience in writing SQL queries in the third part of the survey.
+
+Before distributing our survey, we conducted pilot
+interviews with three graduate students with XXX experience
+at University of Washington. We ran the survey with them and
+made notes of their comments. According to their feedback,
+we refined the survey questions and adjusted the wording to
+make sure that the questions are relevant and clear.
+
+
+We sent out invitation to graduate mailing lists at
+University of Washington, and posted our survey on
+professional online forums (e.g., StackOverflow).
+As of April 2013, we received \respnum responses.
+On average, the respondents have XXX years of experience
+in Computer Science, and XXX years of experience in
+using database.
+
+Figure~\ref{}
 
 \subsection{Syntax}
 
@@ -98,7 +146,14 @@ well as a few common aggregation functions such as \CodeIn{count}, \CodeIn{sum},
 %many evaluated SQL exercises from a textbook and some real problems
 %from online forums.
 
-\subsection{Feedback about the SQL Subset}
+\subsection{Follow-up Interviews: Feedback about the SQL Subset}
 
-Send another survey to confirm our design.
+After prototyping the SQL language in Figure~\ref{},
+we performed follow-up email interviews to gain
+participants' feedback about the tailored SQL
+subset. Participants were first asked to rate
+the expressiveness of the SQL subset in Figure~\ref{}
+on a 6-point scale (5-sufficient; 0-not sufficient at all),
+and then to provide their comments.
+\todo{xxx}.
 
