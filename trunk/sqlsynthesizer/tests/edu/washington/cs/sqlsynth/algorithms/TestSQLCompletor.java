@@ -13,7 +13,6 @@ import edu.washington.cs.sqlsynth.entity.SQLSkeleton;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.util.TableInstanceReader;
-import edu.washington.cs.sqlsynth.util.TableUtils;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -42,6 +41,14 @@ public class TestSQLCompletor extends TestCase {
 		SQLSkeletonCreator creator = new SQLSkeletonCreator(inputs, output);
 		SQLSkeleton skeleton = creator.inferSQLSkeleton();
 		
+		List<TableInstance> tables = skeleton.computeJoinTableWithoutUnmatches();
+		
+		for(TableInstance t : tables) {
+			System.out.println(t.toString());
+		}
+		System.out.println("Number of tables: " + tables.size());
+		
+		
 		System.out.println("input 1:");
 		System.out.println(input1);
 		System.out.println("input 2:");
@@ -53,18 +60,6 @@ public class TestSQLCompletor extends TestCase {
 		
 		
 		System.out.println("number of join columns: " + skeleton.getJoinPairNum());
-		
-		System.out.println(skeleton.getAllJoinConditions());
-
-		TableUtils.USE_SAME_NAME_JOIN = true;
-		List<TableInstance> tables = skeleton.computeJoinTableWithoutUnmatches();
-		
-		
-		System.out.println("Number of tables: " + tables.size());
-		
-//		if(skeleton != null) {
-//			return;
-//		}
 		
 		SQLQueryCompletor completor = new SQLQueryCompletor(skeleton);
 		completor.addInputTable(input1);
@@ -445,7 +440,7 @@ public class TestSQLCompletor extends TestCase {
 			System.out.println(q.toSQLString());
 		}
 		
-		throw new Error();
+		//throw new Error();
 	}
 	
 	
