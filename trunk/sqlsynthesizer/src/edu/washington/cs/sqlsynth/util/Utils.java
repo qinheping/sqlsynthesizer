@@ -33,6 +33,8 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class Utils {
 	
+	public static boolean VERBOSE = true;
+	
 	public static void checkTrue(boolean cond) {
 		checkTrue(cond, "");
 	}
