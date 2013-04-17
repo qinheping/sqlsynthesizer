@@ -92,4 +92,16 @@ public class TestTableInstance extends TestCase {
 		String content = t.getTableContent();
 		assertEquals(9, content.split(Globals.lineSep).length);
 	}
+	
+	public void testGroupByMultiColumns() {
+		TableInstance t = TableInstanceReader.readTableFromFile("./dat/groupbymulticolumns/class_enroll.txt");
+		System.out.println(t);
+		int count = t.getCountOfSameKey("course_name", new String[]{"student_name", "room"}, 0);
+		System.out.println(count);
+		assertEquals(count, 2);
+		
+		count = t.getCountOfSameKey("course_name", new String[]{"student_name", "room"}, 3);
+		System.out.println(count);
+		assertEquals(count, 1);
+	}
 }
