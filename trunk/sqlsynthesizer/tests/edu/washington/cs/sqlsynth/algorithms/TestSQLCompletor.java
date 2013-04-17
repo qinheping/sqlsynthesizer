@@ -22,6 +22,57 @@ public class TestSQLCompletor extends TestCase {
 	public static Test suite() {
 		return new TestSuite(TestSQLCompletor.class);
 	}
+	
+	public void test5_1_1()
+	{	
+		DbConnector.NO_ORDER_MATCHING = true;
+		
+		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_1/class");
+		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_1_1/enroll");
+		TableInstance input3 = TableInstanceReader.readTableFromFile("./dat/5_1_1/student");
+		TableInstance input4 = TableInstanceReader.readTableFromFile("./dat/5_1_1/faculty");
+		TableInstance output = TableInstanceReader.readTableFromFile("./dat/5_1_1/output");
+		
+		Collection<TableInstance> inputs = new LinkedList<TableInstance>();
+		inputs.add(input1);
+		inputs.add(input2);
+		inputs.add(input3);
+		inputs.add(input4);
+		SQLSkeletonCreator creator = new SQLSkeletonCreator(inputs, output);
+		SQLSkeleton skeleton = creator.inferSQLSkeleton();
+		
+		System.out.println("input 1:");
+		System.out.println(input1);
+		System.out.println("input 2:");
+		System.out.println(input2);
+		System.out.println("input 3:");
+		System.out.println(input3);
+		System.out.println("input 4:");
+		System.out.println(input4);
+		
+		
+		System.out.println("number of join columns: " + skeleton.getJoinPairNum());
+		
+		SQLQueryCompletor completor = new SQLQueryCompletor(skeleton);
+		completor.addInputTable(input1);
+		completor.addInputTable(input2);
+		completor.addInputTable(input3);
+		completor.addInputTable(input4);
+		completor.setOutputTable(output);
+		
+		List<SQLQuery> queries = completor.inferSQLQueries();
+		System.out.println("number of inferred queries: " + queries.size());
+		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+		System.out.println();
+		queries = completor.validateQueriesOnDb(queries);
+		//after validating on my sql
+		System.out.println("The final output....");
+		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+	}
 
 	public void testDTree1()
 	{	
