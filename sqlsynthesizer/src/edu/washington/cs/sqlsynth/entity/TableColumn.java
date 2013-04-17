@@ -123,6 +123,15 @@ public class TableColumn {
 		return retValues;
 	}
 	
+	public static String getShortNames(Collection<TableColumn> columns) {
+		StringBuilder sb = new StringBuilder();
+		for(TableColumn tc : columns) {
+			sb.append(tc.getFullName());
+			sb.append("  ");
+		}
+		return sb.toString().trim();
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
