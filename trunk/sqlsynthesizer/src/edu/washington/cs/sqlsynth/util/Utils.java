@@ -266,6 +266,18 @@ public class Utils {
 		return sb.toString();
 	}
 	
+	public static <T> boolean hasOverlap(Set<T> s1, Set<T> s2) {
+		Utils.checkNotNull(s1);
+		Utils.checkNotNull(s2);
+		for(T t : s1) {
+			Utils.checkNotNull(t);
+			if(s2.contains(t)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public static <T> boolean includedIn(T target, T[] array) {
 		if(target == null) {
 			throw new RuntimeException("target can not be null.");
