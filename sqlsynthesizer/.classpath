@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="libs/weka-libs/java-cup.jar"/>
 	<classpathentry kind="lib" path="libs/weka-libs/JFlex.jar"/>
 	<classpathentry kind="lib" path="libs/weka-libs/junit.jar"/>
+	<classpathentry kind="lib" path="libs/mysql-connector-java-5.1.20-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
