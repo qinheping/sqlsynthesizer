@@ -194,6 +194,38 @@ public class TableInstance {
 		return count;
 	}
 	
+	public int getCountOfSameKey(String columnName, String[] keyColumnNames, int rowNum) {
+		Utils.checkTrue(keyColumnNames.length > 0);
+		Utils.checkTrue(!Utils.containIn(columnName, keyColumnNames));
+		checkColumnsExistence(columnName);
+		checkColumnsExistence(keyColumnNames);
+		Utils.checkTrue(rowNum > -1 && rowNum < this.rowNum, "The provided row num: "
+				+ rowNum + " is illegal, it should >= 0 and < " + this.rowNum);
+		
+		TableColumn[] keyColumns = new TableColumn[keyColumnNames.length];
+		for(int i = 0; i < keyColumnNames.length; i++) {
+			keyColumns[i] = this.getColumnByName(keyColumnNames[i]);
+		}
+		//project values to certain rows
+		String referredValue = "";
+		for(int i = 0; i < keyColumns.length; i++) {
+			referredValue = referredValue + keyColumns[i].getValue(rowNum);
+		}
+		//start count
+		int count = 0;
+		for(int i = 0; i < this.rowNum; i++) {
+			String projectedValue = "";
+			for(int j = 0; j < keyColumns.length; j++) {
+				projectedValue = projectedValue + keyColumns[j].getValue(i);
+			}
+			if(projectedValue.equals(referredValue)) {
+				count++;
+			}
+		}
+		
+		return count;
+	}
+	
 	public int getSumOfSameKey(String columnName, String keyColumnName, int rowNum) {
 		checkColumnsExistence(columnName, keyColumnName);
 //		Utils.checkTrue(!columnName.equals(keyColumnName));
