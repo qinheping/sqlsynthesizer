@@ -52,6 +52,7 @@ public class TableUtils {
 	}
 	
 	public static boolean USE_SAME_NAME_JOIN = false;
+	public static boolean JOIN_ALL_TABLES = false;
 	
 	//enumerate all possible joining conditions
 	public static List<TableInstance> joinTables(Collection<TableInstance> tables, Collection<Pair<TableColumn, TableColumn>> joinColumns) {
@@ -65,6 +66,11 @@ public class TableUtils {
 					if(USE_SAME_NAME_JOIN) {
 						if(!strictSameNameColumns(js)) {
 							continue;
+						}
+						if(JOIN_ALL_TABLES) {
+							if(joinColumns.size() < tables.size() - 1) {
+							    continue;
+							}
 						}
 					}
 				    list.add(DbConnector.instance().joinTable(tables, js));
