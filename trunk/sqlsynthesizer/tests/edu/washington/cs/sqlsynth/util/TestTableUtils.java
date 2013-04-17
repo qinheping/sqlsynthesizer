@@ -10,6 +10,7 @@ import edu.washington.cs.sqlsynth.algorithms.SQLSkeletonCreator;
 import edu.washington.cs.sqlsynth.entity.SQLSkeleton;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
+import edu.washington.cs.sqlsynth.entity.TableColumn.ColumnType;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -43,6 +44,17 @@ public class TestTableUtils extends TestCase {
 		TableInstance st = TableInstanceReader.readTableFromFile("./dat/subsume/smallt");
 		assertTrue(TableUtils.subsume(st, bt));
 		assertTrue(!TableUtils.subsume(bt, st));
+	}
+	
+	public void testTableColumnNames() {
+		TableColumn t1 = new TableColumn("catalog", "id", ColumnType.String, true);
+		TableColumn t2 = new TableColumn("product", "id", ColumnType.String, true);
+		List<TableColumn> list = new LinkedList<TableColumn>();
+		list.add(t1);
+		list.add(t2);
+		TableColumn selected = TableUtils.selectTableColumns(list);
+		System.out.println(selected.getFullName());
+		assertTrue(selected == t1);
 	}
 	
 	public void testJoinThreeTables() {
