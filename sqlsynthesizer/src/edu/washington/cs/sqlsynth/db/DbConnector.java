@@ -21,12 +21,17 @@ import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableColumn.ColumnType;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.util.Globals;
+import edu.washington.cs.sqlsynth.util.Log;
 import edu.washington.cs.sqlsynth.util.TableInstanceReader;
 import edu.washington.cs.sqlsynth.util.Utils;
 
 public class DbConnector {
 	
 	public static boolean NO_ORDER_MATCHING = false;
+	
+	//when joining multiple tables, each table must be used at least
+	//once in the joining conditions
+	public static boolean USE_ALL_TABLES = true;
 
 	private Connection con = null;
 	
@@ -48,6 +53,25 @@ public class DbConnector {
 		for (TableInstance t : inputTables) {
 			this.initializeTable(t);
 		}
+	}
+	
+	public boolean areAllTablesUsedInJoining(Collection<TableInstance> tables, Collection<Pair<TableColumn, TableColumn>> joinColumns) {
+		//check whether all tables are involved in the joining conditions
+		//for instance, if there are three tables A, B, C, but the joining columns are only: A.a == B.b
+		//this should not be joined
+		Set<String> tableNames = new HashSet<String>();
+		for(TableInstance t : tables) {
+			tableNames.add(t.getTableName());
+		}
+//		System.out.println("Table names: " + tableNames);
+		//look at the join columns
+		for(Pair<TableColumn, TableColumn> p : joinColumns) {
+			tableNames.remove(p.a.getTableName());
+			tableNames.remove(p.b.getTableName());
+		}
+//		System.out.println("Joini columns: " + joinColumns);
+		
+		return tableNames.isEmpty();
 	}
 	
 	public TableInstance joinTable(Collection<TableInstance> tables, Collection<Pair<TableColumn, TableColumn>> joinColumns) {
@@ -104,6 +128,9 @@ public class DbConnector {
 			joinSQL.append(p.a.getFullName() + "=" + p.b.getFullName());
 			count++;
 		}
+		
+		Log.logln("During joining: " + joinSQL
+		    		+ ", joining condition: " + joinColumns);
 		
 		ResultSet r = this.executeQuery(this.con, joinSQL.toString());
 		this.insertResultSetIntoEmptyTable(newTable, r);
