@@ -56,6 +56,7 @@ public class DbConnector {
 		}
 	}
 	
+	
 	public boolean areAllTablesUsedInJoining(Collection<TableInstance> tables, Collection<Pair<TableColumn, TableColumn>> joinColumns) {
 		//check whether all tables are involved in the joining conditions
 		//for instance, if there are three tables A, B, C, but the joining columns are only: A.a == B.b
