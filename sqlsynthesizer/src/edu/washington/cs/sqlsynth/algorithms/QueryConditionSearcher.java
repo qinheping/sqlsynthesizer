@@ -308,7 +308,16 @@ public class QueryConditionSearcher {
 				TableColumn.ColumnType type = TableColumn.ColumnType.Integer;
 				for (int k = 0; k<output.getColumnNum(); ++k)
 				{
-					if (table.getColumn(j).getColumnName().equals((output.getColumn(k).getColumnName())) )
+					StringTokenizer st = new StringTokenizer(table.getColumn(j).getColumnName(), ".");
+					String col_name;
+					if (st.countTokens() == 1)
+						col_name = st.nextToken();
+					else {
+						st.nextToken();
+						col_name = st.nextToken();
+					}
+					
+					if (col_name.equals((output.getColumn(k).getColumnName())) )
 					{
 						idx = k;
 						type = output.getColumn(k).getType();
