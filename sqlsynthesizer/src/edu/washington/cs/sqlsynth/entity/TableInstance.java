@@ -194,7 +194,7 @@ public class TableInstance {
 		return count;
 	}
 	
-	public int getCountOfSameKey(String columnName, String[] keyColumnNames, int rowNum) {
+	public int getCountOfSameKey(String columnName, String[] keyColumnNames, int rowNum, boolean filterDup) {
 		Utils.checkTrue(keyColumnNames.length > 0);
 		Utils.checkTrue(!Utils.containIn(columnName, keyColumnNames));
 		checkColumnsExistence(columnName);
@@ -213,6 +213,10 @@ public class TableInstance {
 		}
 		//start count
 		int count = 0;
+		//for count unique values
+		Set<String> uniqueValueSet = new HashSet<String>();
+		TableColumn column = this.getColumnByName(columnName);
+		
 		for(int i = 0; i < this.rowNum; i++) {
 			String projectedValue = "";
 			for(int j = 0; j < keyColumns.length; j++) {
@@ -220,10 +224,26 @@ public class TableInstance {
 			}
 			if(projectedValue.equals(referredValue)) {
 				count++;
+				uniqueValueSet.add(column.getValue(i)+"");
 			}
 		}
 		
-		return count;
+		if(filterDup) {
+			return uniqueValueSet.size();
+		} else {
+		    return count;
+		}
+	}
+	
+	public int getCountOfSameKey(String columnName, String[] keyColumnNames, int rowNum) {
+		return this.getCountOfSameKey(columnName, keyColumnNames, rowNum, false);
+	}
+	
+	/**
+	 * The only difference is this method filters otu duplicates
+	 * */
+	public int getUniqueCountOfSameKey(String columnName, String[] keyColumnNames, int rowNum) {
+		return this.getCountOfSameKey(columnName, keyColumnNames, rowNum, true);
 	}
 	
 	public int getSumOfSameKey(String columnName, String keyColumnName, int rowNum) {
