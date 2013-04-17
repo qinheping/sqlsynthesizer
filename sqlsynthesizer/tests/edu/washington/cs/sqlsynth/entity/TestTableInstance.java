@@ -103,5 +103,12 @@ public class TestTableInstance extends TestCase {
 		count = t.getCountOfSameKey("course_name", new String[]{"student_name", "room"}, 3);
 		System.out.println(count);
 		assertEquals(count, 1);
+		
+		count = t.getCountOfSameKey("course_name", new String[]{"student_name", "room"}, 6);
+		System.out.println(count);
+		assertEquals(count, 2);
+		count = t.getUniqueCountOfSameKey("course_name", new String[]{"student_name", "room"}, 6);
+		System.out.println(count);
+		assertEquals(count, 1);
 	}
 }
