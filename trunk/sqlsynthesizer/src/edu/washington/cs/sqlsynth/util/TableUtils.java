@@ -1,9 +1,12 @@
 package edu.washington.cs.sqlsynth.util;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import plume.Pair;
@@ -56,6 +59,31 @@ public class TableUtils {
 		}
 		Log.logln("Number of tables after join: " + list.size());
 		return list;
+	}
+	
+	//select which column to use by alphametic ranking
+	//in the joining conditions: a.id == b.id, both id should not
+	//appear in the result at the same time, thus, we rank the their name
+	//by the alphametic ranking, e.g.,  a.key ranks higher than b.key
+	public TableColumn selectTableColumns(Collection<TableColumn> coll) {
+		Utils.checkTrue(!coll.isEmpty());
+		Map<String, TableColumn> map = new HashMap<String, TableColumn>();
+		List<String> columnNames = new LinkedList<String>();
+		for(TableColumn tc : coll) {
+			String fullName = tc.getFullName();
+			Utils.checkTrue(!map.containsKey(fullName));
+			columnNames.add(fullName);
+			map.put(fullName, tc);
+		}
+		String selectedName = this.selectTableNames(columnNames);
+		return map.get(selectedName);
+	}
+	
+	public String selectTableNames(Collection<String> names) {
+		Utils.checkTrue(!names.isEmpty());
+		List<String> list = new LinkedList<String>(names);
+		Collections.sort(list);
+		return list.get(0);
 	}
 	
 	//is table t1 a part table t2?
