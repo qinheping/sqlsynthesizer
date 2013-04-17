@@ -351,6 +351,18 @@ public class TestSQLCompletor extends TestCase {
 		
 		
 		System.out.println("number of join columns: " + skeleton.getJoinPairNum());
+		System.out.println("columns: " + skeleton.getAllJoinConditions());
+		
+		List<TableInstance> tables = skeleton.computeJoinTableWithoutUnmatches();
+		
+		for(TableInstance t : tables) {
+			System.out.println(t.toString());
+		}
+		System.out.println("Number of tables: " + tables.size());
+//		
+//		if(tables != null) {
+//			return;
+//		}
 		
 		SQLQueryCompletor completor = new SQLQueryCompletor(skeleton);
 		completor.addInputTable(input1);
@@ -368,6 +380,8 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		
+		throw new Error();
 	}
 	
 	
