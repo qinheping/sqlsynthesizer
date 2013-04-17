@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -92,11 +93,13 @@ public class DbConnector {
 				selectColumns.add(c.getFullName());
 			}
 		}
-		//remove repetitive FIXME
-		Set<String> removed = new LinkedHashSet<String>();
-		for(Pair<TableColumn, TableColumn> p : joinColumns) {
-			removed.add(p.b.getFullName()); //FIXME what about a = b and b =c
-		}
+		//remove repetitive columns, e.g., if a.id == b.id is used,
+		//either a.id or b.id should be appeared just once
+		//it used a simple heuristic, first rank all table names alphabetically,
+		//and always retain the first table name
+		Set<String> removed = this.getRemovableColumns(tables, joinColumns);
+		
+		//remove the repetitive table columns
 		selectColumns.removeAll(removed);
 		
 		joinSQL.append("select ");
@@ -136,6 +139,60 @@ public class DbConnector {
 		this.insertResultSetIntoEmptyTable(newTable, r);
 		
 		return newTable;
+	}
+	
+	
+	Set<String> getRemovableColumns(Collection<TableInstance> tables, Collection<Pair<TableColumn, TableColumn>> joinColumns) {
+		//remove repetitive columns, e.g., if a.id == b.id is used,
+		//either a.id or b.id should be appeared just once
+		//it used a simple heuristic, first rank all table names alphabetically,
+		//and always retain the first table name
+//		List<String> sortedNames = this.sortTableByNames(tables);
+		
+		//then decide which column should be removed
+		List<Set<String>> joinClosures = new LinkedList<Set<String>>();
+		for(Pair<TableColumn, TableColumn> p : joinColumns) {
+			Set<String> tmpSet = new HashSet<String>();
+			tmpSet.add(p.a.getFullName());
+			tmpSet.add(p.b.getFullName());
+			joinClosures.add(tmpSet);
+		}
+		
+		//test whether two sets have overlapped, if so merge then
+		boolean flag = true;
+		while (flag) {
+			flag = false;
+			for (int i = 0; i < joinClosures.size(); i++) {
+				for (int j = i + 1; j < joinClosures.size(); j++) {
+					Set<String> seti = joinClosures.get(i);
+					Set<String> setj = joinClosures.get(j);
+					if (Utils.hasOverlap(seti, setj)) {
+						// we merge set i and setj
+						joinClosures.get(i).addAll(joinClosures.get(j));
+						joinClosures.remove(j);
+						flag = true;
+						break;
+					}
+				}
+				if(flag) {
+					break;
+				}
+			}
+		}
+		
+		Set<String> removed = new LinkedHashSet<String>();
+		//XXX same logic as in the TableUtils
+		for(Set<String> set : joinClosures) {
+			//for each set only retain the highest ranked one
+			List<String> l = new LinkedList<String>(set);
+			Collections.sort(l);
+			Utils.checkTrue(l.size() > 1);
+			removed.addAll(l.subList(1, l.size()));
+		}
+		
+		System.out.println("Removable column names from joining conditions: " + removed);
+		
+		return removed;
 	}
 	
 	private void insertResultSetIntoEmptyTable(TableInstance newTable, ResultSet rs) {
