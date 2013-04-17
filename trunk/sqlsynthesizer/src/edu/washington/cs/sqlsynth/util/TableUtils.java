@@ -65,7 +65,7 @@ public class TableUtils {
 	//in the joining conditions: a.id == b.id, both id should not
 	//appear in the result at the same time, thus, we rank the their name
 	//by the alphametic ranking, e.g.,  a.key ranks higher than b.key
-	public TableColumn selectTableColumns(Collection<TableColumn> coll) {
+	public static TableColumn selectTableColumns(Collection<TableColumn> coll) {
 		Utils.checkTrue(!coll.isEmpty());
 		Map<String, TableColumn> map = new HashMap<String, TableColumn>();
 		List<String> columnNames = new LinkedList<String>();
@@ -75,11 +75,11 @@ public class TableUtils {
 			columnNames.add(fullName);
 			map.put(fullName, tc);
 		}
-		String selectedName = this.selectTableNames(columnNames);
+		String selectedName = selectTableNames(columnNames);
 		return map.get(selectedName);
 	}
 	
-	public String selectTableNames(Collection<String> names) {
+	public static String selectTableNames(Collection<String> names) {
 		Utils.checkTrue(!names.isEmpty());
 		List<String> list = new LinkedList<String>(names);
 		Collections.sort(list);
