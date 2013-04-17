@@ -47,7 +47,11 @@ public class TableUtils {
 		} else {
 			Collection<Collection<Pair<TableColumn, TableColumn>>> allSubs = Maths.allSubset(joinColumns);
 			for(Collection<Pair<TableColumn, TableColumn>> js : allSubs) {
-				list.add(DbConnector.instance().joinTable(tables, js));
+				if(DbConnector.instance().areAllTablesUsedInJoining(tables, js)) {
+				    list.add(DbConnector.instance().joinTable(tables, js));
+				} else {
+					Log.logln("Skip the case that of joining: " + joinColumns);
+				}
 			}
 		}
 		Log.logln("Number of tables after join: " + list.size());
