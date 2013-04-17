@@ -13,6 +13,7 @@ import edu.washington.cs.sqlsynth.entity.SQLSkeleton;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
 import edu.washington.cs.sqlsynth.util.TableInstanceReader;
+import edu.washington.cs.sqlsynth.util.TableUtils;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -25,6 +26,7 @@ public class TestSQLCompletor extends TestCase {
 	
 	public void test5_1_1()
 	{	
+		TableUtils.USE_SAME_NAME_JOIN = true;
 		DbConnector.NO_ORDER_MATCHING = true;
 		
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_1/class");
