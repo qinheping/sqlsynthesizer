@@ -7,6 +7,7 @@ import java.util.List;
 import plume.Pair;
 
 import edu.washington.cs.sqlsynth.algorithms.SQLSkeletonCreator;
+import edu.washington.cs.sqlsynth.db.DbConnector;
 import edu.washington.cs.sqlsynth.entity.SQLSkeleton;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
@@ -79,6 +80,34 @@ public class TestTableUtils extends TestCase {
 		}
 		
 		System.out.println("Number of tables: " + tables.size());
+		assertEquals(1, tables.size());
+	}
+	
+	public void testJoinFourTables() {
+		TableUtils.USE_SAME_NAME_JOIN = true;
+		TableUtils.JOIN_ALL_TABLES = true;
+		
+		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_1/class");
+		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_1_1/enroll");
+		TableInstance input3 = TableInstanceReader.readTableFromFile("./dat/5_1_1/student");
+		TableInstance input4 = TableInstanceReader.readTableFromFile("./dat/5_1_1/faculty");
+		TableInstance output = TableInstanceReader.readTableFromFile("./dat/5_1_1/output");
+		
+		Collection<TableInstance> inputs = new LinkedList<TableInstance>();
+		inputs.add(input1);
+		inputs.add(input2);
+		inputs.add(input3);
+		inputs.add(input4);
+		SQLSkeletonCreator creator = new SQLSkeletonCreator(inputs, output);
+		SQLSkeleton skeleton = creator.inferSQLSkeleton();
+		
+        List<TableInstance> tables = skeleton.computeJoinTableWithoutUnmatches();
+		
+		for(TableInstance t : tables) {
+			System.out.println(t.toString());
+		}
+		System.out.println("Number of tables: " + tables.size());
+		
 		assertEquals(1, tables.size());
 	}
 }
