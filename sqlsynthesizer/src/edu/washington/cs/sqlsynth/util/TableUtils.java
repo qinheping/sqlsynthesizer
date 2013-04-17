@@ -42,6 +42,17 @@ public class TableUtils {
 		return c1.getType().equals(c2.getType());
 	}
 	
+	public static boolean strictSameNameColumns(Collection<Pair<TableColumn, TableColumn>> js) {
+		for(Pair<TableColumn, TableColumn> p : js) {
+			if(!p.a.getColumnName().equals(p.b.getColumnName())) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static boolean USE_SAME_NAME_JOIN = false;
+	
 	//enumerate all possible joining conditions
 	public static List<TableInstance> joinTables(Collection<TableInstance> tables, Collection<Pair<TableColumn, TableColumn>> joinColumns) {
 		List<TableInstance> list = new LinkedList<TableInstance>();
@@ -51,6 +62,11 @@ public class TableUtils {
 			Collection<Collection<Pair<TableColumn, TableColumn>>> allSubs = Maths.allSubset(joinColumns);
 			for(Collection<Pair<TableColumn, TableColumn>> js : allSubs) {
 				if(DbConnector.instance().areAllTablesUsedInJoining(tables, js)) {
+					if(USE_SAME_NAME_JOIN) {
+						if(!strictSameNameColumns(js)) {
+							continue;
+						}
+					}
 				    list.add(DbConnector.instance().joinTable(tables, js));
 				} else {
 					Log.logln("Skip the case that of joining: " + joinColumns);
