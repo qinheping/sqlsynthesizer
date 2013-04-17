@@ -68,7 +68,7 @@ public class TableUtils {
 							continue;
 						}
 						if(JOIN_ALL_TABLES) {
-							if(joinColumns.size() < tables.size() - 1) {
+							if(js.size() < tables.size() - 1) {
 							    continue;
 							}
 						}
