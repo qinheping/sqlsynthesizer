@@ -27,6 +27,7 @@ public class TestSQLCompletor extends TestCase {
 	public void test5_1_1()
 	{	
 		TableUtils.USE_SAME_NAME_JOIN = true;
+		TableUtils.JOIN_ALL_TABLES = true;
 		DbConnector.NO_ORDER_MATCHING = true;
 		
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_1/class");
@@ -50,6 +51,9 @@ public class TestSQLCompletor extends TestCase {
 		}
 		System.out.println("Number of tables: " + tables.size());
 		
+//		if(tables != null) {
+//			return;
+//		}
 		
 		System.out.println("input 1:");
 		System.out.println(input1);
