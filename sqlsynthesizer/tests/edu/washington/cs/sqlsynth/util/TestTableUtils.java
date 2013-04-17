@@ -6,6 +6,8 @@ import java.util.List;
 
 import plume.Pair;
 
+import edu.washington.cs.sqlsynth.algorithms.SQLSkeletonCreator;
+import edu.washington.cs.sqlsynth.entity.SQLSkeleton;
 import edu.washington.cs.sqlsynth.entity.TableColumn;
 import edu.washington.cs.sqlsynth.entity.TableInstance;
 import junit.framework.Test;
@@ -41,5 +43,30 @@ public class TestTableUtils extends TestCase {
 		TableInstance st = TableInstanceReader.readTableFromFile("./dat/subsume/smallt");
 		assertTrue(TableUtils.subsume(st, bt));
 		assertTrue(!TableUtils.subsume(bt, st));
+	}
+	
+	public void testJoinThreeTables() {
+		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_2/parts");
+		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_2_2/catalog");
+		TableInstance input3 = TableInstanceReader.readTableFromFile("./dat/5_2_2/suppliers");
+		TableInstance output = TableInstanceReader.readTableFromFile("./dat/5_2_2/output");
+		
+		Collection<TableInstance> inputs = new LinkedList<TableInstance>();
+		inputs.add(input1);
+		inputs.add(input2);
+		inputs.add(input3);
+		
+		SQLSkeletonCreator creator = new SQLSkeletonCreator(inputs, output);
+		SQLSkeleton skeleton = creator.inferSQLSkeleton();
+		
+		List<TableInstance> tables = skeleton.computeJoinTableWithoutUnmatches();
+		
+		System.out.println("------ the joined tables ---------");
+		for(TableInstance t : tables) {
+			System.out.println(t.toString());
+		}
+		
+		System.out.println("Number of tables: " + tables.size());
+		assertEquals(1, tables.size());
 	}
 }
