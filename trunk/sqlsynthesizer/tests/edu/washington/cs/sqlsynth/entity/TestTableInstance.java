@@ -110,5 +110,10 @@ public class TestTableInstance extends TestCase {
 		count = t.getUniqueCountOfSameKey("course_name", new String[]{"student_name", "room"}, 6);
 		System.out.println(count);
 		assertEquals(count, 1);
+		
+		int maxRoom = t.getMaxValue("room");
+		assertEquals(maxRoom, 106);
+		int minRoom = t.getMinValue("room");
+		assertEquals(minRoom, 101);
 	}
 }
