@@ -1,11 +1,13 @@
 package edu.washington.cs.sqlsynth.entity;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import edu.washington.cs.sqlsynth.entity.TableColumn.ColumnType;
 import edu.washington.cs.sqlsynth.util.Globals;
 import edu.washington.cs.sqlsynth.util.TableInstanceReader;
 import edu.washington.cs.sqlsynth.util.Utils;
@@ -264,6 +266,30 @@ public class TableInstance {
 			}
 		}
 		return sum;
+	}
+	
+	public int getMaxValue(String columnName) {
+		return this.getValueByColumn(columnName, true);
+	}
+	
+	public int getMinValue(String columnName) {
+		return this.getValueByColumn(columnName, false);
+	}
+	
+	private int getValueByColumn(String columnName, boolean max) {
+		checkColumnsExistence(columnName);
+		TableColumn column = this.getColumnByName(columnName);
+		Utils.checkTrue(column.getType().equals(ColumnType.Integer));
+		List<Object> values =  column.getValues();
+		List<Integer> tList = new LinkedList<Integer>();
+		for(Object o : values) {
+			tList.add(Integer.parseInt(o.toString()));
+		}
+		if(max) {
+		    return Collections.max(tList);
+		} else {
+			return Collections.min(tList);
+		}
 	}
 	
 	public int getMaxOfSameKey(String columnName, String keyColumnName, int rowNum) {
