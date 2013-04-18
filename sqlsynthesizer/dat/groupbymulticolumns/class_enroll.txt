@@ -4,3 +4,5 @@ John,DB,101
 Kay,OS,101
 Ari,DB,101
 Ari,AI,106
+Noone,AI,106
+Noone,AI,106
