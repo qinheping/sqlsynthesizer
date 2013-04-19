@@ -1,6 +1,6 @@
-C_name,F_key
-class1,f1
-class2,f2
-class3,f1
-class4,f3
-class5,f4
+C_name,meets_at
+class1,mon
+class2,mon
+class3,tue
+class4,tue
+class5,fri
