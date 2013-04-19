@@ -683,6 +683,96 @@ public class TestSQLCompletor extends TestCase {
 	}
 	
 	
+	public void test5_2_7()
+	{
+		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_7/parts");
+		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_2_7/catalog");
+		TableInstance input3 = TableInstanceReader.readTableFromFile("./dat/5_2_7/suppliers");
+		TableInstance output = TableInstanceReader.readTableFromFile("./dat/5_2_7/output");
+		
+		Collection<TableInstance> inputs = new LinkedList<TableInstance>();
+		inputs.add(input1);
+		inputs.add(input2);
+		inputs.add(input3);
+		
+		SQLSkeletonCreator creator = new SQLSkeletonCreator(inputs, output);
+		SQLSkeleton skeleton = creator.inferSQLSkeleton();
+		
+		System.out.println("input 1:");
+		System.out.println(input1);
+		System.out.println("input 2:");
+		System.out.println(input2);
+		System.out.println("input 3:");
+		System.out.println(input3);
+		
+		
+		System.out.println("number of join columns: " + skeleton.getJoinPairNum());
+		
+		SQLQueryCompletor completor = new SQLQueryCompletor(skeleton);
+		completor.addInputTable(input1);
+		completor.addInputTable(input2);
+		completor.addInputTable(input3);
+		completor.setOutputTable(output);
+		
+		List<SQLQuery> queries = completor.inferSQLQueries();
+		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+		queries = completor.validateQueriesOnDb(queries);
+		//after validating on my sql
+		System.out.println("The final output....");
+		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+	}
+	
+	
+	
+	public void test5_2_8()
+	{
+		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_8/parts");
+		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_2_8/catalog");
+		TableInstance input3 = TableInstanceReader.readTableFromFile("./dat/5_2_8/suppliers");
+		TableInstance output = TableInstanceReader.readTableFromFile("./dat/5_2_8/output");
+		
+		Collection<TableInstance> inputs = new LinkedList<TableInstance>();
+		inputs.add(input1);
+		inputs.add(input2);
+		inputs.add(input3);
+		
+		SQLSkeletonCreator creator = new SQLSkeletonCreator(inputs, output);
+		SQLSkeleton skeleton = creator.inferSQLSkeleton();
+		
+		System.out.println("input 1:");
+		System.out.println(input1);
+		System.out.println("input 2:");
+		System.out.println(input2);
+		System.out.println("input 3:");
+		System.out.println(input3);
+		
+		
+		System.out.println("number of join columns: " + skeleton.getJoinPairNum());
+		
+		SQLQueryCompletor completor = new SQLQueryCompletor(skeleton);
+		completor.addInputTable(input1);
+		completor.addInputTable(input2);
+		completor.addInputTable(input3);
+		completor.setOutputTable(output);
+		
+		List<SQLQuery> queries = completor.inferSQLQueries();
+		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+		queries = completor.validateQueriesOnDb(queries);
+		//after validating on my sql
+		System.out.println("The final output....");
+		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+	}
+	
+	
+	
 	public void testExampleForPresentation()
 	{
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/example_for_presentation/student");
