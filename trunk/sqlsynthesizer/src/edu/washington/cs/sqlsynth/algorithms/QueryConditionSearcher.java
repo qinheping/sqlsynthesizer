@@ -391,8 +391,6 @@ public class QueryConditionSearcher {
 										
 										for (int n = 0; n<tmpTable.getRowNum(); ++n)
 										{
-//											System.out.println("--------------line 385----------------");
-//											System.out.println(col.getValue(n).toString() + "-------------"+table.getColumn(k).getValue(j));
 											if (col.getValue(n).toString().equals(table.getColumn(k).getValue(j).toString()))
 											{
 												rowNum = n;
@@ -400,21 +398,17 @@ public class QueryConditionSearcher {
 											}
 										}
 										
-//										System.out.println("---------------line 394----------------");
-//										System.out.println("k: "+k+" l: "+l+" m: "+m);
-//										if (rowNum == -1)
-//										{
-//											System.out.println("----------------stop here and check-----------------");
-//										}
 										inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getUniqueCountOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), rowNum));
-//										inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getCountOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), rowNum));
+
 										flag = true;
 										break;
 									}
 								}
 								if (!flag)
 								{
-									inst.setValue(allData.get(i).attribute(attCount++), 0);
+									// Different from previous version, may actually increase dimensionality of feature space, and bring problem in generating query conditions
+									inst.setValue(allData.get(i).attribute(attCount++), table.getUniqueCountOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), j));
+								//	inst.setValue(allData.get(i).attribute(attCount++), 0);
 								}
 
 							}
@@ -452,10 +446,20 @@ public class QueryConditionSearcher {
 								}
 								if (!flag)
 								{
+									// Different from previous version, may actually increase dimensionality of feature space, and bring problem in generating query conditions
+									
+									inst.setValue(allData.get(i).attribute(attCount++), table.getMaxOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), j));
+									inst.setValue(allData.get(i).attribute(attCount++), table.getMinOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), j));
+									inst.setValue(allData.get(i).attribute(attCount++), table.getSumOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), j));
+									inst.setValue(allData.get(i).attribute(attCount++), table.getAvgOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), j));
+									
+									
+									/*
 									inst.setValue(allData.get(i).attribute(attCount++), 0);
 									inst.setValue(allData.get(i).attribute(attCount++), 0);
 									inst.setValue(allData.get(i).attribute(attCount++), 0);
 									inst.setValue(allData.get(i).attribute(attCount++), 0);
+									*/
 								}								
 							}
 						}
