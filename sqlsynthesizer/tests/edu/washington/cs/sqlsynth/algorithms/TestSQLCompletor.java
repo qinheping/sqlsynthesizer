@@ -277,7 +277,7 @@ public class TestSQLCompletor extends TestCase {
 	
 	
 
-	public void testDTree1()
+	public void test5_1_3()
 	{	
 		DbConnector.NO_ORDER_MATCHING = true;
 		
@@ -317,7 +317,7 @@ public class TestSQLCompletor extends TestCase {
 		}
 	}
 	
-	public void testDTree2()
+	public void test5_1_5()
 	{
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_5/id_class_5_1_5");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_1_5/id_faculty_5_1_5");
@@ -354,7 +354,7 @@ public class TestSQLCompletor extends TestCase {
 	}
 	
 	//NOTE this can not be figured by our language subset
-	public void testDTree3()
+	public void test5_1_9()
 	{
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_9/id_class_5_1_9");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_1_9/id_faculty_5_1_9");
@@ -391,7 +391,7 @@ public class TestSQLCompletor extends TestCase {
 	}
 	
 	
-	public void testDTree4()
+	public void test5_1_10()
 	{
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_10/student");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_1_10/enrolled");
@@ -581,7 +581,7 @@ public class TestSQLCompletor extends TestCase {
 	}
 	
 	
-	public void testDTree9()
+	public void test5_2_2()
 	{
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_2/parts");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_2_2/catalog");
@@ -639,7 +639,7 @@ public class TestSQLCompletor extends TestCase {
 	}
 	
 	
-	public void testDTree10()
+	public void test5_2_4()
 	{
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_4/parts");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_2_4/catalog");
