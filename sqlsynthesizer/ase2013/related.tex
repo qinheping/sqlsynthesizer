@@ -3,8 +3,8 @@
 \label{sec:related}
 
 This section discusses two categories
-of closely-related work on on reverse query processing methods
-and automated program synthesis techniques.
+of closely-related work on reverse query processing 
+and automated program synthesis.
 
 
 \subsection{Reverse Query Processing}
@@ -16,22 +16,16 @@ of ``reverse query processing''. Zloof's work on \textit{Query by Example} (QBE)
 writing database queries, which is completely different than ours.
 \todo{add why it is different}
 
-\todo{mention the difference} Tran et al.~\cite{Tran:2009} studied the
-problem of \textit{Query By Output} (QBO). QBO shares a similar
-goal with QBE, but is significantly different than \ourtool.
-In QBO, we are given a view: $V$ and $n$ relations: $R_1, R_2, ..., R_n$ and asked to
-return a query $Q$ such that $Q(R_1, R_2, ..., R_n)$ = $V$. 
-\todo{what's the difference between?}
-However, QBO is cast as
-a classification problem (into two classes: tuples in $V$, and tuples not in $V$)
-and decision trees are used to find a compact query. A decision tree is constructed
-in a greedy fashion by determining a ``good'' predicate to split the tuples into two
-classes, which form the root nodes of two decisions trees (each of which is
-constructed in a recursive fashion).  The QBO technique presented in~\cite{Tran:2009}
-infers select-project-join queries. Such queries can only be applied to
-satisfy a limited number of examples, and cannot be applied to many of the other
-real world cases that we studied (e.g., queries with aggregation operators
-such the examples in Figure~\ref{fig:motivating} and~\ref{fig:example2}).
+
+
+Tran et al.~\cite{Tran:2009} studied the problem of \textit{Query By Output} (QBO). 
+The problem of QBO is similar to the view synthesis problem, but the technique
+presented in~\cite{Tran:2009} infers simple select-project-join queries.
+Of the examples presented in this paper, such queries can only be applied
+to satisfy the example in \todo{some example}, and such queries cannot
+be applied to many of the other real-world cases that we studied (Section~\ref{}).
+The key limitation of \todo{fail to encode extra features}
+
 
 Recently, Sarma et al.~\cite{DasSarma:2010} proposed a technique
 to address the \textit{View Definitions Problem} (VDP).
@@ -53,22 +47,6 @@ database with the same schema\todo{revise}, while our work eliminates these
 assumptions, and considers both join and projection operations.\todo{revise above}
 
 
-In the data mining community, a slightly related problem,
-called the \textit{redescription mining problem}~\cite{Ramakrishnan:2004},
-has been recently studied by researchers.
-\todo{explain the problem}
-However, \ourtool is significantly
-%ours is the \textit{redescription mining} problem~\cite{Ramakrishnan:2004}.
-%At an abstract level, our work is 
-different from existing redescription mining techniques~\cite{} in several ways.
-First, the goal of redescription mining is to find different subsets of
-data that afford multiple descriptions across multiple vocabularies
-covering the same dataset, while our goal is to infer a SQL query 
-to achieve the desirable output. 
-Second, we are concerned with a fixed subset of the data (i.e., the output example table).
-\todo{explain}
-Third, none of the existing redescription mining techniques account for
-structural (relational) information in the data. \todo{revise}
 
 \todo{what is the limitation of non program sythesis, why
 sythensis would be useful.}
@@ -76,36 +54,68 @@ sythensis would be useful.}
 \subsection{Automated Program Synthesis }
 
 
-
-Program synthesis aims to create an executable program
+Program synthesis~\cite{Gulwani:2010:DPS} aims to create an executable program
 in some underlying language from specifications that can range
 from logical declarative specifications to examples or
-demonstrations~\cite{Harris:2011, singh:2012, Gulwani:2011}.
-This topic has been studied intensively in Artificial Intelligence and
-Programming Language communities with the goal of easing the burden of
-algorithm designers, software developers, or end-users.
-Interest in it has grown rapidly in recent years~\cite{Gulwani:2010:DPS},
-and many approaches have been proposed.
-\todo{need to inspect}
-Closely-related to \ourtool, example-based program synthesis
-techniques~\cite{Kandel:2011, Fisher:2008,
-Fisher08Pads,Lau:2003:PDU, Lau:2000:VSA, Barbosa:2010:MLA, Arasu:2009:LST}
-take textual input-output examples and infer programs that transform text.
-However, existing techniques focused on synthesizing programs for string
-expressions~\cite{singh:2012, Gulwani:2011}, spreadsheet layout transformation~\cite{Harris:2011},
-, geometry constructions~\cite{Gulwani:2011:SGC}, thus
-can not be directly applied to our SQL query synthesis domain,
-due to different abstractions, granularities, and tasks.
-\todo{explain the difference between excel work}
+demonstrations~\cite{Harris:2011, singh:2012, Gulwani:2011,
+Kandel:2011, Fisher08Pads,Lau:2003:PDU, Lau:2000:VSA, Barbosa:2010:MLA, Arasu:2009:LST}.
 
-There is few work for inferring SQL queries for database end-users.
+Automated program synthesis techniques 
+has been used recently for many applications
+such as synthesis of efficient low-level code~\cite{Solar-Lezama:2005},
+data structure manipulations~\cite{Fisher:2008},
+geometry constructions~\cite{Gulwani:2011:SGC},
+snippets of excel macros~\cite{Harris:2011},
+relational data representations~\cite{Barbosa:2010:MLA, Arasu:2009:LST} and string
+expressions~\cite{singh:2012, Gulwani:2011}.
+
+
+PADS~\cite{Fisher:2008} takes a large sample of unstructured data and infers a
+format that describes the data. Users then manually define tools for
+data in the format.
+Though well-suited for their intended tasks, these
+systems are insufficient for the database query tasks.
+For example, while text extraction and mass editing
+are quite valuable for data transformation, the above tools
+lack other needed operations such as table
+re-shaping, aggregation, and missing value imputation.
+\todo{explain}
+
+
+Closely related to our current work is Harris and Gulwani’s
+system for learning excel spreadsheet transformations
+from an example input-output pair~\cite{Harris:2011}. Given input and output
+tables, their system can infer an excel macro that filters,
+duplicates, and/or reorganizes table cells to generate the output table.
+These resulting programs can express a variety of table
+re-shaping operations. \ourtool differs in multiple respects.
+First, Harris and Gulwani's approach treats table cells
+as atomic units, and thus has limited expressiveness.
+For example, it does not support queries involving text editing or extraction\todo{xxx}.
+Second, \todo{explain the difference between excel work}
+
+
+The Wrangler tool, developed in the HCI community, provides a nice visual
+programming-by-demonstration interface to table transformations
+for data cleaning~\cite{Kandel:2011}. By contrast, \ourtool provides
+an interface based on examples, which is more
+friendly to end users. \todo{xxx}
+
+
+There is some recent work for inferring SQL queries for database end-users.
 Query recommendation systems, such as SQLShare~\cite{} and SQLSnippet~\cite{},
 \todo{explain}
 may achieve a similar goal of helping end-users write better SQL
 queries, but they rely on information
 that we cannot assume access to in many realistic scenarios: a query log~\cite{Khoussainova:2010},
 or user history and preferences~\cite{Howe:2011}.
-\todo{inferring SQL from code, for performance}
-Add this as related work~\cite{abs-1208-2013}
+
+Cheung et al~\cite{abs-1208-2013} presented a technique to infer SQL
+queries from imperative code.
+Their technique automatically identifies
+fragments of application logic (written in an imperative language
+like Java) that can be pushed into
+SQL queries. 
+\todo{focus on performance...}
 
 %also cite this~\cite{Cheung:2012:UPS}, combining machine learning with program synthesis.

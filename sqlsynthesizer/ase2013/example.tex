@@ -14,34 +14,52 @@
 \section{Illustrating Example}
 \label{sec:example}
 
-We use a SQL exercise from a classic database textbook~\cite{cowbook} (Chapter 5, Exercise \todo{xx})
-as an example to illustrate the use of \ourtool.
+We use the example in Figure~\ref{fig:motivating} (described below)
+to illustrate the use of \ourtool. This example is
+adapted from a SQL exercise from a classic
+database textbook~\cite{cowbook} (Chapter 5, Exercise 1),
+and has been simplified for illustration purpose.
 
 \begin{quote}
-\textit{Find out the name and max score of the students whose
-level is senior and enrolled in more than 3 courses.}\footnote{
-As described in the textbook, there is a \CodeIn{student} table
-having two columns: \CodeIn{student\_id} and \CodeIn{nameA}, and
-a \CodeIn{enrolled} table having three columns:
-\CodeIn{student\_id}, \CodeIn{course\_id}, and \CodeIn{score}.}
+\textit{Find the name and the maximum course score of all senior student
+who are enrolled in more than 2 courses.}
+\footnote{
+Shown in Figure~\ref{fig:motivating}, the \CodeIn{student} table
+contains three columns: \CodeIn{student\_id}, \CodeIn{name},
+and \CodeIn{level}. Table \CodeIn{enrolled} contains
+three columns: \CodeIn{student\_id}, \CodeIn{course\_id},
+and \CodeIn{score}.
+%a \CodeIn{enrolled} table having three columns:
+%\CodeIn{student\_id}, \CodeIn{course\_id}, and \CodeIn{score}.
+}
 \end{quote}
 
 
-Although the problem description is quite clear and
-most end-users have a clear idea of what the desirable
-query should do, they \todo{still have difficult ...}
-
-As an alternative solution, end-users can use \ourtool
-to solve this peroblem. As depicted in Figure~\ref{fig:motivating},
-a user provides \ourtool two input tables and one expected
-output table. \ourtool automatically inferred the desirable
-SQL query (Figure~\ref{fig:motivating}(b)) to produce the output from the input tables.
-
-
-The synthesized query by \ourtool first joins the student, then ... \todo{project, and
-aggregation}
+The desirable SQL query, as \ourtool inferred in
+Figure~\ref{fig:motivating}(b), first joins the
+\CodeIn{student} and \CodeIn{enrolled} tables,
+then groups by the joined table by the \CodeIn{student\_id}
+column and selects students enrolled in more
+than 3 courses (the \CodeIn{having} statement).
+After that, this query further selects students
+whose level is \CodeIn{senior} and uses the \CodeIn{max}
+aggregator function to compute the maximum course score.
 
 
-\todo{add the following justification}
-To the best of our knowledge, none of the
-existing techniques can do ...
+Despite the simplicity of the problem description,
+to write the desirable SQL query, end-users must manually
+connect their understanding of the task
+with specific SQL language features that can be used to
+fullfil the task. Such a process can be non-trivial
+for novice users.  In addition, to the best of our knowledge,
+none of the existing SQL synthesis techniques~\cite{Zloof:1975,
+Tran:2009, DasSarma:2010, abs-1208-2013}
+can help uers write the above query\todo{right place?}
+
+As illustrate in Figure~\ref{fig:motivating}, an alternative
+approach to write this query is to provide \ourtool
+with some representative input-output examples; and
+let \ourtool automatically automatically infer the query.
+\todo{transition}
+
+
