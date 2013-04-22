@@ -9,42 +9,50 @@ and automated program synthesis.
 
 \subsection{Reverse Query Processing}
 
-In the database community, there is a rich body of
-work~\cite{Zloof:1975, Tran:2009, DasSarma:2010} that share the same broad principle
-of ``reverse query processing''. Zloof's work on \textit{Query by Example} (QBE)
-~\cite{Zloof:1975} provided an intuitive form-based Graphical User Interface for
-writing database queries, which is completely different than ours.
-\todo{add why it is different}
+Reverse query processing is a well-known problem in the database
+community~\cite{Zloof:1975, Tran:2009, DasSarma:2010}. Zloof's work on \textit{Query by Example} (QBE)~\cite{Zloof:1975}
+provided a high-level query language and an intuitive
+form-based Graphical User Interface for
+writing database queries. To use the QBE system, 
+users must formulate their queries with the
+provided language and fill in the appropriate
+skeleton tables on its interface.
+\todo{exactly what we need to avoid.}
 
 
 
-Tran et al.~\cite{Tran:2009} studied the problem of \textit{Query By Output} (QBO). 
-The problem of QBO is similar to the view synthesis problem, but the technique
-presented in~\cite{Tran:2009} infers simple select-project-join queries.
-Of the examples presented in this paper, such queries can only be applied
-to satisfy the example in \todo{some example}, and such queries cannot
-be applied to many of the other real-world cases that we studied (Section~\ref{}).
-The key limitation of \todo{fail to encode extra features}
+Tran et al.~\cite{Tran:2009} proposed a technique, called \textit{Query By Output} (QBO), 
+to infer SQL queries from input-output examples. \todo{say}
+However, their techniques can only infer simple select-project-join queries,
+and such queries can only be applied to satisfy the example in \todo{some example},
+and such queries cannot be applied to many of the other real-world cases that we
+studied (Section~\ref{}). The key limitation of the QBO technique is
+that it only considers table values in the original input tables as
+features \todo{need to read}
 
 
-Recently, Sarma et al.~\cite{DasSarma:2010} proposed a technique
-to address the \textit{View Definitions Problem} (VDP).
-\todo{explain more here}
+Recently, Sarma et al.~\cite{DasSarma:2010} studied the \textit{View Definitions Problem} (VDP).
 With a rather different goal than \ourtool,
-VDP aims to to find the most succinct and accurate view definition, when
+VDP aims to to find the most
+succinct and accurate view definition, when
 the view query is restricted to a specific family of queries.
-VDP can be treated as a special
-case of QBO where $n = 1$ and there are no joins nor projections.
-Compared to \ourtool, there are three key differences:
-(1) VDP aims to infer a relation from a large representative
-example view, while \ourtool attempts to infer a SQL query from a
-set of few input-output examples \todo{revise below}
-(which is a critical usability aspect for end-users who lack adequate
-SQL experience). (2) the technique proposed by Sarma et al.~\cite{DasSarma:2010} does
-not consider join or projection
-operations and assumes the output view to be a strict subset of the input
-database with the same schema\todo{revise}, while our work eliminates these
-assumptions, and considers both join and projection operations.\todo{revise above}
+VDP can be solved as a special case in \ourtool where there is only 1
+input table with no joins nor projections.
+In addition, the main contribution of Sarma et al's work
+is the complexity analysis of three variants of the view
+definitions problem, and there are no tool implementationand empirical study
+for their proposed technique.
+
+%Compared to \ourtool, there are three key differences:
+%(1) VDP aims to infer a relation from a large representative
+%example view, while \ourtool attempts to infer a SQL query from a
+%set of few input-output examples \todo{revise below}
+%(which is a critical usability aspect for end-users who lack adequate
+%SQL experience). (2) the technique proposed by Sarma et al.~\cite{DasSarma:2010} does
+%not consider join or projection
+%operations and assumes the output view to be a strict subset of the input
+%database with the same schema\todo{revise}, while our work eliminates these
+%assumptions, and considers both join and projection operations.\todo{revise above}
 
 
 
@@ -59,9 +67,7 @@ in some underlying language from specifications that can range
 from logical declarative specifications to examples or
 demonstrations~\cite{Harris:2011, singh:2012, Gulwani:2011,
 Kandel:2011, Fisher08Pads,Lau:2003:PDU, Lau:2000:VSA, Barbosa:2010:MLA, Arasu:2009:LST}.
-
-Automated program synthesis techniques 
-has been used recently for many applications
+It has been used recently for many applications
 such as synthesis of efficient low-level code~\cite{Solar-Lezama:2005},
 data structure manipulations~\cite{Fisher:2008},
 geometry constructions~\cite{Gulwani:2011:SGC},
@@ -70,52 +76,72 @@ relational data representations~\cite{Barbosa:2010:MLA, Arasu:2009:LST} and stri
 expressions~\cite{singh:2012, Gulwani:2011}.
 
 
-PADS~\cite{Fisher:2008} takes a large sample of unstructured data and infers a
-format that describes the data. Users then manually define tools for
-data in the format.
-Though well-suited for their intended tasks, these
-systems are insufficient for the database query tasks.
+The PADS~\cite{Fisher:2008} system takes a large sample
+of unstructured data and infers a
+format that describes the data. Users then manually
+define tools for data in the format.
+Similarly, the Wrangler tool, developed in the HCI community,
+provides a nice visual programming-by-demonstration
+interface to table transformations for data cleaning~\cite{Kandel:2011}.
+Theses techniques, though well-suited for their intended tasks,
+are insufficient for the database query tasks.
 For example, while text extraction and mass editing
 are quite valuable for data transformation, the above tools
-lack other needed operations such as table
-re-shaping, aggregation, and missing value imputation.
+lack other needed operations such as table joinning,
+aggregation, and query condition inference.
 \todo{explain}
 
 
-Closely related to our current work is Harris and Gulwani’s
-system for learning excel spreadsheet transformations
-from an example input-output pair~\cite{Harris:2011}. Given input and output
+Harris and Gulwani described a system for learning excel
+spreadsheet transformations macros from an example
+input-output pair~\cite{Harris:2011}. Given input and output
 tables, their system can infer an excel macro that filters,
 duplicates, and/or reorganizes table cells to generate the output table.
-These resulting programs can express a variety of table
-re-shaping operations. \ourtool differs in multiple respects.
-First, Harris and Gulwani's approach treats table cells
+\ourtool differs in multiple respects.
+First, excel macros have significantly different
+abstractions and semantics than the SQL language.
+An excel macro can express a variety of table re-shaping operations
+(e.g., \todo{an example}), but
+are not suitable to formulate database queries.
+Second, Harris and Gulwani's approach treats table cells
 as atomic units, and thus has limited expressiveness.
-For example, it does not support queries involving text editing or extraction\todo{xxx}.
-Second, \todo{explain the difference between excel work}
+It can only transforms one table to another, but
+does not support queries involving table joining, aggregation,
+or column projection. \todo{takk avbout the example}
 
 
-The Wrangler tool, developed in the HCI community, provides a nice visual
-programming-by-demonstration interface to table transformations
-for data cleaning~\cite{Kandel:2011}. By contrast, \ourtool provides
-an interface based on examples, which is more
-friendly to end users. \todo{xxx}
+%By contrast, \ourtool provides
+%an interface based on examples, which is more
+%friendly to end users. \todo{However, }
 
 
-There is some recent work for inferring SQL queries for database end-users.
-Query recommendation systems, such as SQLShare~\cite{} and SQLSnippet~\cite{},
-\todo{explain}
-may achieve a similar goal of helping end-users write better SQL
-queries, but they rely on information
-that we cannot assume access to in many realistic scenarios: a query log~\cite{Khoussainova:2010},
-or user history and preferences~\cite{Howe:2011}.
+Some recent work proposed query recommendations systems to reduce
+the obstacles to using relational databases~\cite{Howe:2011, Khoussainova:2010}. 
+SQLShare~\cite{Howe:2011} is a cloud-based service that allows
+users to upload their data and SQL queries. 
+Each saved query is also registered as a view, allowing other users
+to compose and reuse. SnipSuggest~\cite{Khoussainova:2010} is a SQL autocompletion
+system. As a user typs a query, SnipSuggest mines existing query
+logs to recommend relevant clauses or SQL snippets (e.g., the table
+names for the \CodeIn{from} clause) based on the partial query that
+the user has typed so far.
+Compard to \ourtool, both SQLShare and SnipSuggest hypothesize that existing query
+logs (by the user herself or other users) contains valuable information,
+as a user articulates an increasingly larger fragment of a query.
+However, such query logs are often not available to most users.
+\ourtool eliminates this assumption by directly asking users to
+draw the input-output examples.
+\todo{the difficult of start writing queries.}
+
 
 Cheung et al~\cite{abs-1208-2013} presented a technique to infer SQL
-queries from imperative code.
-Their technique automatically identifies
+queries from imperative code. Their technique automatically identifies
 fragments of application logic (written in an imperative language
-like Java) that can be pushed into
-SQL queries. 
+like Java) that can be pushed into SQL queries. 
+Compared to \ourtool, their work is designed for developers
+to improve a database application's performance by re-writing fragments of
+logic code into SQL queries, rather than helping novice end-users
+write correct SQL queries from scratch. In addition,
 \todo{focus on performance...}
 
 %also cite this~\cite{Cheung:2012:UPS}, combining machine learning with program synthesis.
