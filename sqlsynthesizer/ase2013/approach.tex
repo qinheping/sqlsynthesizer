@@ -2,11 +2,10 @@
 \section{Technique}
 \label{sec:approach}
 
-This section explains \ourtool's 3 steps, as introduced
+This section first explains \ourtool's 3 steps, as introduced
 in Section~\ref{sec:introduction} and illustrated
-in Figure~\ref{fig:workflow}.
-
-\todo{add some transition sentence}
+in Figure~\ref{fig:workflow}; and then gives \ourtool's full algorithm
+in Section~\ref{sec:algorithm}
 
 
 \begin{figure*}[t]
@@ -39,29 +38,41 @@ informative examples and then refine the SQL queries.
 
 \input{ranking}
 
+\input{together}
+
 
 \todo{write an algorithm here?}
 
-\subsection{Discussions}
+\subsection{Discussion}
 \label{sec:uim}
 
-\todo{limitations}
+We next discuss some design issues in \ourtool.
 
-\todo{soundness and completeness}
+\noindent \textbf{Soundness and Completeness.} The \ourtool
+technique is neither sound nor complete. The primary
+reason is that the Query Skeleton Creation step (Section~\ref{sec:skeleton})
+in \ourtool is based on heuristics.
+\todo{such heuristics approximate the NP hard problems.}
+Thus, \ourtool cannot gurantee to infer correct SQL queries
+in all cases. Despite such limitations,
+as demonstrated in Section~\ref{sec:evaluation}, \ourtool
+is still useful in sythesizing many SQL queries in practice.
 
-End-users can use our approach to obtain SQL query to transform
-multiple, huge database tables by constructing small, representative
-input and output example tables. On some examples, we speculate
-that our approach
-may produce a SQL query that satisfies the input and output examples
-given by the user, but does not address the intention
-that the user wants. To address this issue, we adapt a simple
-interaction model from~\cite{Harris:2011} to ask users to investigate the results of
-an output SQL query and report any discrepancy. In this case,
-the user can refine the inferred SQL query by providing a more
-informative input-output example (or multiple input-output examples
-that together describe the required behavior) that demonstrate the behavior on
+\vspace{1mm}
+\noindent \textbf{What if the input-output examples are not
+representative enough?}
+On some examples, \ourtool may produce a SQL query that
+satisfies the input-output examples specified by the user,
+but does not address the intention that the user wants.
+To address this issue, we use a simple
+interaction model~\cite{Harris:2011} to ask users to
+investigate the results of an output SQL query and report any discrepancy.
+After, the user can refine the inferred SQL query by providing a more
+informative input-output example that demonstrate the behavior on
 which the originally-inferred SQL query behaves incorrectly.
+As demonstrated in our evaluation (Section~\ref{sec:evaluation}),
+such an interactive model works well in practice: \todo{a
+few interations}
 
 
 

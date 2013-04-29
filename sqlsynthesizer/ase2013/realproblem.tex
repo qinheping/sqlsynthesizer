@@ -11,23 +11,25 @@
 }}
 \end{figure*}
 
-We next describe a real SQL problem picked up from
-an online SQL help forum\footnote{\url{http://forums.tutorialized.com/sql-basics-113/join-problem-147856.html}}.
-The thread was started by a novice user, who needed help to write a
-SQL query to get result from three input tables. In the help thread, the
+We use a real SQL question from
+an online forum\footnote{\url{http://forums.tutorialized.com/sql-basics-113/join-problem-147856.html}} to illustrate
+\ourtool's effectiveness.
+The question was started by a novice user, who needed help to write a
+SQL query to get result from three input tables. In this question, the
 novice user described his required query in a few paragraphs of
 English, but also include several small, representative input-output
-examples as shown in Figure~\ref{fig:example}, to better express
+examples as shown in Figure~\ref{fig:example2}, to better express
 his intention. 
-This thread receives no replies as of May 2012, and we speculated that
+This question receives no replies as of April 2013 and we speculated that
 writing a SQL query to join three tables to produce certain output results
-can be non-trivial.
+is non-trivial.
 
-We ran our tool on the input-output examples
-in Figure~\ref{fig:example}. The tool produced 6 valid answers
+We ran \ourtool on the input-output examples
+in Figure~\ref{fig:example2}. The tool produced 6 valid answers
 in less than 1 minutes, all of which satisfy the given examples. The
-highest ranked SQL query is shown in Figure~\ref{fig:answer},
-which is quite unintuitive to write. The SQL query in Figure~\ref{fig:answer}
+highest ranked SQL query is shown in Figure~\ref{fig:example2},
+which is quite unintuitive to write. The SQL query in
+Figure~\ref{fig:example2}
 first joins three input tables
 on columns \CodeIn{T1.Column2}, \CodeIn{T2.Column2},
 \CodeIn{T2.Column1}, and \CodeIn{T3.Column1} using some
@@ -36,6 +38,4 @@ column \CodeIn{Table2.Column3}'s value. Finally, it
 returns the minimal values of columns \CodeIn{T1.Column1}, \CodeIn{T1.Column4}, and \CodeIn{T3.Column2}
 from each aggregated group as the results.
 
-%Such help threads on online discussion forums are not rare, but the SQL
-%queries needed to address them are non-trivial.
 
