@@ -1,6 +1,9 @@
 \subsection{Query Skeleton Creation}
 \label{sec:skeleton}
 
+\todo{why need a skeleton. We divide the whole inference
+into three tasks}
+
 In this step, \ourtool performs a simple scan over
 the provided input-output examples to capture the basic
 structure of the desirable SQL query.
@@ -11,7 +14,7 @@ the table columns used to join tables, and the table
 columns used to project the query results. Besides,
 other query parts, such as query conditions and
 aggregation operators, are left as unknown and will be
-determined later.
+determined later. \todo{the group by columns}
 
 We next describe how \ourtool determines the table set,
 joining columns, and projection columns used in a query.

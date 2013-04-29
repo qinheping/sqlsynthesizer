@@ -1,0 +1,44 @@
+\subsection{Put It All Together}
+\label{sec:algorithm}
+
+Figure~\ref{fig:algorithm} summarizes the full algorithm in sythesizing
+SQL queries from input-output examples. \ourtool first creates a
+set of query skeletons based on the given input-output examples (line 2). Then,
+for each query skeleton, it searches for the query conditions (line 4),
+aggregates (line 5), and order-by columns (line 6) to construct a list of syntactically-correct
+SQL queries (line 7). \ourtool further validates each constructed SQL query
+on the given example input tables to verify whether it can produce the same
+example output table (line 9). If so, the constructed query is added to
+the result list (line 10). Finally, the query list is sorted by using
+the Occam's razor principle (line 14), and returned to the end-users.
+
+\begin{figure}[t]
+
+\textbf{Input}: example input table(s) $T_I$, example output table $T_O$\\
+
+\vspace{-4mm}
+\textbf{Output}: a ranked list of SQL queries\\
+\vspace{1mm}
+sythesizeSQLQueries({$V_{old}$, $V_{new}$, $T$})\\
+\vspace{-5mm}
+\begin{algorithmic}[1]
+\STATE $\mathit{queries}$ $\leftarrow$ an empty list
+\STATE $\mathit{skeletons}$ $\leftarrow$ createQuerySkeletons($\mathit{T_I}$, $\mathit{T_O}$)
+\FOR{each $\mathit{skeleton}$ in $\mathit{skeletons}$}
+\STATE $\mathit{conditions}$ $\leftarrow$ inferQueryConditions($\mathit{T_I}$, $\mathit{T_O}$, $\mathit{skeleton}$)
+\STATE $\mathit{aggregates}$ $\leftarrow$ searchForAggregates($\mathit{T_I}$, $\mathit{T_O}$, $\mathit{skeleton}$, $conditions$)
+\STATE $\mathit{orderByColumns}$ $\leftarrow$ searchForOrderByColumns($\mathit{T_O}$, $\mathit{skeleton}$, $\mathit{aggregates}$)
+\STATE $\mathit{queryCandidates}$ $\leftarrow$ constructQueries($\mathit{skeleton}$, $\mathit{conditions}$, $\mathit{aggregates}$, $\mathit{orderByColumns}$)
+\FOR{each $\mathit{query}$ in $\mathit{queryCandidates}$}
+\IF{validateOnDatabase($mathit{query}$, $\mathit{T_I}$, $\mathit{T_O}$)}
+\STATE $\mathit{queries}$.add($\mathit{query}$)
+\ENDIF
+\ENDFOR
+\ENDFOR
+\STATE $\mathit{queries}$ $\leftarrow$ rankdQuery($\mathit{queries}$)
+\RETURN $\mathit{queries}$
+\end{algorithmic}
+\vspace{-3mm}
+\caption{Algorithm for sythesizing SQL queries from input-output examples.}
+ \label{fig:algorithm}
+\end{figure}

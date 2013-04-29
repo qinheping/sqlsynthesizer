@@ -10,14 +10,19 @@ and automated program synthesis.
 \subsection{Reverse Query Processing}
 
 Reverse query processing is a well-known problem in the database
-community~\cite{Zloof:1975, Tran:2009, DasSarma:2010}. Zloof's work on \textit{Query by Example} (QBE)~\cite{Zloof:1975}
+community~\cite{Zloof:1975, Tran:2009, DasSarma:2010}. \todo{what is the purpose? check teh title?} 
+Zloof's work on \textit{Query by Example} (QBE)~\cite{Zloof:1975}
 provided a high-level query language and an intuitive
 form-based Graphical User Interface for
 writing database queries. To use the QBE system, 
 users must formulate their queries with the
 provided language and fill in the appropriate
 skeleton tables on its interface.
-\todo{exactly what we need to avoid.}
+In other words, to derive a SQL query with the QBE system,
+end-users must learn a new query formulation language
+and explore its GUIs. These are the exactly
+two activities that may increase end-users' learning curve, and are avoided
+in \ourtool. \todo{exactly what we need to avoid.}
 
 
 
@@ -32,7 +37,6 @@ features \todo{need to read}
 
 
 Recently, Sarma et al.~\cite{DasSarma:2010} studied the \textit{View Definitions Problem} (VDP).
-With a rather different goal than \ourtool,
 VDP aims to to find the most
 succinct and accurate view definition, when
 the view query is restricted to a specific family of queries.
@@ -94,8 +98,8 @@ aggregation, and query condition inference.
 
 Harris and Gulwani described a system for learning excel
 spreadsheet transformations macros from an example
-input-output pair~\cite{Harris:2011}. Given input and output
-tables, their system can infer an excel macro that filters,
+input-output pair~\cite{Harris:2011}. Given 1 input table and 1 output
+table, their system can infer an excel macro that filters,
 duplicates, and/or reorganizes table cells to generate the output table.
 \ourtool differs in multiple respects.
 First, excel macros have significantly different
@@ -119,15 +123,16 @@ Some recent work proposed query recommendations systems to reduce
 the obstacles to using relational databases~\cite{Howe:2011, Khoussainova:2010}. 
 SQLShare~\cite{Howe:2011} is a cloud-based service that allows
 users to upload their data and SQL queries. 
-Each saved query is also registered as a view, allowing other users
+Each uploaded query is also saved as a view, allowing other users
 to compose and reuse. SnipSuggest~\cite{Khoussainova:2010} is a SQL autocompletion
 system. As a user typs a query, SnipSuggest mines existing query
 logs to recommend relevant clauses or SQL snippets (e.g., the table
 names for the \CodeIn{from} clause) based on the partial query that
 the user has typed so far.
-Compard to \ourtool, both SQLShare and SnipSuggest hypothesize that existing query
-logs (by the user herself or other users) contains valuable information,
-as a user articulates an increasingly larger fragment of a query.
+Compard to \ourtool, both SQLShare and SnipSuggest hypothesize that the
+existence of a comprehensive query log (either by the user herself or other users)
+containing valuable information.
+%as a user articulates an increasingly larger fragment of a query.
 However, such query logs are often not available to most users.
 \ourtool eliminates this assumption by directly asking users to
 draw the input-output examples.
@@ -139,9 +144,11 @@ queries from imperative code. Their technique automatically identifies
 fragments of application logic (written in an imperative language
 like Java) that can be pushed into SQL queries. 
 Compared to \ourtool, their work is designed for developers
-to improve a database application's performance by re-writing fragments of
-logic code into SQL queries, rather than helping novice end-users
+to improve a database application's performance,
+rather than helping novice end-users
 write correct SQL queries from scratch. In addition,
-\todo{focus on performance...}
+to use their technique to sythesize a SQL query, 
+a snippet of imperative code describing the query task
+\todo{unrealistic for end-users to write}
 
 %also cite this~\cite{Cheung:2012:UPS}, combining machine learning with program synthesis.

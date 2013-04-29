@@ -15,10 +15,10 @@
 \label{sec:example}
 
 We use the example in Figure~\ref{fig:motivating} (described below)
-to illustrate the use of \ourtool. This example is
+to illustrate the use of \ourtool. The example,
 adapted from a SQL exercise from a classic
 database textbook~\cite{cowbook} (Chapter 5, Exercise 1),
-and has been simplified for illustration purpose.
+has been simplified for illustration purpose.
 
 \begin{quote}
 \textit{Find the name and the maximum course score of all senior students
@@ -34,6 +34,16 @@ and \CodeIn{score}.
 }
 \end{quote}
 
+\todo{re-organize the following}
+Despite the simplicity of the problem description,
+to write the desirable SQL query, end-users must manually
+connect their understanding of the task
+with specific SQL language features that can be used to
+fullfil the task. Such a process can be non-trivial
+for novice users.  In addition, to the best of our knowledge,
+none of the existing SQL synthesis techniques~\cite{Zloof:1975,
+Tran:2009, DasSarma:2010, abs-1208-2013}
+can help uers write the above query\todo{right place?}
 
 The desirable SQL query, as \ourtool inferred in
 Figure~\ref{fig:motivating}(b), first joins the
@@ -46,15 +56,6 @@ whose level is \CodeIn{senior} and uses the \CodeIn{max}
 aggregator function to compute the maximum course score.
 
 
-Despite the simplicity of the problem description,
-to write the desirable SQL query, end-users must manually
-connect their understanding of the task
-with specific SQL language features that can be used to
-fullfil the task. Such a process can be non-trivial
-for novice users.  In addition, to the best of our knowledge,
-none of the existing SQL synthesis techniques~\cite{Zloof:1975,
-Tran:2009, DasSarma:2010, abs-1208-2013}
-can help uers write the above query\todo{right place?}
 
 As illustrate in Figure~\ref{fig:motivating}, an alternative
 approach to write this query is to provide \ourtool
