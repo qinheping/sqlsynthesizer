@@ -71,10 +71,10 @@ study has ever been conducted to this end,
 and little empirical evidence has ever been provided
 on which SQL features are important in practice.
 Without such empirical knowledge, deciding which
-SQL subset to support in \ourtool remains difficult.
+SQL subset to support remains difficult.
 
 \todo{Existing work some existing work, that the author decided
-the language subset}
+the language subset. We reduce the bias of selecting features}
 
 To address this issue, we first conducted an online survey
 to ask IT professionals about the most important and widely-used
@@ -135,15 +135,13 @@ Figure~\ref{fig:survey} summaries the survey results.
 \subsection{Language Syntax}
 \label{sec:syntax}
 
-We now present a SQL subset that can express database query
-tasks required by real users. Figure~\ref{fig:syntax} shows
-the language syntax.
+Based on the survey, we design a SQL subset that can contains
+many widely-used features required by real users. 
+Figure~\ref{fig:syntax} shows the language syntax.
 
 
 The supported SQL subset is a subset of the SQL 93
-language, and shares the same semantics with the standard
-SQL language.  Even though this subset cannot describe all query
-tasks against a database, it covers XXX out of XXX 
+language. It covers XXX out of XXX 
 \todo{features}. In particular, this SQL subset significantly
 enriches the SQL features used in existing query inference
 work~\cite{DasSarma:2010}. \todo{xx} It supports database query

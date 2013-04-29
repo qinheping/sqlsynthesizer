@@ -112,7 +112,11 @@ and should not be expected, to invest.
 
 In this paper, we present a technique (and its tool
 implementation, called \ourtool) to automatically synthesize SQL queries
-from input-output examples. \ourtool takes example input
+from input-output examples. Although input-output examples may lead to
+underspecification, writing them, as opposed to writing
+declarative sepcifications or formal descriptions of any forms,
+is a more straightforward way of describing \textit{what} the
+task is. \ourtool takes example input
 table(s) and output table from the end-users, and then automatically
 infers a SQL query (or multiple queries, if exist) that queries
 against the input tables and returns the output example. If the inferred
@@ -122,13 +126,9 @@ SQL query is applied to other similar inputs (potentially much larger tables),
 then the SQL query produces a corresponding output.
 
 
-Although input-output examples may lead to
-underspecification, writing them, as opposed to writing
-declarative sepcifications or transformation scripts of any forms,
-is a more straightforward way of describing \textit{what} the
-task is. \ourtool uses such input-output examples
-as a natural interface to "understand" an end-user's intention
-and provide corresponding assistance.
+%\ourtool uses such input-output examples
+%as a natural interface to "understand" an end-user's intention
+%and provide corresponding assistance.
 
 %Compared with other alternatives (such as, writting
 %a declarative specification) to specify a user's intention,
@@ -137,8 +137,7 @@ and provide corresponding assistance.
 
 \ourtool is designed to be used by non-professional or novice database
 end-users when they do not know how
-to write a desirable SQL query. It aims to help end-users
-solve their problems by replacing the role of the SQL expert.
+to write a desirable SQL query. 
 End-users can use \ourtool to obtain SQL query to transform
 multiple, huge database tables by constructing small, representative
 input and output example tables. 
@@ -156,9 +155,24 @@ that can help answer SQL problems would be useful.
 %helping end-users writing a wide range of SQL queries.
 
 
-Inferring SQL queries from examples can be challenging.
-This is primarily because \todo{some reasons.}.
-\ourtool focuses on an \todo{important} SQL subset (described in Section~\ref{sec:langsubset}),
+Inferring SQL queries from examples can be challenging,
+primarily for two reasons. First, a SQL query consists
+of many parts, such as joining columns, aggregate functions,
+and group by clauses, etc, and the exhaustive search for a valid SQL
+query would quickly become intractable. In fact, as proved
+by Sarma et al.~\cite{DasSarma:2010}, even for a simplified
+SQL langauge, soundly inferring a desirable query from input-output
+examples is PSPACE-complete. Second, unlike the spreadsheet
+table transformation problem that converts 1 input
+table to 1 output table~\cite{Harris:2011}, a SQL query often
+needs to evaluate on \textit{multiple} input tables, perform
+corresponding data manipulations, and then project data on
+certain columns as the output.
+
+
+%To make query inference tractable, 
+To address the inference challenges,
+\ourtool focuses on a widely-used SQL subset (Section~\ref{sec:langsubset}),
 and uses three steps to link a user's intention to
 a desirable SQL query:
 
@@ -166,19 +180,20 @@ a desirable SQL query:
 
 \begin{itemize}
 \item \textbf{Skeleton Creation.} \ourtool scans the
-given input-output examples to determine the table
-set, joining columns, and output columns that might
+given input-output examples and employs some heuristics
+to determine the table set, joining columns, and output columns that might
 be used in the result query. Then, it creates an
 incomplete SQL query (called, query skeleton) to
 capture the basic structure of the result query.
 
-\item \textbf{Condition Inference.} \ourtool
+\item \textbf{Query Completion.} \ourtool
 uses a rule-learning algorithm from the machine
 learning community to infer a set of accurate
 and expressive rules, which transform the input
-example into the output example; and
+example into the output example; then infers
+aggregates and order-by clauses, and finally
 outputs a set of syntactically-valid SQL
-queries.
+queries. 
 
 
 \item \textbf{Solution Ranking.} If multiple SQL
@@ -196,7 +211,7 @@ examples, \ourtool does not require users to provide
 annotations or hints of any form. 
 This distinguishes our work from competing techniques such as
 interactive query writing~\cite{Zloof:1975} and
-programmer-assisted SQL sythensis~\cite{abs-1208-2013}.
+SQL sythensis from imperative code~\cite{abs-1208-2013}.
 
 \item \textbf{It supports a wide range of SQL queries.}
 Similar approaches in the literature support
@@ -230,7 +245,7 @@ in two aspects. First, we used \ourtool to solve
 Exercises from a textbook are good resource
 to evaluate \ourtool's generality, since textbook
 exercises are often designed to cover a wide range of SQL features.
-(Some exercises are even designed on purpose to cover less realistic,
+(Some exercises are even designed on purpose to cover some less realistic,
 corner cases in using SQL.)
 %the most important
 %SQL features that an instructor wishes students to master,
