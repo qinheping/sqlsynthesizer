@@ -12,9 +12,8 @@
 \end{figure*}
 
 In this step, \ourtool takes as input a query skeleton, infers
-the missing parts, namely
-query conditions (Section~\ref{sec:condition}) and
-aggregation operators (Section~\ref{sec:agg_search}); and then produces a
+the missing parts, namely query conditions (Section~\ref{sec:condition}),
+aggregates (Section~\ref{sec:agg_search}), and order-by clauses (Section~\ref{sec:orderby}); and then produces a
 set of syntactically-correct SQL queries.
 
 %The SQL skeleton produced by the first step, though incomplete,
@@ -55,11 +54,14 @@ additional features for each tuple:
 
 \begin{itemize}
 
-\item {\textbf{Aggregation Features}}. Aggregation
+\item {\textbf{Aggregation Features}}. For each column, \ourtool
+adds 
+Aggregation
 features are the aggregation results grouped by each \CodeIn{String} type column
 over every other columns. Table~\ref{tbl:agg} shows an example.
 (1) Aggregation, including \CodeIn{COUNT}, \CodeIn{MAX},
 \CodeIn{MIN} and \CodeIn{AVG}, whose results might be used in query condition.
+\todo{cannot infer group by column1, column2}
 
 
 \item {\textbf{Comparison Features}}. Comparison
@@ -172,7 +174,7 @@ for the example of Figure~\ref{fig:motivating}). \todo{explain why?}
 
 %\end{itemize}
 
-\subsubsection{Searching for Aggregation Operators}
+\subsubsection{Searching for Aggregates}
 \label{sec:agg_search}
 
 For each column produced by an aggregation operator,
@@ -195,4 +197,11 @@ is used, each value in the output column must has appeared in the input table.
 %In our experience, the type-directed searching strategy significantly reduces the
 %searching space and makes our tool find the desirable aggregates faster.
 
-\todo{Order by structure, relatively each to add}
+%\todo{Order by structure, relatively each to add}
+\subsubsection{Searching for Order By Columns}
+\label{sec:orderby}
+
+After the query conditions and aggregates are inferred,
+\ourtool observes data values in each output table column. If
+the data values in a column appear are sorted, \ourtool
+append the column name to the \CodeIn{Order By} clause.

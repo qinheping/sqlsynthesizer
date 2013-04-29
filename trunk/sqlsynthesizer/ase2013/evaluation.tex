@@ -2,15 +2,20 @@
 \section{Evaluation}
 \label{sec:evaluation}
 
-Our evaluation evaluates \ourtool's
-effectiveness in the following our aspects:
+We evaluate \ourtool's effectiveness in sythesizing
+SQL queries. \ourtool's effectiveness can be reflected
+by:
 
 \begin{itemize}
-\item Is the supported SQL subset expressive enough to describe
-a variety of queries?
-\item the time cost of \ourtool in sythesizing SQL queries
+\item the success ratio of sythesizing a variety of
+SQL queries (Section~\ref{sec:ratio}).
+%Is the supported SQL subset expressive enough to describe a variety of queries?
+\item the time cost of sythesizing SQL queries
 (Section~\ref{sec:performance}).
-\item c
+\item the human efforts to write input-output
+examples (Section~\ref{sec:human}).
+\item comparison with a previous SQL query inference
+technique (Section~\ref{sec:comparison}).
 \end{itemize}
 
 
@@ -20,135 +25,162 @@ a variety of queries?
 
 \subsection{Benchmarks}
 
-To answer these two questions, we collected a set
-of SQL query synthesis scenarios in the following
-two ways. First, we picked
-up 6 SQL exercises from a classic database textbook~\cite{cowbook}.
-Those 6 SQL exercises cover many commonly-used SQL features,
-which a database course instructor think would be the most useful parts,
-and expect her students to get familiar with. Second, we collected
-5 SQL problems raised by real end-users from popular online help forums
-~\cite{stackoverflow, tutorialized, dbjournal}.
+We collected benchmarks from two sources:
 
-%evaluation
-%subjects from two major sources: exercises from classic
-%database textbooks like, and real-world questions
-%that end-user asked on well-known online help forums. Specifically,
-%we aim to apply our implemented tool solve SQL query related questions
-%after Chapter 3 (SQL DML) in~\cite{cowbook}. We have also collected
-%19 end-user questions from online forums, and plan to apply our
-%tool to solve them.
+\begin{itemize}
+\item We picked up \textit{all} SQL exericses (\allex in total) from a
+classic database textbook~\cite{cowbook}. Exercises
+from a textbook are good resource to evaluate \ourtool's
+generality, since such exericses are often designed to
+cover a wide range of SQL features. Some exericses
+are even designed on purpose to cover less realistic,
+corner cases in using SQL. When writing \todo{exclude
+sql update, delte}
 
-For a given exercise or problem, if it
-has already been associated with input-output examples (e.g.,
-those provided by users from online forums),
-we directly apply our tool on the existing examples.
-Otherwise, we manually provide small concise and representative
-input-output examples for our tool.
-If for a given exercise or problem, our tool inferred
-a SQL query that does not behave as we expected when applied
-to other inputs, we will manually find an input on which the
-SQL query misbehaves and reapplied our tool to the new input. We
-repeat this process until our tool infers a desirable SQL query.
+\item We searched SQL query-related questions raised by real-world
+database users from 3 popular online forums~\cite{stackoverflow, tutorialized, dbjournal}.
+\todo{focus on standard features, some of features, such
+questions reflect how ppl use sql in practice}
+As of April 2013, we collected \pnum forum questions related
+to writing a SQL query.
+\end{itemize}
+
+
 
 \subsection{Evaluation Procedure}
-\todo{describe how to perform evaluation}
+
+For each textbook exericse and forum question, we use
+\ourtool to solve it. If an exericse or problem has
+been associated with input-output examples,
+we directly apply \ourtool on those existing examples.
+Otherwise, we manually write some examples based
+on our understanding. To reduce the bias in writing
+examples, all examples are writting by a graduate
+student from University of Washington other than
+\ourtool's developers.
+
+We checked \ourtool's correctness by comparing its
+output with the desired SQL queries. \todo{
+    some exericses have answers, but some are not.
+    If in different forms, we checked it semantic
+    equivalence.}
+
+For some textbook exercises and forum questions,
+\ourtool inferred a SQL query that satisfied the input-output
+examples, but did not behave as we expected when applied
+to other inputs. We manually found another input on which the
+SQL query mis-behaved and reapplied \ourtool to the new input. We
+repeated this process until our tool inferred a desirable SQL query.
 
 Our experiments were run on a 2.67GHz Intel Core PC
 with 4GB physical memory (2GB was allocated for the JVM),
 running Windows 7.
 
+\begin{figure*}[t]
+\setlength{\tabcolsep}{.24\tabcolsep}
+\begin{tabular}{|c|c|c||c|c|c|c|c||l|}
+\hline
+\multicolumn{3}{|c||}{Benchmarks} & \multicolumn{5}{|c||}{\ourtool} & Query by\\
+\cline{1-8}
+ ID & Source & \#Input Tables & Example Size & Rank & Tool Cost (s) & Cost in Writing Examples (s) & \#Iterations & Output~\cite{Tran:2009}\\
+ \hline
+ \hline
+ 1 & Textbook Ex 5.1.1 & &  & & & & & \\
+\hline
+\end{tabular}
+\Caption{{\label{tab:results} Experimental results in synthesizing SQL queries.
+Column ``Benchmarks'' describes the characteristics of our benchmarks. Sub-column ``\#Input Tables''
+shows the number of input tables in each benchmark. Column ``\ourtool'' shows
+\ourtool's results in sythesizing SQL queries. Sub-column ``Example Size''
+shows the number of rows in all example input and output tables.
+Sub-column ``Rank'' shows the absolute
+rank of the desirable SQL query in \ourtool's output. Sub-column ``Tool Time Cost (s)''
+shows \todo{}. Sub-column ``\#Iterations'' shows the number of
+interactive rounds in using \ourtool to obtain the desirable SQL query.
+Column ``Query by Output'' shows the results of using a previous technique, called
+\textit{Query by Output} (QBO)~\cite{}. Since \todo{treated as a special case},
+we omit other. ``Y''  means QBO produces the desirable SQL queries, while ``N''
+means QBO fails to produce the desirable SQL queries.
+}}
+\end{figure*}
 
 \subsection{Results}
 
-\begin{figure*}[t]
-\setlength{\tabcolsep}{.14\tabcolsep}
-\begin{tabular}{|c|c|c|}
-\hline
- ID & Source & Short description \\
- \hline
- 1 & Textbook &  Find all students that registrate \\
- 2 & Textbook &   \\
- 3 & Textbook &   \\
- 4 & Textbook &   \\
- 5 & Textbook &   \\
- 6 & Textbook &   \\
- 7 & Textbook &   \\
- 8 & Textbook &   \\
- 9 & Textbook &   \\
- 10 & Textbook &   \\
- 11 & Textbook &   \\
- 12 & Textbook &   \\
- 13 & Textbook &   \\
- 14 & Textbook &   \\
- 15 & Textbook &   \\
- 16 & Textbook &   \\
- 17 & Textbook &   \\
- 18 & Textbook &   \\
- 19 & Textbook &   \\
- 20 & Textbook &   \\
- 21 & Textbook &   \\
- 22 & Textbook &   \\
- 23 & Textbook &   \\
- 24 & Textbook &   \\
- 25 & Textbook &   \\
-\hline
-\end{tabular}
-
-\Caption{{\label{tab:results} lack a title.}}
-\end{figure*}
+Figure~\ref{tab:results} summarizes our experimental results.
 
 \subsubsection{Success Ratio}
+\label{sec:ratio}
 
-For each SQL synthesis scenario, we measured two results.
-The time cost in producing
-a desirable SQL query by our tool, and
-the time we spent in writing input-output examples.
-%For each exercise or problem, we also record
-%how much time we spent in writing input-output examples.
-Table~\ref{tab:results} summarizes our experimental results.
 
-\todo{need to edit}
-As shown in Table~\ref{tab:results}, our technique synthesized
-expected SQL queries for 10 out of 11 scenarios
-within a very small amount of time (less than 1 minute each).
-The human effort spent in providing input-output examples
-is also very limited: it took us less than 5 minutes for one scenario.
+As shown in Figure~\ref{tab:results}, \ourtool
+synthesized expected SQL queries for \solexnum  out of
+\exnum the textbook exercises, and \solpnum out of
+\pnum the forum questions.
 %per exercise (or problem).
 
-\subsubsection{A Real Example}
+\todo{why the technique can work, why some problem
+can not be solved}
+
 \input{realproblem}
 
 \subsubsection{Performance}
+\label{sec:performance}
 
 We measured \ourtool’s performance by recording the average
 time cost in producing a ranked list of SQL queries. 
-As shown in Figure~\ref{}, the performance of \ourtool is
-reasonable. On average, it uses less than XX minutes to
+As shown in Figure~\ref{tab:results}, the performance of \ourtool is
+reasonable. On average, it uses less than \avgtime minutes to
 produce the results in one interative round.
 Most of the time is spent querying the backend
 database to validate the correctness of each sythesized SQL query.
-\todo{caching might be helpful}
+%\todo{caching might be helpful}
 
 
 
-\subsubsection{Number of Interactive Rounds}
-This is a measure of the generalization power of
-the conditional learning part of the algorithm and
-the ranking scheme. We observed that the tool typically requires
-just \todo{XXX} round of interaction, when the user is smart
+\subsubsection{Human Efforts}
+\label{sec:human}
+
+We measured the human efforts taken to use \ourtool in two ways.
+First, the time cost to write input-output examples. Second,
+the number of interactive rounds in invoking \ourtool
+to sythesize the desirable SQL queries.
+
+As shown in Figure~\ref{tab:results}, human efforts
+spent in providing input-output examples are very limited:
+on average, it took less than 5 minutes for one benchmark.
+\todo{explain some abnormal points}
+
+The number of interactive rounds is a measure of
+the generalization power of the conditional learning part
+of the algorithm and the ranking scheme.
+We observed that the tool typically requires
+just \avground rounds of interaction, when the user is smart
 enough to give an example for each input format (which
-typically range from 1 to
-3) to start with. This was indeed the case
-for most scenarios in our benchmarks, even though our algorithm
+typically range from 1 to 3) to start with. This was indeed the case
+for most cases in our benchmarks, even though our algorithm
 can function robustly without this assumption. The maximum number
 of interactive rounds required in any scenario was \todo{XXX}
 (with 2 to 3 being a more typical number). \todo{the largest table}
 The maximum number of examples
 required in any scenario over all possible interactions was 10.
 
-\subsubsection{Comparison with a Previous Technique}.
-\todo{not ready yet}
+\subsubsection{Comparison with an Existing Technique}.
+\label{sec:comparison}
+
+We compared \ourtool with \textit{Query By Output} (QBO), a
+data-driven approach to infer SQL queries~\cite{Tran:2009}. We chose
+QBO because it is the most recent technique and also one
+of the most precise SQL query inference techniques in
+the literature. QBO uses a decision-tree-based algorithm
+\todo{explaining what is QBO}
+However, QBO cannot infer SQL queries using \todo{aggregates}
+
+The experimental results of QBO is shown in Figure~\ref{tab:results}
+(Column ``Query by Example''). For all \exnum database exercises
+and \pnum forum questions, QBO produces correct answers
+for XXX and XXX of them, respectively. QBO fails to
+sythesize desirable SQL queries for other benchmarks, because
+it \todo{the reasons}.
 
 \subsection{Initial Experience}
 
@@ -200,11 +232,11 @@ might achieve different results. Third, \todo{about user study}
 We have three chief findings: \textbf{(1)}
 The supported SQL subset in \ourtool is
 expressive enough to describe a variety of database queries.
-\textbf{(2)} \ourtool efficiently synthesizes desirable SQL
+\textbf{(2)} \ourtool can efficiently synthesize desirable SQL
 queries on \todo{how many} for both textbook exercises
 and online forum problems, with a small amount of human
 effort small input-output examples.
-\textbf{(3)} \ourtool infers more SQL queries
+\textbf{(3)} \ourtool produces better results
 than existing techniques~\cite{}. \todo{edit}
 
 
