@@ -3,10 +3,10 @@
   \centering
   \includegraphics[scale=0.70]{motivating}
   \vspace*{-1.0ex}\caption {{\label{fig:motivating}
-  Example input-output tables and the SQL query sythensized by
+  Example input/output tables and the SQL query sythensized by
   \ourtool. In this example, users provide \ourtool with
   two input tables (shown in (a)) and an output table (shown in (c));
-  \ourtool automatically infers a SQL query (shown in (b)) that
+  \ourtool automatically sythesizes a SQL query (shown in (b)) that
   transforms the two input tables into the output table.
 }}
 \end{figure*}
@@ -14,53 +14,58 @@
 \section{Illustrating Example}
 \label{sec:example}
 
-We use the example in Figure~\ref{fig:motivating} (described below)
-to illustrate the use of \ourtool. The example,
-adapted from a SQL exercise from a classic
-database textbook~\cite{cowbook} (Chapter 5, Exercise 1),
-has been simplified for illustration purpose.
-
-\begin{quote}
-\textit{Find the name and the maximum course score of all senior students
-who are enrolled in more than 2 courses.}
-\footnote{
-Shown in Figure~\ref{fig:motivating}, the \CodeIn{student} table
+We use an example, described below, to illustrate the use
+of \ourtool. The example is
+taken from a SQL exercise from a classic
+database textbook~\cite{cowbook} (Chapter 5, Exercise 1)
+and has been simplified for illustration purpose\footnote{
+This exercise defines 2 tables: \CodeIn{student}
+and \CodeIn{enrolled}. The \CodeIn{student} table
 contains three columns: \CodeIn{student\_id}, \CodeIn{name},
 and \CodeIn{level}. Table \CodeIn{enrolled} contains
 three columns: \CodeIn{student\_id}, \CodeIn{course\_id},
 and \CodeIn{score}.
-%a \CodeIn{enrolled} table having three columns:
-%\CodeIn{student\_id}, \CodeIn{course\_id}, and \CodeIn{score}.
-}
+}.
+
+\begin{quote}
+\textit{Find the name and the maximum course score of each senior student
+enrolled in more than 2 courses.}
 \end{quote}
 
-\todo{re-organize the following}
 Despite the simplicity of the problem description,
-to write the desirable SQL query, end-users must manually
-connect their understanding of the task
-with specific SQL language features that can be used to
-fullfil the task. Such a process can be non-trivial
-for novice users.  In addition, to the best of our knowledge,
-none of the existing SQL synthesis techniques~\cite{Zloof:1975,
-Tran:2009, DasSarma:2010, abs-1208-2013}
-can help uers write the above query\todo{right place?}
+writing a correct SQL query is non-trivial.
+Although most users can clearly understand the
+question, they must identify the right SQL
+features and use them correctly.
 
-The desirable SQL query, as \ourtool inferred in
-Figure~\ref{fig:motivating}(b), first joins the
-\CodeIn{student} and \CodeIn{enrolled} tables,
-then groups by the joined table by the \CodeIn{student\_id}
-column and selects students enrolled in more
-than 3 courses (the \CodeIn{having} statement).
-After that, this query further selects students
+As an alternative approach, end-users can use
+our \ourtool technique to sythesize a desirable query.
+As illustrated in Figure~\ref{fig:motivating},
+to use \ourtool, an end-user only needs to provide it with
+some small, representative example input and output tables
+(Figures~\ref{fig:motivating}(a) and~\ref{fig:motivating}(c)).
+Then, \ourtool works in a fully-automatic, push-button
+way in inferring a SQL query that satisfies the given
+example input and output.
+
+ %illustrate in Figure~\ref{fig:motivating}, an alternative
+%approach to write this query is to provide \ourtool
+%with some representative input-output examples; and
+%let \ourtool automatically automatically infer the query.
+
+The desirable SQL query, shown in Figure~\ref{fig:motivating}(b),
+first joins the \CodeIn{student} with \CodeIn{enrolled} tables,
+then group bys the joined table by the \CodeIn{student\_id}
+column, and selects students enrolled in more
+than 2 courses (using the \CodeIn{having} statement).
+After that, the query further selects students
 whose level is \CodeIn{senior} and uses the \CodeIn{max}
 aggregator function to compute the maximum course score.
+\todo{the above needs polish}
 
 
 
-As illustrate in Figure~\ref{fig:motivating}, an alternative
-approach to write this query is to provide \ourtool
-with some representative input-output examples; and
-let \ourtool automatically automatically infer the query.
+
 \todo{transition}
 
 

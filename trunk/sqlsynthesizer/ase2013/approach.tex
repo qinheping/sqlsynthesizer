@@ -2,35 +2,23 @@
 \section{Technique}
 \label{sec:approach}
 
-This section first explains \ourtool's 3 steps, as introduced
-in Section~\ref{sec:introduction} and illustrated
-in Figure~\ref{fig:workflow}; and then gives \ourtool's full algorithm
-in Section~\ref{sec:algorithm}
+This section first gives an overview of \ourtool's
+algorithm and workflow in Section~\ref{sec:algorithm}, and
+then explains \ourtool's 3 steps in details (Section~\ref{sec:skeleton},
+Section~\ref{sec:condition}, and Section~\ref{sec:ranking}).
+
 
 
 \begin{figure*}[t]
   \centering
   \includegraphics[scale=0.70]{workflow}
   \vspace*{-1.0ex}\caption {{\label{fig:workflow} Illustration
-  of \ourtool's workflow in inferring SQL queries from input-output examples. \ourtool consists of 3 steps: (1) The ``Skeleton Creation'' step (Section~\ref{sec:skeleton})
-infers a partially-complete SQL query as a skeleton from the given
-examples, (2) The ``Query Completion'' step (Section~\ref{sec:completion}) uses
-a rule-learning algorithm~\cite{} and type-directed search to
-produces a list of syntactically-valid query candidates that satisfy
-the provided input-output examples.
-, and (3) The ``Candidate Ranking'' step (Section~\ref{sec:ranking})
-ranks all inferred SQL query candidates and provides users a
-ranked list of SQL queries with the likely ones on the top. 
-Users select the
-desirable SQL queries from the produced ranked query list. On some
-examples, if \ourtool produces SQL queries that satisfy the input and
-output examples, but does not address the intention that the user wants;
-\ourtool can be used interactively by asking users to provide more
-informative examples and then refine the SQL queries.
+  of \ourtool's workflow of sythesizing SQL queries from input-output examples. 
 }}
 
 \end{figure*}
 
+\input{together}
 
 \input{skeletoncreation}
 
@@ -38,23 +26,26 @@ informative examples and then refine the SQL queries.
 
 \input{ranking}
 
-\input{together}
 
 \subsection{Discussion}
 \label{sec:uim}
 
-We next discuss some design issues in \ourtool.
+%We next discuss some design issues in \ourtool.
 
 \noindent \textbf{Soundness and Completeness.} The \ourtool
 technique is neither sound nor complete. The primary
-reason is that the Query Skeleton Creation step (Section~\ref{sec:skeleton})
-in \ourtool is based on heuristics.
-\todo{such heuristics approximate the NP hard problems.}
-Thus, \ourtool cannot gurantee to infer correct SQL queries
-in all cases. Despite such limitations,
-as demonstrated in Section~\ref{sec:evaluation}, \ourtool
+reason is that several steps (e.g., the Query Skeleton Creation
+step (Section~\ref{sec:skeleton})) in it use heuristics  
+to approximate the exact solution. Such heuristics
+are necessary, since the exact inference of SQL queries
+from examples has been proved to be PSPACE-complete and would
+quickly become intractable.
+Even though \ourtool cannot gurantee to infer correct SQL queries
+for all cases, as demonstrated in Section~\ref{sec:evaluation},
+we find \ourtool
 is still useful in sythesizing many SQL queries in practice.
 
+\begin{comment}
 \vspace{1mm}
 \noindent \textbf{What if the input-output examples are not
 representative enough?}
@@ -63,14 +54,12 @@ satisfies the input-output examples specified by the user,
 but does not address the intention that the user wants.
 To address this issue, we use a simple
 interaction model~\cite{Harris:2011} to ask users to
-investigate the results of an output SQL query and report any discrepancy.
+investigate the query results and report any discrepancy.
 After, the user can refine the inferred SQL query by providing a more
 informative input-output example that demonstrate the behavior on
 which the originally-inferred SQL query behaves incorrectly.
 As demonstrated in our evaluation (Section~\ref{sec:evaluation}),
-such an interactive model works well in practice: \todo{a
-few interations}
-
-
-
-
+such an interactive model works fairly well in practice: 
+a typical end-user only needs XXX rounds of interactions to
+obtain the desirable SQL query.
+\end{comment}

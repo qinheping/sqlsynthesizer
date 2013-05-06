@@ -3,11 +3,13 @@
   \centering
   \includegraphics[scale=0.50]{survey}
   \vspace*{-1.0ex}\caption {{\label{fig:survey}
-  Survey results of the most important SQL features
+  \todo{remove distinct}
+  Survey results of the most widely-used SQL features
   in writing a database query. There were 12 participants
   in the survey, and each participant was asked to
-  select the top 10 most important SQL features.
-  SQL features with no selection \todo{x} are omitted for brevity.
+  select the top 10 widely-used SQL features.
+  SQL features with no selection are omitted in this Figure
+  for brevity.
 }}
 
 \end{figure}
@@ -42,7 +44,6 @@
     & |\ \cond \;\texttt{||}\; \cond \\
     & |\ \texttt{(}\;\cond\;\texttt{)} \\
     & |\ \ce \;\op\; \ce \\
-    & |\ \texttt{NOT EXIST} \;(\q) \\
 \op ::= {} &\ \ \texttt{=} \;\;|\;\; \texttt{>}  \;\;|\;\; \texttt{<}\\
 \ce ::= {} &\ \ const \;\;|\;\; \column  \;\; \\
 \e ::= {} & \ce \;\;|\ count(\column) \\
@@ -50,41 +51,48 @@
 \end{align*}
 \normalsize%
 \caption{Syntax of the supported SQL subset in \ourtool.
-This subset covers the top XXX \todo{refer to figure 2}
-in Figure~\ref{fig:survey}}
+%This subset covers the top XXX \todo{refer to figure 2}
+%in Figure~\ref{fig:survey}
+}
 \label{fig:syntax}
 \end{figure}
 
 
-\section{Supported SQL Subset}
+\section{A SQL Subset Supported in \ourtool}
 \label{sec:langsubset}
 
+Exact inference of queries for the whole
+SQL language from examples
+is infeasible in practice. As proved
+by Sarma et al.~\cite{DasSarma:2010}, even for
+a simplified SQL language, inferring
+a SQL query satisifying a input-output example
+pair is a PSPACE-Complete problem. To make our
+technique usuable, we need to identify a
+SQL subset using which a large class of query tasks
+can be performed, and then design an efficient
+algorithm to infer queries using that SQL subset.
 
-The full SQL language\footnote{Here, we refer to
-the latest SQL 93 standard~\cite{}.} contains
-\todo{.intractable.} keywords. It is infeasible to infer
-the whole language\todo{revise}. \todo{We must focus on} Thus, the
-first step is to identify a widely-used SQL
-subset using which a large class of query tasks
-can be performed. Unfortunately, no systematic
+Unfortunately, when designing the supported SQL
+subset, we found that no systematic
 study has ever been conducted to this end,
 and little empirical evidence has ever been provided
-on which SQL features are important in practice.
+on which SQL features are widely-used in practice.
 Without such empirical knowledge, deciding which
 SQL subset to support remains difficult.
 
-\todo{Existing work some existing work, that the author decided
-the language subset. We reduce the bias of selecting features}
+%\todo{Existing work some existing work, that the author decided
+%the language subset. We reduce the bias of selecting features}
 
-To address this issue, we first conducted an online survey
-to ask IT professionals about the most important and widely-used
+To address this challenge and reduce our personal bias
+in language design, we first conducted an online survey
+to ask experienced IT professionals about the most widely-used
 SQL features in writing database queries (Section~\ref{sec:survey}).
 Then, based on the survey results, we designed
-a SQL subset that supports many database query tasks
-in practice (Section~\ref{sec:syntax}).  After that,
-we sent the designed SQL subset to the survey participants
+a SQL subset (Section~\ref{sec:syntax}).  
+We also sent the designed SQL subset to the survey participants
 and conducted a series of follow-up email interviews
-to confirm our design.
+to confirm whether our design would be sufficient in practice.
 
 
 
@@ -103,8 +111,7 @@ Our online survey consists of 6 questions that can be
 divided into three parts. The first part includes
 simple demographic questions about participants.
 In the second part, participants were asked to select
-most important SQL features in their minds.
-%their most-often \todo{most important?} used SQL language features. 
+the top 10 most widely-used SQL features in their minds.
 Instead of directly asking participants about the SQL
 features, which might be vague and difficult to respond,
 we presented them a list of \textit{all} standard
@@ -130,43 +137,59 @@ and 5.5 years of experience in
 using database (max: 10, min: 2). In addition, two
 participants identified themselves as database professionals.
 
-Figure~\ref{fig:survey} summaries the survey results.
+Figure~\ref{fig:survey} summaries the survey results about
+the most-widely used SQL features rated by 12 participants.
 
 \subsection{Language Syntax}
 \label{sec:syntax}
 
-Based on the survey, we design a SQL subset that can contains
-many widely-used features required by real users. 
-Figure~\ref{fig:syntax} shows the language syntax.
+Based on the survey, we design a SQL subset
+whose syntax is shown in Figure~\ref{fig:syntax}
+%shown in
+%that can contains
+%many widely-used features required by real users. 
+% shows the language syntax.
 
 
 The supported SQL subset is a subset of the SQL 93
-language. It covers XXX out of XXX 
-\todo{features}. In particular, this SQL subset significantly
-enriches the SQL features used in existing query inference
-work~\cite{DasSarma:2010}. \todo{xx} It supports database query
-across multiple tables, conjuction of query conditions
-\todo{others...}
-joining operations across multiple tables, and includes
-widely-used database operations such as \CodeIn{group by},
-\CodeIn{order by}, and \CodeIn{having}, as
-well as a few common aggregation functions such as \CodeIn{count}, \CodeIn{sum},
-\CodeIn{max}, and \CodeIn{min}.
+language. It covers all top 10 most widely-used SQL
+features except for the \CodeIn{IN} keyword, plus
+the \CodeIn{Having} keyword in Figure~\ref{fig:survey}. 
+This SQL subset, though by means complete in writing all
+possible queries, has significantly
+enriched the SQL subset supported by many existing query inference
+work~\cite{DasSarma:2010}. In particular, our SQL subset
+supports writing queries across multiple tables,
+conjuction of query conditions, aggregate functions
+(i.e., \CodeIn{COUNT}, \CodeIn{MAX}, \CodeIn{MIN}, and \CodeIn{AVG}),
+group by operations, and the \CodeIn{Having} clause.
 
-When designing this SQL subset, we used the following rationale.
-First, we only considered standard SQL features, and excluded
+
+
+When designing this SQL subset, we only considered standard
+SQL features, and excluded
 some vendor-specific features, such as the \CodeIn{top} keyword
-in Microsoft SQLServer. Second, we \todo{discard fuzzy matching,
-like, untractable, string manipulation}. Third, we exclude
-a few SQL features that can have equivalent replacement \todo{xx}
-in the current SQL subset. For example, the \CodeIn{Not Null} (followed
-by a column name) keyword can be simply replaced by a
-query condition to check the column is not \CodeIn{Null}.
-Nested queries are also omitted, since it can be re-written
-using conditions \todo{xx}.
-Fourth, we exclude less useful
-\todo{features}
-5. omit between, discard Left Joint, Right Join, only remaining Full Join
+which is supported in Microsoft SQLServer. 
+We discard the \CodeIn{IN} keyword since it can be replaced
+by a joining condition in most cases. For example:
+\todo{}
+We add the \CodeIn{Having} keyword because it is often used
+together with the \CodeIn{Group by} clause.
+For the unsupported features in Figure~\ref{fig:survey},
+keywords \CodeIn{Full Join}, \CodeIn{Left Join}, and \CodeIn{Right Join}
+provide special ways to join two tables, and are less
+likely to be used by non-expert users in practice.
+Keyword \CodeIn{Not Null} can be replaced
+by a condition to check whether the decorated
+column has a \CodeIn{Null} value or not.
+Keyword \CodeIn{Between} can be replaced by two
+conditions that check the value boundary. For example,
+\todo{xxx.}. Keywords \CodeIn{UNION} and \CodeIn{Not Exist}
+are often used in writing nested queries, which are
+not currently supported in \ourtool.
+Keyword \CodeIn{Like} is also not supported, since
+\todo{string matching}
+
 
 
 
@@ -177,18 +200,22 @@ After proposing the SQL subset in Figure~\ref{fig:syntax},
 we performed follow-up email interviews to gain
 participants' feedback about the tailored SQL
 subset. Participants were first asked to rate
-the expressiveness of the SQL subset in Figure~\ref{}
-on a 6-point scale (5-completely sufficient; 0-not sufficient at all;
+the expressiveness of the SQL subset in Figure~\ref{fig:syntax}
+on a 6-point scale (5-completely
+sufficient; 0-not sufficient at all;
 and in-between values indicating intermediate sufficiency),
 and then to provide their comments.
 
 On average, the rating of this SQL subset is 4.5. Most of
 the participant rate it 5, or 4. Only one participant rates
-it 3. He mistakenly understood....\todo{}
+it 3, since he mistakenly thought this subset does not
+support joining multiple tables. 
 
-One participant complained the SQL subset lacks the support
-of column re-naming
+One participant commented that the SQL subset did not support
+column re-naming. However, re-naming database columns is not
+critical in sythesizing a correct SQL query \todo{xxx}
 
-Based on the feedback, we think the language subset is
-sufficient ...
+Overall, based on the feedback, we think our SQL subset is
+sufficient for writing a wide range of database queries
+that most end-users would need.
 

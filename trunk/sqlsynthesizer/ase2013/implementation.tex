@@ -3,14 +3,14 @@
 \label{sec:implementation}
 
 We implemented the proposed technique in a tool, called \ourtool. 
-\ourtool uses the Weka toolkit~\cite{Hall:2009}
-to implement the rule-learning algorithm described in
-Section~\ref{sec:completion}. \todo{inspect the above}
-
-\ourtool uses MySQL~\cite{mysql} as the backend
-database to check the correctness of each inferred
+\ourtool leverages the built-in PART algorithm implementation in
+the Weka toolkit~\cite{Hall:2009} to learn query conditions
+(Section~\ref{sec:completion}). \ourtool also uses
+MySQL~\cite{mysql} as the backend
+database to validate the correctness of each sythesized
 SQL query. Specifically, \ourtool populates the backend database
 with the given input tables. When a SQL query is
 synthesized, \ourtool executes the query on the database
 to observe whether the output matches the given output.
-
+Our implementation is publicly available at:
+\url{http://sqlsythesizer.googlecode.com}

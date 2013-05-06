@@ -16,7 +16,9 @@ of their increasingly large and complex databases.
 %query databases to obtain relevant data to support their business decisions.
 
 
-\subsection{End-users' Difficulties in Writing SQL Queries}
+%\subsection{End-users' Difficulties in Writing SQL Queries}
+\vspace{1mm}
+\noindent \textbf{\textit{Motivation.}}
 Although the relational database management system (RDBMS) and the
 de facto language (SQL) are perfectly adequate for most end-users'
 needs~\cite{Howe:2011}, the costs associated with deployment and
@@ -35,45 +37,55 @@ finance professionals, and marketing managers.
 Those end-users are not professional programmers, but are experts in some
 other domains. They need to query a variety of information on their
 database and use the information to support their business decisions.
-%\todo{move the following sentence to somewhere esle}
-
-%Similarly, other end-users
-%such as business analysts who query databases frequently often
-%do not have significant SQL expertise.
-
-To learn how to query a RDBMS, most end-users often refer
-to a textbook or online resources to first get familiar with
-the basic idioms of the SQL language. Then, they may
-try to write some experimental queries, execute them
-on a sample database to observe the output, and
-subsequently revise the queries (if the output is not desirable).
-%The above process may
-%predicates in the \CodeIn{where} clause,
-%tables in the \CodeIn{from} clause, or columns in the \CodeIn{select} clauses.
-However, such practice is inefficient and time-consuming.
-Non-professional end-users are often stucked with the
-process of \textit{how} to
-accomplish a certain task by receiving step-by-step, detailed,
+Although most end-users can clearly describe \textit{what} the task is, they
+are often stucked with the process of \textit{how} to
+write a desirable database query even after
+receiving step-by-step, detailed,
 and syntactically correct instructions.
-Even though most end-users can clearly
-describe \textit{what} the task is, they
-simply can not get the SQL query correct,
-either due to the syntax complexity of the SQL language itself,
-or the structure complexity of the databases.
-To write a correct SQL query, end-users often need to
+Thus, many end-users often need to
 seek information from online help forums, or ask
 SQL experts. This process can be repetative, laborious, and frustrating.
-To assist them in performing database query tasks,
+To assist end-users in performing database query tasks,
 %For them, they need an \textit{intelligent} tool
 %to assist them to perform database query tasks. 
 a highly accessible tool that can be used to ``describe''
 their needs and connect their intentions to executable
 SQL queries would be highly desirable.
 
+%simply can not get the SQL query correct,
+%either due to the syntax complexity of the SQL language itself,
+%or the structure complexity of the databases.
+%To write a correct SQL query, end-users often need to
+%seek information from online help forums, or ask
+%SQL experts. This process can be repetative, laborious, and frustrating.
 
-\subsection{Existing Solutions}
+%However, such practice is inefficient and time-consuming.
+%Non-professional end-users 
 
 
+%\todo{move the following sentence to somewhere esle}
+
+%Similarly, other end-users
+%such as business analysts who query databases frequently often
+%do not have significant SQL expertise.
+
+%To learn how to query a RDBMS, most end-users often refer
+%to a textbook or online resources to first get familiar with
+%the basic idioms of the SQL language. Then, they may
+%try to write some experimental queries, execute them
+%on a sample database to observe the output, and
+%subsequently revise the queries (if the output is not desirable).
+
+%The above process may
+%predicates in the \CodeIn{where} clause,
+%tables in the \CodeIn{from} clause, or columns in the \CodeIn{select} clauses.
+
+
+
+%\subsection{Existing Solutions}
+
+\vspace{1mm}
+\noindent \textbf{\textit{Existing Solutions.}}
 \textit{Graphical User Interfaces} (GUIs) and \textit{general programming languages}
 are two state-of-the-art approaches in helping end-users perform
 database queries. However, both approaches are far from satisfactory.
@@ -85,7 +97,7 @@ However,
 %succession of commands to use from a maze of features to accomplish
 %their tasks.
 a GUI is often fixed, and does not permit users to personalize
-a database's functionality for their specific tasks. On the other hand,
+a database's functionality for their query tasks. On the other hand,
 as a GUI supports more and more customization features, users
 may struggle to discover those features, which can significantly
 degrade its usability. 
@@ -103,24 +115,27 @@ and should not be expected, to invest.
 
 
 
-\subsection{Synthesizing SQL Queries from Input-Output Examples}
+%\subsection{Synthesizing SQL Queries from Input-Output Examples}
 
 %After carefully studying how end-users were describing their
 %encountered SQL query problems on online help forums, we observed that
 %one of the most common ways for end-users to
 %express their intents is using input-output examples. 
 
+\vspace{1mm}
+\noindent \textbf{\textit{Our Solution: Synthesizing SQL Queries from Input-Output Examples}}
 In this paper, we present a technique (and its tool
 implementation, called \ourtool) to automatically synthesize SQL queries
 from input-output examples. Although input-output examples may lead to
 underspecification, writing them, as opposed to writing
-declarative sepcifications or formal descriptions of any forms,
-is a more straightforward way of describing \textit{what} the
-task is. \ourtool takes example input
-table(s) and output table from the end-users, and then automatically
-infers a SQL query (or multiple queries, if exist) that queries
-against the input tables and returns the output example. If the inferred
-SQL query is applied
+declarative sepcifications or imperative code
+of any form, is one of the most straightforward ways
+to describe \textit{what} the task is.
+%\ourtool takes example input
+%table(s) and output table from the end-users, and then automatically
+%infers a SQL query (or multiple queries, if exist) that queries
+%against the input tables and returns the output example.
+If the sythesized SQL query is applied
 to the example input, then it produces the example output; and if the
 SQL query is applied to other similar inputs (potentially much larger tables),
 then the SQL query produces a corresponding output.
@@ -135,13 +150,13 @@ then the SQL query produces a corresponding output.
 %input-output examples, although may lead to underspecification,
 %serve as a more straightforward way  is and a natural interface that a tool can provide assistance.
 
-\ourtool is designed to be used by non-professional or novice database
+\ourtool is designed to be used by non-expert database
 end-users when they do not know how
 to write a desirable SQL query. 
-End-users can use \ourtool to obtain SQL query to transform
+End-users can use \ourtool to obtain a SQL query to transform
 multiple, huge database tables by constructing small, representative
 input and output example tables. 
-We also envision this technique to be useful in an online education
+We also envision \ourtool to be useful in an online education
 setting (i.e., an online database course). Recently, several
 education initiatives such as EdX, Coursera,
 and Udacity are teaming up with experts to provide
@@ -150,29 +165,32 @@ to several thousands of students worldwide.
 One challenge, which is not present in a traditional classroom
 setting, is to provide answers on questions raised by a large
 number of students. A tool, like \ourtool,
-that can help answer SQL problems would be useful.
+that has the potential of answer SQL-related questions
+would be useful.
 %preferrable in \todo{teaching a database course.}
 %helping end-users writing a wide range of SQL queries.
 
 
-Inferring SQL queries from examples can be challenging,
-primarily for two reasons. First, a SQL query consists
+Inferring SQL queries from examples is challenging,
+primarily for two reasons. First, a SQL query can consist
 of many parts, such as joining columns, aggregate functions,
-and group by clauses, etc, and the exhaustive search for a valid SQL
-query would quickly become intractable. In fact, as proved
+and group by clauses, etc. Exhaustive searching for all
+syntactically-valid SQL queries and then filtering those that do not
+satisify the given input-output examples would quickly
+become intractable. In fact, as proved
 by Sarma et al.~\cite{DasSarma:2010}, even for a simplified
-SQL langauge, soundly inferring a desirable query from input-output
-examples is PSPACE-complete. Second, unlike the spreadsheet
-table transformation problem that converts 1 input
-table to 1 output table~\cite{Harris:2011}, a SQL query often
+SQL langauge, exact inference of a SQL query satisfying
+a input-output example pair is PSPACE-complete.
+Second, unlike the spreadsheet
+table transformation problem that converts one input
+table to one output table~\cite{Harris:2011}, a SQL query often
 needs to evaluate on \textit{multiple} input tables, perform
-corresponding data manipulations, and then project data on
-certain columns as the output.
+data manipulations, and then project data on
+certain columns as the output. This requires \todo{new challenges}
 
 
-%To make query inference tractable, 
-To address the inference challenges,
-\ourtool focuses on a widely-used SQL subset (Section~\ref{sec:langsubset}),
+\todo{To make the query inference tractable,}
+Our \ourtool technique focuses on a widely-used SQL subset (Section~\ref{sec:langsubset}),
 and uses three steps to link a user's intention to
 a desirable SQL query:
 
@@ -180,8 +198,8 @@ a desirable SQL query:
 
 \begin{itemize}
 \item \textbf{Skeleton Creation.} \ourtool scans the
-given input-output examples and employs some heuristics
-to determine the table set, joining columns, and output columns that might
+given input-output examples and heuristically
+determine the table set, joining columns, and output columns that might
 be used in the result query. Then, it creates an
 incomplete SQL query (called, query skeleton) to
 capture the basic structure of the result query.
@@ -190,8 +208,8 @@ capture the basic structure of the result query.
 uses a rule-learning algorithm from the machine
 learning community to infer a set of accurate
 and expressive rules, which transform the input
-example into the output example; then infers
-aggregates and order-by clauses, and finally
+example into the output example. Then, it
+searches for possible aggregates and order-by clauses, and
 outputs a set of syntactically-valid SQL
 queries. 
 
@@ -199,29 +217,31 @@ queries.
 \item \textbf{Solution Ranking.} If multiple SQL
 queries satisify the given input-output examples,
 \ourtool employs the Occam's razor principle to
-rank more likely queries higher in the result.
+rank more likely queries higher in the output.
 \end{itemize}
 
 Compared to previous approaches~\cite{Zloof:1975,
 Tran:2009, DasSarma:2010, abs-1208-2013}, \ourtool has two notable features:
 
 \begin{itemize}
-\item \textbf{It is fully automated.} Besides input-output
-examples, \ourtool does not require users to provide
+\item \textbf{It is fully automated.} Besides
+an example input and output pair,
+\ourtool does not require users to provide
 annotations or hints of any form. 
 This distinguishes our work from competing techniques such as
-interactive query writing~\cite{Zloof:1975} and
-SQL sythensis from imperative code~\cite{abs-1208-2013}.
+specification-based query inference~\cite{Zloof:1975} and
+query sythensis from imperative code~\cite{abs-1208-2013}.
 
 \item \textbf{It supports a wide range of SQL queries.}
 Similar approaches in the literature support
-a small subset of the SQL language, such as data selection
-(from a single table)~\cite{Zloof:1975, DasSarma:2010}
-and table joining~\cite{Tran:2009, DasSarma:2010, abs-1208-2013}. By contrast, 
+a small subset of the SQL language; most of them
+can only infer simple select-join-projection
+queries on a single table~\cite{Zloof:1975, DasSarma:2010, Tran:2009, DasSarma:2010, abs-1208-2013}. By contrast, 
 \ourtool significantly enriches the supported SQL subset.
-Besides supporting the standard data selection and table joining
-operations, \ourtool also supports aggregate functions (i.e.,
-\CodeIn{MAX()}, \CodeIn{MIN()}, \CodeIn{SUM()},
+Besides supporting the standard select-join-projection
+queries, \ourtool also supports many other important
+SQL features, such as table joining,
+aggregate functions (i.e., \CodeIn{MAX()}, \CodeIn{MIN()}, \CodeIn{SUM()},
 and \CodeIn{COUNT()}), group by operation,
 order by operation, and the \CodeIn{HAVING}
 statement. 
@@ -237,8 +257,10 @@ statement.
 %pick the most likely one.
 
 
-\subsection{Evaluation}
+%\subsection{Evaluation}
 
+\vspace{1mm}
+\noindent \textbf{\textit{Evaluation}}.
 We evaluated \ourtool's generality and accuracy
 in two aspects. First, we used \ourtool to solve
 \exnum SQL exercises from a classic database textbook~\cite{cowbook}. 
@@ -249,10 +271,9 @@ exercises are often designed to cover a wide range of SQL features.
 corner cases in using SQL.)
 %the most important
 %SQL features that an instructor wishes students to master,
-Second, we evaluated \ourtool on 5 SQL problems collected 
+Second, we evaluated \ourtool on 5 SQL-related questions collected 
 from online help forums, and tested whether
-\ourtool can synthesize desirable SQL queries for those
-real problems.  
+\ourtool can synthesize desirable SQL queries for them.
 
 As a result, \ourtool successfully synthesized \solexnum out of \exnum
 textbook exercises and solved all \pnum forum problems, within a very
@@ -260,8 +281,10 @@ small amount of time (\avgtime minute per exercise or problem, on average).
 \ourtool's accuracy and speed make it an attractive
 approach to help end-users write SQL queries.
 
-\subsection{Contributions}
+%\subsection{Contributions}
 
+\vspace{1mm}
+\noindent\textbf{\textit{Contributions.}}
 This paper makes the following contributions:
 
 \begin{itemize}
@@ -281,8 +304,8 @@ available at: \url{http://sqlsynthesizer.googlecode.com}.
 
 \item \textbf{Evaluation.} We applied \ourtool
 to \exnum textbook SQL exercises and \pnum 
-SQL-related problems from online forums.
-The results show that \ourtool can synthesize
-a wide range of SQL queries.
-(Section~\ref{sec:evaluation}).
+SQL forum questions.
+The experimental results show that \ourtool can synthesize
+a wide range of SQL queries, and it does so with
+small examples (Section~\ref{sec:evaluation}).
 \end{itemize}
