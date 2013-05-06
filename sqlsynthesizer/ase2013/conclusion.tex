@@ -1,4 +1,4 @@
-\section{Conclusions and Future Work}
+\section{Conclusion and Future Work}
 \label{sec:conclusion}
 
 %\todo{move to somewhere else}
@@ -10,17 +10,23 @@
 
 This paper studied the problem of automated SQL query synthesis
 from simple input-output examples, and presented a
-practical technique (and its tool implementation, called \ourtool)
-that can infer desirable SQL queries that fulfill end-users' intentions.
+practical technique (and its tool implementation, called \ourtool).
+%that can infer desirable SQL queries that fulfill end-users' intentions.
 Our experimental results show that \ourtool is
-effective in automating a variety of database query tasks
-with small input-output examples.
-
-The source code of our tool implementation is available at: \\
+capable to sythesize a variety of SQL queries,
+and it does so with small input-output examples. The source code of our tool implementation is available at: 
 \url{http://sqlsynthesizer.googlecode.com}
+
+
+For future work, we are interested in conducting a user study
+to evaluate \ourtool's usability. We also plan to explore
+applications of this technique.
+%enrich the
+%supported SQL subset for sythesizing more expressive queries.
 
 \vspace{1mm}
 
+\begin{comment}
 Our future work will concentrate on the following topics:
 
 \textbf{Enrich the supported SQL subset.} We plan to enrich the
@@ -46,11 +52,6 @@ To overcome this limitation, we plan to design a more robust inference
 algorithm that can attempt to identify and tolerate user-input noises,
 and even suggest a fix to the noisy example.
 
+\end{comment}
 
-
-%\textbf{Generalization.}
-%We have applied our synthesis technique to one specific, but
-%important problem.  There is a rich history of end-user programming
-%problems being cast as program synthesis (e.g.,~\cite{Gulwani:2010:DPS}).  In future
-%work, we plan to formulate other tasks, such as repetitive file operations, and to apply our technique to them.
 

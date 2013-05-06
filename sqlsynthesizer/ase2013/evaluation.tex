@@ -2,20 +2,19 @@
 \section{Evaluation}
 \label{sec:evaluation}
 
-We evaluate \ourtool's effectiveness in sythesizing
-SQL queries. \ourtool's effectiveness can be reflected
-by:
+We evaluated four aspects of \ourtool's effectiveness,
+answering the following research questions:
 
 \begin{itemize}
-\item the success ratio of sythesizing a variety of
-SQL queries (Section~\ref{sec:ratio}).
+\item What is the success ratio of \ourtool in sythesizing
+a variety of SQL queries? (Section~\ref{sec:ratio}).
 %Is the supported SQL subset expressive enough to describe a variety of queries?
-\item the time cost of sythesizing SQL queries
-(Section~\ref{sec:performance}).
-\item the human efforts to write input-output
-examples (Section~\ref{sec:human}).
-\item comparison with a previous SQL query inference
-technique (Section~\ref{sec:comparison}).
+\item How long does it take for \ourtool to
+sythesize a SQL query (Section~\ref{sec:performance}).
+\item How much human effort is needed to write sufficient
+input-output examples for \ourtool in SQL sythesis (Section~\ref{sec:human}).
+\item How does \ourtool's effectiveness compare to
+an existing SQL query inference technique (Section~\ref{sec:comparison}).
 \end{itemize}
 
 
@@ -28,53 +27,65 @@ technique (Section~\ref{sec:comparison}).
 We collected benchmarks from two sources:
 
 \begin{itemize}
-\item We picked up \textit{all} SQL exericses (\allex in total) from a
-classic database textbook~\cite{cowbook}. Exercises
-from a textbook are good resource to evaluate \ourtool's
+\item We selected \textit{all} SQL query related exericses
+(\allex in total) from a classic database textbook~\cite{cowbook}.
+All exercises are from Chapter 5, which systematically
+introduces the SQL language.
+Exercises from a textbook are good resource to evaluate \ourtool's
 generality, since such exericses are often designed to
 cover a wide range of SQL features. Some exericses
-are even designed on purpose to cover less realistic,
-corner cases in using SQL. When writing \todo{exclude
-sql update, delte}
+are even designed on purpose to cover some less realistic,
+corner cases in using SQL. As shown in Figure~\ref{tab:results},
+each textbook exercises involves at least 3 tables. It was unintuitive
+for us to write the correct query by simply looking at the problem
+description in the exercise.
 
-\item We searched SQL query-related questions raised by real-world
+\item We searched SQL query related questions raised by real-world
 database users from 3 popular online forums~\cite{stackoverflow, tutorialized, dbjournal}.
-\todo{focus on standard features, some of features, such
-questions reflect how ppl use sql in practice}
-As of April 2013, we collected \pnum forum questions related
-to writing a SQL query.
+We focused on questions related to standard SQL features
+rather than vendor-specific SQL features. We
+excluded questions that were vaguely described or obviously
+wrong, and discarded questions that had been proved
+to be unsolvable by using SQL (e.g., computing a
+transitive closure).
+We collected \pnum forum questions related to writing a SQL query.
+\todo{merge same types. exclude jdbc, why relative few}
 \end{itemize}
 
 
 
 \subsection{Evaluation Procedure}
 
-For each textbook exericse and forum question, we use
-\ourtool to solve it. If an exericse or problem has
-been associated with input-output examples,
-we directly apply \ourtool on those existing examples.
-Otherwise, we manually write some examples based
-on our understanding. To reduce the bias in writing
-examples, all examples are writting by a graduate
+We used \ourtool to solve each textbook exercise and forum
+question. If an exericse or problem had
+been associated with example input and output,
+we directly applied \ourtool on the existing example.
+Otherwise, we manually wrote some examples.
+To reduce the bias in writing
+examples, all examples are writting by a different graduate
 student from University of Washington other than
 \ourtool's developers.
 
 We checked \ourtool's correctness by comparing its
-output with the desired SQL queries. \todo{
-    some exericses have answers, but some are not.
-    If in different forms, we checked it semantic
-    equivalence.}
+output with the desired SQL queries. Specifically,
+for textbook exericses, we compared \ourtool's output with
+their correct answers, and for forum questions, we
+manually determined whether the output query can fulfill
+the query task or not.
 
 For some textbook exercises and forum questions,
 \ourtool inferred a SQL query that satisfied the input-output
 examples, but did not behave as we expected when applied
 to other inputs. We manually found another input on which the
-SQL query mis-behaved and reapplied \ourtool to the new input. We
-repeated this process until our tool inferred a desirable SQL query.
+SQL query mis-behaved and re-applied \ourtool to the new input. We
+repeated this process and recorded the number of
+interactions until \ourtool sythesized a desirable SQL query.
+
 
 Our experiments were run on a 2.67GHz Intel Core PC
 with 4GB physical memory (2GB was allocated for the JVM),
 running Windows 7.
+
 
 \begin{figure*}[t]
 \setlength{\tabcolsep}{.24\tabcolsep}
@@ -145,7 +156,7 @@ synthesized expected SQL queries for \solexnum  out of
 \todo{why the technique can work, why some problem
 can not be solved}
 
-\input{realproblem}
+%\input{realproblem}
 
 \subsubsection{Performance}
 \label{sec:performance}
@@ -195,7 +206,8 @@ We compared \ourtool with \textit{Query By Output} (QBO), a
 data-driven approach to infer SQL queries~\cite{Tran:2009}. We chose
 QBO because it is the most recent technique and also one
 of the most precise SQL query inference techniques in
-the literature. QBO uses a decision-tree-based algorithm
+the literature. QBO requires similar input as \ourtool, and
+uses a decision-tree-based algorithm
 \todo{explaining what is QBO}
 However, QBO cannot infer SQL queries using \todo{aggregates}
 
@@ -206,49 +218,58 @@ for XXX and XXX of them, respectively. QBO fails to
 sythesize desirable SQL queries for other benchmarks, because
 it \todo{the reasons}.
 
-\subsection{Initial Experience}
-
-We deployed the beta-test version of \ourtool
-to a small number of developers and have been
-using it ourselves, and refining it, since
-early May 2012. Designing and deploying \ourtool, along with
-feedback from the handful of users, has helped
-us to better understand the issues and to improve
-the tool's design.
-
-Here is one example piece of feedback from an
-external user, via private communication:
-
-\todo{some quote from users}
-
-Prior to developing \ourtool, we studied
-over 100 forum posts about common problems
-about writing correct SQL queries.
-\todo{most of them use examples}
-We anticipate that future user studies will
-identify additional strengths and weaknesses that will allow us to
-further improve \ourtool.
-
-
-
+We did not compared \ourtool with other related techniques~\cite{},
+for three reasons. \todo{reasons}
 
 \subsection{Experimental Discussion}
 
 \noindent \textbf{\textit{Limitations.}}
-The experiments indicate several limitations
-of our technique. First, XXX Second, XXX..
-\todo{fill above}
+The experiments indicate three limitations
+of our technique. First, the supported SQL
+subset may not be expressive enough to write
+database queries for certain tasks. \todo{not solved problems} As our
+future work, we plan to include more SQL features
+to the supported subset, and improve the current
+sythesis algorithm.
+Second, on some examples, the learned query
+condition, though correct, may not be accurate; and requires
+users to provide more informative examples.
+Take the example input and output in Figure~\ref{fig:rank}
+as an example, \ourtool produces a SQL
+query \CodeIn{select name from student where score > 3}
+\todo{exam}
+which perfectly satisify the examples. However, if
+the query conditoin of the desirable SQL query
+should be \CodeIn{score > 2}, users must provide
+one more record in the input table with score 3 
+to guide \ourtool to learn the correct query condition.
+Third, \ourtool requires
+users to provide noise-free input-output examples.
+Even in the presence of a small amount of user-input
+noises (e.g., a typo), \ourtool will declare failure
+when it fails to infer a valid SQL query.
+To overcome this limitation, we plan to design a more
+robust inference algorithm that can attempt to identify
+and tolerate user-input noises, and even suggest a fix
+to the noisy example.
 
 \vspace{1mm}
 \noindent \textbf{\textit{Threats to Validity.}}
 There are three major threats to validity
 in our evaluation. First, the \exnum textbook exercises
-and \pnum forum problems may not be representative. Thus,
-we can not claim the results can be generalized to an
+and \pnum forum questions, though covering
+a wide variety of SQL features, may not be representative enough.
+Thus, we can not claim the results can be generalized to an
 arbitrary scenario. Second, we only compared
-\ourtool with \todo{comparison results}. Using
-other query inference and recommendation techniques~\cite{}
-might achieve different results. Third, \todo{about user study}
+\ourtool with the \textit{Query by Output} technique~\cite{Tran:2009}.
+Using other query inference or recommendation techniques
+might achieve different results. Third, our
+experiments focus on evaluating \ourtool's generality 
+and accuracy. Even though all experiments are carried
+out by a different person other than \ourtool's developers,
+it is unknown about \ourtool's general usability for other
+end-users. To address this issue, we plan to conduct
+a user study in our future work.
 
 
 \vspace{1mm}
@@ -257,11 +278,10 @@ We have three chief findings: \textbf{(1)}
 The supported SQL subset in \ourtool is
 expressive enough to describe a variety of database queries.
 \textbf{(2)} \ourtool can efficiently synthesize desirable SQL
-queries on \todo{how many} for both textbook exercises
-and online forum problems, with a small amount of human
-effort small input-output examples.
+queries with a small amount of human
+efforts and small input-output examples.
 \textbf{(3)} \ourtool produces better results
-than existing techniques~\cite{}. \todo{edit}
+than an existing technique (\textit{Query by Output}~\cite{Tran:2009}).
 
 
 
