@@ -57,7 +57,7 @@ additional features (Section~\ref{sec:condition}).
 
 
 Recently, Sarma et al.~\cite{DasSarma:2010} studied the \textit{View Definitions Problem} (VDP).
-VDP aims to to find the most
+VDP aims to find the most
 succinct and accurate view definition, when
 the view query is restricted to a specific family of queries.
 VDP can be solved as a special case in \ourtool where there is only one
@@ -107,9 +107,9 @@ format that describes the data. Related,
 the Wrangler tool, developed in the HCI community,
 provides a visual programming-by-demonstration
 interface to table transformations for data cleaning~\cite{Kandel:2011}.
-Theses two techniques, though well-suited for tasks
-like text extraction, are inappliable to
-sythesizing a database query, since they use completely
+These two techniques, though well-suited for tasks
+like text extraction, are inapplicable to
+synthesizing  a database query, since they use completely
 different abstractions than SQL and lack the support
 for many database operations like table joining, aggregations, etc.
 %For example, while text extraction and mass editing
@@ -132,7 +132,7 @@ An excel macro can express a variety of table transformation operations
 Second, Harris and Gulwani's approach treats table cells
 as atomic units, and thus has different expressiveness
 than \ourtool. For instance, their technique can generate macros to
-transform one table to another, but can not join multiple
+transform one table to another, but cannot join multiple
 tables or group query results by certain table columns. 
 %does not support queries
 %involving conditions table joining, aggregation, or even column projection.
@@ -150,11 +150,11 @@ SQLShare~\cite{Howe:2011} is a cloud-based service that allows
 users to upload their data and SQL queries. 
 Each uploaded query is saved as a view, allowing other users
 to compose and reuse. SnipSuggest~\cite{Khoussainova:2010} is a SQL autocompletion
-system. As a user typs a query, SnipSuggest mines existing query
+system. As a user types a query, SnipSuggest mines existing query
 logs to recommend relevant clauses or SQL snippets (e.g., the table
 names for the \CodeIn{from} clause) based on the partial query that
 the user has typed so far.
-Compard to \ourtool, both SQLShare and SnipSuggest assume the
+Compared to \ourtool, both SQLShare and SnipSuggest assume the
 existence of a comprehensive query log (produced either
 by the user herself or other users)
 that contains valuable information.
@@ -174,7 +174,7 @@ to improve a database application's performance,
 rather than helping non-expert end-users
 write correct SQL queries from scratch. 
 If an end-user wishes to use their technique to 
-sythesize a SQL query, she must write a snippet of
+synthesize a SQL query, she must write a snippet of
 imperative code to describe the query task.
 Comparing to providing example input
 and output as required by \ourtool,

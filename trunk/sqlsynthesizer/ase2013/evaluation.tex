@@ -6,7 +6,7 @@ We evaluated four aspects of \ourtool's effectiveness,
 answering the following research questions:
 
 \begin{itemize}
-\item What is the success ratio of \ourtool in sythesizing
+\item What is the success ratio of \ourtool in synthesizing
 SQL queries? (Section~\ref{sec:ratio}).
 %Is the supported SQL subset expressive enough to describe a variety of queries?
 \item How long does it take for \ourtool to
@@ -27,13 +27,13 @@ existing SQL query inference techniques (Section~\ref{sec:comparison}).
 We collected benchmarks from two sources:
 
 \begin{itemize}
-\item We selected \textit{all} SQL query related exericses
+\item We selected \textit{all} SQL query related exercises
 (\allex in total) from a classic database textbook~\cite{cowbook}.
 All exercises are from Chapter 5, which systematically
 introduces the SQL language.
 Textbook exercises are good resource to evaluate \ourtool's
-generality, since such exericses are often designed to
-cover a wide range of SQL features. Some exericses
+generality, since such exercises are often designed to
+cover a wide range of SQL features. Some exercises
 are even designed on purpose to cover some less realistic,
 corner cases in using SQL. As shown in Figure~\ref{tab:results},
 each textbook exercises involves at least 3 tables. It was unintuitive
@@ -57,18 +57,18 @@ We collected \pnum recent forum questions related to writing a SQL query.
 \subsection{Evaluation Procedure}
 
 We used \ourtool to solve each textbook exercise and forum
-question. If an exericse or problem
+question. If an exercise or problem
 was associated with example input and output,
 we directly applied \ourtool on those examples.
 Otherwise, we manually wrote some example input and output.
 To reduce the bias in writing
-examples, all examples are writting by a different graduate
+examples, all examples are written by a different graduate
 student (whose research field is not database-related) from University of Washington other than
 \ourtool's developers.
 
 We checked \ourtool's correctness by comparing its
 output with the expected SQL queries. Specifically,
-for textbook exericses, we compared \ourtool's output with
+for textbook exercises, we compared \ourtool's output with
 their correct answers; for forum questions, we
 manually wrote the correct SQL query and then determined
 whether \ourtool can produce it.
@@ -81,7 +81,7 @@ examples, but did not behave as we expected when applied
 to other inputs. We manually found another input on which the
 SQL query mis-behaved and re-applied \ourtool to the new input. We
 repeated this process and recorded the number of
-interactions until \ourtool sythesized a desirable SQL query.
+interactions until \ourtool synthesized a desirable SQL query.
 
 
 All experiments were run on a 2.67GHz Intel Core PC
@@ -128,7 +128,7 @@ running Windows 7.
 \Caption{{\label{tab:results} Experimental results in synthesizing SQL queries.
 Column ``Benchmarks'' describes the characteristics of our benchmarks. Sub-column ``\#Input Tables''
 shows the number of input tables in each benchmark. Column ``\ourtool'' shows
-\ourtool's results in sythesizing SQL queries. Sub-column ``Example Size''
+\ourtool's results in synthesizing SQL queries. Sub-column ``Example Size''
 shows the number of rows in all example input and output tables.
 Sub-column ``Rank'' shows the absolute
 rank of the desirable SQL query in \ourtool's output. Sub-column ``Tool Time Cost (s)''
@@ -167,9 +167,9 @@ We measured \ourtool’s performance by recording the average
 time cost in producing a ranked list of SQL queries. 
 As shown in Figure~\ref{tab:results}, the performance of \ourtool is
 reasonable. On average, it uses less than \avgtime minutes to
-produce the results in one interative round.
+produce the results in one interactive round.
 Most of the time is spent querying the backend
-database to validate the correctness of each sythesized SQL query.
+database to validate the correctness of each synthesized  SQL query.
 %\todo{caching might be helpful}
 
 
@@ -180,7 +180,7 @@ database to validate the correctness of each sythesized SQL query.
 We measured the human efforts taken to use \ourtool in two ways.
 First, the time cost to write input-output examples. Second,
 the number of interactive rounds in invoking \ourtool
-to sythesize the desirable SQL queries.
+to synthesize the desirable SQL queries.
 
 As shown in Figure~\ref{tab:results}, human efforts
 spent in providing input-output examples are very limited:
@@ -217,7 +217,7 @@ The experimental results of QBO is shown in Figure~\ref{tab:results}
 (Column ``Query by Example''). For all \exnum database exercises
 and \pnum forum questions, QBO produces correct answers
 for XXX and XXX of them, respectively. QBO fails to
-sythesize desirable SQL queries for other benchmarks, because
+synthesize desirable SQL queries for other benchmarks, because
 it \todo{the reasons}.
 
 We did not compared \ourtool with other related techniques~\cite{},
@@ -241,7 +241,7 @@ Take the example input and output in Figure~\ref{fig:rank}
 as an example, \ourtool produces a SQL
 query \CodeIn{select name from student where score > 2}
 to satisfy the examples. However, if
-the conditoin of the expected query
+the condition of the expected query
 is \CodeIn{score > 3}, users must provide
 one more tuple in the input table, such as "Chris, 3"
 (a tuple with value ``Chris'' in the name column and ``3''

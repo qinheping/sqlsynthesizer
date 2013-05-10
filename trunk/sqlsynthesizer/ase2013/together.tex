@@ -8,7 +8,7 @@ infers a set of query skeletons from the given examples;
 infers the missing parts in each query skeleton and outputs
 a list of syntactically-valid queries that satisfy
 the provided example input and output; and (3) the ``Candidate Ranking'' step (Section~\ref{sec:ranking})
-ranks all sythesized SQL queries and place the more likely ones near the top. 
+ranks all synthesized SQL queries and place the more likely ones near the top. 
 Users can inspect the query list and select a query
 from it.
 If \ourtool produces SQL queries that satisfy the input and
@@ -35,7 +35,7 @@ Line 14 corresponds to the ``Query Ranking'' step.
 \vspace{-4mm}
 \textbf{Output}: a ranked list of SQL queries\\
 \vspace{1mm}
-sythesizeSQLQueries({$V_{old}$, $V_{new}$, $T$})\\
+synthesizeSQLQueries({$V_{old}$, $V_{new}$, $T$})\\
 \vspace{-5mm}
 \begin{algorithmic}[1]
 \STATE $\mathit{queryList}$ $\leftarrow$ an empty list\\
@@ -55,6 +55,6 @@ sythesizeSQLQueries({$V_{old}$, $V_{new}$, $T$})\\
 \RETURN $\mathit{queryList}$
 \end{algorithmic}
 \vspace{-3mm}
-\caption{Algorithm for sythesizing SQL queries from input-output examples.}
+\caption{Algorithm for synthesizing SQL queries from input-output examples.}
  \label{fig:algorithm}
 \end{figure}
