@@ -3,7 +3,6 @@
   \centering
   \includegraphics[scale=0.50]{survey}
   \vspace*{-1.0ex}\caption {{\label{fig:survey}
-  \todo{remove distinct}
   Survey results of the most widely-used SQL features
   in writing a database query. There were 12 participants
   in the survey, and each participant was asked to
@@ -11,7 +10,6 @@
   SQL features with no selection are omitted in this Figure
   for brevity.
 }}
-
 \end{figure}
 
 \newcommand{\q}{\langle query\rangle}
@@ -46,11 +44,14 @@
     & |\ \ce \;\op\; \ce \\
 \op ::= {} &\ \ \texttt{=} \;\;|\;\; \texttt{>}  \;\;|\;\; \texttt{<}\\
 \ce ::= {} &\ \ const \;\;|\;\; \column  \;\; \\
-\e ::= {} & \ce \;\;|\ count(\column) \\
-    & |\ sum(\column) \;\;|\ max(\column) \;\;|\ min(\column) 
+\e ::= {} & \ce \;\;|\ \texttt{COUNT}(\column) \;\;|\ \texttt{COUNT}(\texttt{DISTINCT}\;\column)\\
+    & |\ \texttt{SUM}(\column) \;\;|\ \texttt{MAX}(\column) \;\;|\ \texttt{MIN}(\column) 
 \end{align*}
 \normalsize%
-\caption{Syntax of the supported SQL subset in \ourtool.
+\caption{Syntax of the supported SQL subset in \ourtool:
+\textit{const} is a constant value and
+\textit{atom} is a string value, representing
+a table name or a column name.
 %This subset covers the top XXX \todo{refer to figure 2}
 %in Figure~\ref{fig:survey}
 }
@@ -61,19 +62,13 @@
 \section{A SQL Subset Supported in \ourtool}
 \label{sec:langsubset}
 
-Exact inference of queries for the whole
-SQL language from examples
-is infeasible in practice. As proved
-by Sarma et al.~\cite{DasSarma:2010}, even for
-a simplified SQL language, inferring
-a SQL query satisifying a input-output example
-pair is a PSPACE-Complete problem. To make our
-technique usuable, we need to identify a
-SQL subset using which a large class of query tasks
-can be performed, and then design an efficient
-algorithm to infer queries using that SQL subset.
-
-Unfortunately, when designing the supported SQL
+The problem of finding SQL queries satisfying
+a given input-output example pair is PSPACE-hard~\cite{DasSarma:2010}. 
+To make the problem tractable,
+insteading of supporting all features in the standard
+SQL language, \ourtool focuses on a widely-used SQL subset
+using which a large class of query tasks can be performed.
+Unfortunately, when designing the SQL
 subset, we found that no systematic
 study has ever been conducted to this end,
 and little empirical evidence has ever been provided
@@ -81,8 +76,6 @@ on which SQL features are widely-used in practice.
 Without such empirical knowledge, deciding which
 SQL subset to support remains difficult.
 
-%\todo{Existing work some existing work, that the author decided
-%the language subset. We reduce the bias of selecting features}
 
 To address this challenge and reduce our personal bias
 in language design, we first conducted an online survey
@@ -127,7 +120,7 @@ own experience in writing SQL queries in the third part of the survey.
 %make sure that the questions are relevant and clear.
 
 
-We sent out invitation to graduate mailing lists at
+We sent out invitation to the graduate mailing list at
 University of Washington, and posted our survey on
 professional online forums (e.g., StackOverflow).
 As of April 2013, we received \respnum responses.
@@ -137,58 +130,79 @@ and 5.5 years of experience in
 using database (max: 10, min: 2). In addition, two
 participants identified themselves as database professionals.
 
-Figure~\ref{fig:survey} summaries the survey results about
-the most-widely used SQL features rated by 12 participants.
+Figure~\ref{fig:survey} summaries the survey results.
+% about
+%the most-widely used SQL features rated by 12 participants.
 
 \subsection{Language Syntax}
 \label{sec:syntax}
 
-Based on the survey, we design a SQL subset
-whose syntax is shown in Figure~\ref{fig:syntax}
+Based on the survey results, we design a SQL subset
+whose syntax is shown in Figure~\ref{fig:syntax}.
+Its semantics are the same as the standard SQL language,
+and are omitted in this section for brevity.
 %shown in
 %that can contains
 %many widely-used features required by real users. 
 % shows the language syntax.
 
 
-The supported SQL subset is a subset of the SQL 93
+The supported SQL subset is a subset of the standard SQL
 language. It covers all top 10 most widely-used SQL
-features except for the \CodeIn{IN} keyword, plus
-the \CodeIn{Having} keyword in Figure~\ref{fig:survey}. 
-This SQL subset, though by means complete in writing all
+features voted by the survey participants, except for the \CodeIn{IN} keyword
+in Figure~\ref{fig:survey}.
+In addition, the SQL subset supports the \CodeIn{HAVING}
+keyword since \CodeIn{HAVING} is often used together with the \CodeIn{GROUP BY} clause.
+The SQL subset, though by means complete in writing all
 possible queries, has significantly
-enriched the SQL subset supported by many existing query inference
-work~\cite{DasSarma:2010}. In particular, our SQL subset
-supports writing queries across multiple tables,
-conjuction of query conditions, aggregate functions
+enriched the SQL subset supported by the existing query inference
+work~\cite{DasSarma:2010, Tran:2009}. Besides supporting the
+standard select-from-where queries as in~\cite{DasSarma:2010, Tran:2009},
+our SQL subset also supports table joins, aggregates
 (i.e., \CodeIn{COUNT}, \CodeIn{MAX}, \CodeIn{MIN}, and \CodeIn{AVG}),
-group by operations, and the \CodeIn{Having} clause.
+the \CodeIn{GROUP BY} clause, the \CodeIn{ORDER BY} clause,
+and the \CodeIn{HAVING} clause. For readers who are not
+familiar with the basic SQL idioms, we show an example query
+using our SQL subset in Figure~\ref{fig:queryex}, and annotate
+the elements in it.
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[scale=0.55]{queryex}
+  \vspace*{-1.0ex}\caption {{\label{fig:queryex}
+  An example query using the SQL subset defined in Figure~\ref{fig:syntax}.
+}}
 
+\end{figure}
 
 When designing this SQL subset, we only considered standard
-SQL features, and excluded
-some vendor-specific features, such as the \CodeIn{top} keyword
-which is supported in Microsoft SQLServer. 
-We discard the \CodeIn{IN} keyword since it can be replaced
-by a joining condition in most cases. For example:
-\todo{}
-We add the \CodeIn{Having} keyword because it is often used
-together with the \CodeIn{Group by} clause.
-For the unsupported features in Figure~\ref{fig:survey},
-keywords \CodeIn{Full Join}, \CodeIn{Left Join}, and \CodeIn{Right Join}
-provide special ways to join two tables, and are less
-likely to be used by non-expert users in practice.
-Keyword \CodeIn{Not Null} can be replaced
-by a condition to check whether the decorated
-column has a \CodeIn{Null} value or not.
-Keyword \CodeIn{Between} can be replaced by two
-conditions that check the value boundary. For example,
-\todo{xxx.}. Keywords \CodeIn{UNION} and \CodeIn{Not Exist}
-are often used in writing nested queries, which are
-not currently supported in \ourtool.
-Keyword \CodeIn{Like} is also not supported, since
-\todo{string matching}
+SQL features, while excluding user-defined functions and
+vendor-specific features, e.g., the \CodeIn{TOP}
+keyword supported in Microsoft SQLServer. 
+We discarded some standard SQL features, primarily for
+three reasons. First, some features are designed
+as syntactic sugar to make a SQL query easier to write;
+and thus can be safely removed without affecting a language's
+functionality. For example, the \CodeIn{BETWEEN}
+keyword checks whether a given value is within a specific
+range, and can be simply replaced by two query conditions.
+Similarly, the \CodeIn{NOT NULL} keyword is also omitted.
+%and \CodeIn{LIKE} keywords are also discarded.
+Second, some features, such as 
+\CodeIn{FULL JOIN}, \CodeIn{LEFT JOIN}, and \CodeIn{RIGHT JOIN},
+provide special ways to join tables, and are less likely to be
+used by non-expert end-users.
+Third, other features, such as \CodeIn{IN}, \CodeIn{UNION}, and \CodeIn{NOT EXIST},
+are used to write sub-queries, which are the major source
+of the PSPACE-hardness in inferring a SQL query~\cite{DasSarma:2010}.
+We exclude them in order to make the synthesis problem more tractable.
+The \CodeIn{LIKE} is also discarded, since it is used for
+string wildcard matching, and can also lead to \todo{xx}
+
+%designed for 
+%for the sake of The \CodeIn{LIKE}
+%keyword is designed for string wildcard matching rather than
+%table query. We also exclude it in the SQL subset
 
 
 
@@ -198,24 +212,22 @@ Keyword \CodeIn{Like} is also not supported, since
 
 After proposing the SQL subset in Figure~\ref{fig:syntax},
 we performed follow-up email interviews to gain
-participants' feedback about the tailored SQL
-subset. Participants were first asked to rate
+participants' feedback about it. Participants were first asked to rate
 the expressiveness of the SQL subset in Figure~\ref{fig:syntax}
+in writing real-world database queries,
 on a 6-point scale (5-completely
 sufficient; 0-not sufficient at all;
 and in-between values indicating intermediate sufficiency),
 and then to provide their comments.
 
 On average, the rating of this SQL subset is 4.5. Most of
-the participant rate it 5, or 4. Only one participant rates
-it 3, since he mistakenly thought this subset does not
-support joining multiple tables. 
+the participant rated it 5, or 4. Only one participant rated
+it 3, because this participant mis-interpreted the designed
+syntax and thought it does not support table joins.
+%One participant commented that the SQL subset did not support
+%column re-naming. However, re-naming database columns is not
+%critical in sythesizing a correct SQL query \todo{xxx}
 
-One participant commented that the SQL subset did not support
-column re-naming. However, re-naming database columns is not
-critical in sythesizing a correct SQL query \todo{xxx}
-
-Overall, based on the feedback, we think our SQL subset is
-sufficient for writing a wide range of database queries
-that most end-users would need.
-
+Overall, based on the feedback by experienced IT professionals,
+we think our SQL subset is reasonably expressive
+for writing database queries that most end-users need.

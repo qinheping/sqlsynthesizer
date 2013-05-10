@@ -3,26 +3,27 @@
 
 Figure~\ref{fig:workflow} illustrates \ourtool's workflow.
 \ourtool consists of three steps: (1) the ``Skeleton Creation'' step (Section~\ref{sec:skeleton})
-infers a partially-complete SQL query as a skeleton from the given
-examples; (2) the ``Query Completion'' step (Section~\ref{sec:completion}) 
-computes the missing parts in a query skeleton and outputs
-a list of syntactically-valid query candidates that satisfy
-the provided input-output examples; and (3) the ``Candidate Ranking'' step (Section~\ref{sec:ranking})
-ranks all sythesized SQL query candidates with the more likely ones on the top. 
-Users select the desirable SQL queries from the produced ranked query list.
+infers a set of query skeletons from the given examples;
+(2) the ``Query Completion'' step (Section~\ref{sec:completion}) 
+infers the missing parts in each query skeleton and outputs
+a list of syntactically-valid queries that satisfy
+the provided example input and output; and (3) the ``Candidate Ranking'' step (Section~\ref{sec:ranking})
+ranks all sythesized SQL queries and place the more likely ones near the top. 
+Users can inspect the query list and select a query
+from it.
 If \ourtool produces SQL queries that satisfy the input and
 output examples, but does not address the intention that the user wants;
-\ourtool can be used interactively by asking users to provide more
-informative examples and then refine the SQL queries.
+\ourtool can be used interactively by asking users to give more
+informative examples and then refine the inferred queries.
 
-Figure~\ref{fig:algorithm} sketches \ourtool's algorithm, which corresponds
-to its three steps. Line 2 corresponds to the first ``Query Skeleton
+Figure~\ref{fig:algorithm} sketches \ourtool's high-level algorithm.
+Line 2 corresponds to the first ``Query Skeleton
 Creation'' step. Lines 3 -- 13 correspond to the second ``Query Completion''
-step, in which \ourtool searches for the query conditions (line 4), aggregate
-functions (line 5), and order by columns (line 6) for each skeleton; and
-then builds a list of syntactically-correct SQL queries (line 7) and
-validates them on the examples (lines 8 -- 11).
-ine 14 corresponds to the ``Query Ranking'' step.
+step, in which \ourtool searches for the query conditions (line 4),
+aggregates (line 5), and columns in the \CodeIn{ORDER BY} clause (line 6).
+\ourtool then assembles a list of candidate SQL queries (line 7), and
+validates their correctness on the examples (lines 8 -- 11).
+Line 14 corresponds to the ``Query Ranking'' step.
 
 %the result list (line 10). Finally, the query list is sorted by using
 %the Occam's razor principle (line 14), and returned to the end-users.
@@ -45,7 +46,7 @@ sythesizeSQLQueries({$V_{old}$, $V_{new}$, $T$})\\
 \STATE $\mathit{columns}$ $\leftarrow$ searchForOrderBys($\mathit{T_O}$, $\mathit{skeleton}$, $\mathit{aggs}$)
 \STATE $\mathit{queries}$ $\leftarrow$ buildQueries($\mathit{skeleton}$, $\mathit{conds}$, $\mathit{aggs}$, $\mathit{columns}$)
 \FOR{each $\mathit{query}$ in $\mathit{queries}$}
-\IF{validateOnDatabase($\mathit{query}$, $\mathit{T_I}$, $\mathit{T_O}$)}
+\IF{isValidOnExamples($\mathit{query}$, $\mathit{T_I}$, $\mathit{T_O}$)}
 \STATE $\mathit{queryList}$.add($\mathit{query}$)
 \ENDIF
 \ENDFOR

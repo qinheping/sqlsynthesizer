@@ -3,8 +3,8 @@
 \label{sec:approach}
 
 This section first gives an overview of \ourtool's
-algorithm and workflow in Section~\ref{sec:algorithm}, and
-then explains \ourtool's 3 steps in details (Section~\ref{sec:skeleton},
+workflow and high-level algorithm in Section~\ref{sec:algorithm}, and
+then explains \ourtool's three steps in details (Section~\ref{sec:skeleton},
 Section~\ref{sec:condition}, and Section~\ref{sec:ranking}).
 
 
@@ -35,15 +35,19 @@ Section~\ref{sec:condition}, and Section~\ref{sec:ranking}).
 \noindent \textbf{Soundness and Completeness.} The \ourtool
 technique is neither sound nor complete. The primary
 reason is that several steps (e.g., the Query Skeleton Creation
-step (Section~\ref{sec:skeleton})) in it use heuristics  
-to approximate the exact solution. Such heuristics
-are necessary, since the exact inference of SQL queries
-from examples has been proved to be PSPACE-complete and would
-quickly become intractable.
-Even though \ourtool cannot gurantee to infer correct SQL queries
+step in Section~\ref{sec:skeleton}) use heuristics
+to infer possible joins, tables used in the \CodeIn{from} clause,
+and columns in the \CodeIn{select} clause.
+Such heuristics are necessary, since they provide a
+good approximate solution to the problem of finding SQL queries
+from examples, which has been proved to be
+PSPACE-hard and is thus intractable in practice.
+Although \ourtool cannot gurantee to infer correct SQL queries
 for all cases, as demonstrated in Section~\ref{sec:evaluation},
 we find \ourtool
-is still useful in sythesizing many SQL queries in practice.
+is useful in sythesizing a wide variety of queries in practice.
+
+\todo{no title}
 
 \begin{comment}
 \vspace{1mm}

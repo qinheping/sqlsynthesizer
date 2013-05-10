@@ -88,60 +88,17 @@ for the SQL inference problem.
 
 
 
-\begin{figure}[t]
-	\begin{center}
-		\begin{tabular}{|c|c|}
-		\hline
-		\textbf{$C_1$}	& \textbf{$C_2$} \\
-		\hline
-		\hline
-		2 				& 4\\
-		2 				& 1\\
-		5 				& 1 \\
-		\hline
-	\end{tabular}
-
-\vspace{5mm}
-
-	\begin{tabular}{|c|c|c|c||c|c|c|c|}
-		\hline
-        \multicolumn{8}{|c|}{Aggregation Features} \\
-		\hline
-		\hline
-        \multicolumn{4}{|c||}{Group by $C_1$} & \multicolumn{4}{|c|}{Group by $C_2$}\\
-		\hline
-        \CodeIn{COUNT} & \CodeIn{MIN} & \CodeIn{MAX} & \CodeIn{AVG} & \CodeIn{COUNT} & \CodeIn{MIN} & \CodeIn{MAX} & \CodeIn{AVG}  \\
-		\hline
-        2  & 1 & 4 & 2.5 & 1 & 2 &  2 & 2 \\
-        2 & 1 & 4 & 2.5 & 2 & 2 & 5 & 3 \\
-        1 & 1 & 1 & 1 & 2 & 2 & 5 & 3\\
-		\hline
-	\end{tabular}
-
-\vspace{5mm}
-
-    \begin{tabular}{|c|c|c|}
-		\hline
-        \multicolumn{3}{|c|}{Comparison Features} \\
-		\hline
-		\hline
-		\textbf{$C_1 = C_2$}	& \textbf{$C_1 > C_2$} & \textbf{$C_1 < C_2$}\\
-		\hline
-        0 & 0 & 1 \\
-        0 & 1 & 0 \\
-        0 & 1 & 0 \\
-		\hline
-		\end{tabular}
-	\end{center}
-	\caption{The generated comparison features
-for a table with 4 columns: $C_1$, $C_2$, $C_3$,
-and $C_4$, in which columns $C_1$ and $C_2$ are \textsf{String} type, and
-columns $C_3$ and $C_4$ are \textsf{Integer} type. Columns with
-the same type are comparable, such as $C_1$ and $C_2$, and
-$C_3$ and $C_4$.
+\begin{figure*}[t]
+    \centering
+    \includegraphics[scale=0.75]{featurex}
+	\caption{Illustration of the aggregation features and the comparison
+    features enriched by \ourtool. (Left) An example input table with
+    two columns: C1 and C2. (Center) The aggregation features enriched by
+    \ourtool for the input table. (Right) The comparison features
+    enriched by \ourtool for the input table.
 }
 	\label{tbl:com}
-\end{figure}
+\end{figure*}
 
 
 Take the joined table in Figure~\ref{fig:motivating} as an example, \ourtool
