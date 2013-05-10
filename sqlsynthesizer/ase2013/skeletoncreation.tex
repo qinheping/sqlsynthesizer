@@ -1,68 +1,74 @@
 \subsection{Query Skeleton Creation}
 \label{sec:skeleton}
 
-\todo{why need a skeleton. We divide the whole inference
-into three tasks}
+%\todo{why need a skeleton. We divide the whole inference
+%into three tasks}
 
-In this step, \ourtool performs a simple scan over
-the provided input-output examples to capture the basic
-structure of the desirable SQL query.
 
-A query skeleton is an incomplete SQL query, consisting
-of three basic parts: the table set used in the query, 
-the table columns used to join tables, and the table
-columns used to project the query results. Besides,
-other query parts, such as query conditions and
-aggregation operators, are left as unknown and will be
-determined later. \todo{the group by columns}
+A query skeleton is a partially-complete SQL query.
+It consists of three parts: the tables used in
+the query, the table columns used to join tables, and the table
+columns used to project the query results.
+Other elements in the query, such as query conditions
+and aggregate functions, will be determined in
+the next step.
 
-We next describe how \ourtool determines the table set,
-joining columns, and projection columns used in a query.
+A query skeleton captures the most basic structure of
+a SQL query; creating it is the first step of sythesizing
+a complete query. \ourtool performs a simple scan over
+the examples, and employs several heuristics to determine
+the table set, joining columns, and project columns.
+
+\todo{why heuristics. the source of PSPACE}
+
+%\item
+\vspace{1mm}
+{\textbf{Determining the Table Set.}} 
+We observe that End-users are often unwilling to provide more than enough
+input: every table in the example input
+is expected to be used (at least once) in the result query.
+Thus, we assume that every input table
+should be used in the query. 
+%By default, the table set contains all given input tables.
+On the other hand, it is possible that one input table will be
+used for multiple times in a query.
+\ourtool does not forbid this case,
+rather, it uses a heuristic
+to estimate the table set: if one column from
+an input table appears multiple times in the
+example output, we add the input table to the table set the same
+number of times.\todo{xx}
+
+The rationale behind this heuristic is that if a table column
+appears multiple times in the output, it may indiciate that the
+table would be joined multiple times.
 
 
 
 %\item
 \vspace{1mm}
-{\textbf{Determining the Table Set.}} 
-End-users are unwilling to provide more than enough
-inputs. Thus, every table in the input example
-is expected to be used in the desirable SQL query.
-Based on this observation, we assume that every input table
-should be used \textit{as least} once in the result query. 
-By default, the table set contains all given input tables.
-However, it is possible that one input table will be
-used for multiple times.
-\ourtool does not forbid this case,
-rather, it uses a heuristic
-to estimate the table set: if the \textit{same} column from
-an input table appears more than once in the
-example output, we add the input table to the table set the same
-number of times.
-
-\todo{we view it as a strong indicator that this table will be joined multiple times and add it to our table
-set $T$ using an alias}
-
-
-%\item
-%\vspace{1mm}
 %\noindent
-{\textbf{Determining Joining Columns. }} Given a set of tables,
-there are many ways to join them. Enumerating all possibilities can
-introduce a huge number of joining conditions and would quickly
-become intractable. To prune the search space, we use
-three simple but effective effective rules. 
-%based We observe that, in practice, two tables are often joined via the following
+{\textbf{Determining the Joining Columns. }} Given a set of tables,
+there are many ways to join them. Enumerating all possibilities
+leads to a huge number of joining conditions and would quickly
+become intractable. To make it feasible, we use
+three simple but effective effective rules to capture
+the most likely ways to join tables in practice.
+%based We observe that, in practice, two tables are
+%often joined via the following
 %three cases: 
 First, tables are often joined on their primary keys with
-the same data types, such as joining the \CodeIn{student} table with
-the \CodeIn{enrolled} table on the \CodeIn{student\_id} column (Figure~\ref{fig:motivating}).
-By contrast, it is unlikely to join two tables with an
-Integer column and a String column. Second, tables are often joined
-on columns with the same name, such as joining the \CodeIn{student} table
+the same data type. For example, in Figure~\ref{fig:motivating},
+the \CodeIn{student} table can be joined with the \CodeIn{enrolled}
+table on the \CodeIn{student\_id} column.
+By contrast, it is unlikely to join two tables on columns
+with different types. Second, tables are often joined
+on columns with the same name, since columns with the same name
+often such as joining the \CodeIn{student} table
 with the \CodeIn{enrolled} table on the
 \CodeIn{student\_name} column. Third, it is only meaningful
 to join two tables on columns that have the same data type and some
-overlapped values. 
+overlapped values. \todo{revise}
 
 \ourtool restricts the search space in uses the above three rules \todo{need to revise}
 
@@ -71,16 +77,18 @@ overlapped values.
 %between two arbitrary columns, and selects columns whose ``value similarity'' is above a fixed threshold as joining columns.
 \todo{need to implement above.}
 \todo{mention how many skeletons will be created}
+\todo{give an algorithm}
 
 %\item
 %\vspace{1mm}
 %\noindent 
-{\textbf{Determining Output Columns.}} For each
-column in the output table, \ourtool checks whether its name
-appears in any of the input table. If so, \ourtool uses
-the matched column from the input table as the output column.
-to the output column set. Otherwise, the output column
-must be produced by using aggregation operators.
+{\textbf{Determining the Output Columns.}} For each
+column in the output table, \ourtool first checks whether
+its column name appears in any of the input table.
+If so, \ourtool uses the matched column from the input
+table as the output column.
+Otherwise, the output column
+must be produced by using an aggregate function.
 \todo{same names}
 Consider the example in Figure~\ref{fig:motivating},
 \ourtool determines that column {\CodeIn{name}} comes from the \CodeIn{student}
@@ -94,6 +102,7 @@ table, while column {\CodeIn{max\_Score}} must be created by using an aggregatio
 
 \todo{It is possible that multiple skeleton can be created. add an algorithm here.}
 \vspace{1mm}
+
 
 
 

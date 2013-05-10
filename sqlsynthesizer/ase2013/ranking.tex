@@ -5,28 +5,38 @@
 It is possible that multiple SQL queries satisfying
 the given input-output examples will be returned.
 This may adversely impact end-users who want to
-write simple query tasks but now may require
-to provide more bits for disambiguation of their intent (which
-manifests in the need to provide more examples and more rounds
-of interaction). To alleviate this problem, we employ
+perform simple query tasks but now need
+to select the query of their intent.
+To alleviate this problem, we employ
 the Occam's razor principle, which states that the
 simplest explanation is usually the correct one, to
-rank the more likely queries higher in the output list.
-We define a comparison scheme between different
-SQL queries by defining a partial order between them. Some of
-these choices are subjective, but have been observed to work well.
+rank a more likely query higher in the output list.
+A simpler query is less likely to overfit the given examples
+than a complex query, even when both of them
+can transform the example input to the example output.
 
+
+%We define a comparison scheme between different
+%SQL queries by defining a partial order between them. Some of
+%these choices are subjective, but have been observed to work well.
 A SQL query is simpler than another one if it uses
-smaller number of query conditions (including \CodeIn{having}
-and \CodeIn{order by}) or the expressions
-in each query condition are pairwise simpler.
+fewer query conditions (including conditions in the \CodeIn{Having}
+and \CodeIn{from} clauses) or the expressions (including
+aggregates) in each query condition are pairwise simpler
+(e.g., expression \CodeIn{Count(student\_id)} is simpler than
+\CodeIn{Count(Distinct student\_id)}.
 Simpler query conditions suggests the extraction logics
 are more common and general.
 
 In our implementation, \ourtool computes a cost for each
 query, and prefers queries with lower costs. The cost
-for a SQL query is computing by summarizing the text length
-of each query condition used. Figure~\ref{fig:rank} shows an example.
+for a SQL query is computing approximately by summarizing
+the number of conditions, aggregates,
+and other expressions
+appearing in the \CodeIn{group by} and \CodeIn{order by} clauses.
+This heuristic, though fairly simple, has been observed
+to work well.
+Figure~\ref{fig:rank} shows an example.
 
 
 \begin{figure}[t]
@@ -34,12 +44,11 @@ of each query condition used. Figure~\ref{fig:rank} shows an example.
  \includegraphics[scale=0.80]{rankexample}
  \vspace{-3mm}
 \Caption{{\label{fig:rank} Illustration of \ourtool's
-query candidate ranking strategy. \ourtool produces two
+query candidate ranking heuristic. \ourtool produces two
 queries for the given input-output examples. Based on
-our heuristic (Section~\ref{sec:ranking}), the first query
+the heuristic in Section~\ref{sec:ranking}, the first query
 differs from the second query by using simpler conditions,
-and thus ranks higher (and is less likely to overfit the
-given examples).
+and thus is ranks higher.
 }}
 \end{figure}
 

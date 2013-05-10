@@ -7,14 +7,14 @@ answering the following research questions:
 
 \begin{itemize}
 \item What is the success ratio of \ourtool in sythesizing
-a variety of SQL queries? (Section~\ref{sec:ratio}).
+SQL queries? (Section~\ref{sec:ratio}).
 %Is the supported SQL subset expressive enough to describe a variety of queries?
 \item How long does it take for \ourtool to
-sythesize a SQL query (Section~\ref{sec:performance}).
+synthesize a SQL query (Section~\ref{sec:performance}).
 \item How much human effort is needed to write sufficient
-input-output examples for \ourtool in SQL sythesis (Section~\ref{sec:human}).
+input-output examples for SQL synthesis (Section~\ref{sec:human}).
 \item How does \ourtool's effectiveness compare to
-an existing SQL query inference technique (Section~\ref{sec:comparison}).
+existing SQL query inference techniques (Section~\ref{sec:comparison}).
 \end{itemize}
 
 
@@ -31,7 +31,7 @@ We collected benchmarks from two sources:
 (\allex in total) from a classic database textbook~\cite{cowbook}.
 All exercises are from Chapter 5, which systematically
 introduces the SQL language.
-Exercises from a textbook are good resource to evaluate \ourtool's
+Textbook exercises are good resource to evaluate \ourtool's
 generality, since such exericses are often designed to
 cover a wide range of SQL features. Some exericses
 are even designed on purpose to cover some less realistic,
@@ -42,13 +42,13 @@ description in the exercise.
 
 \item We searched SQL query related questions raised by real-world
 database users from 3 popular online forums~\cite{stackoverflow, tutorialized, dbjournal}.
-We focused on questions related to standard SQL features
+We focused on questions about using standard SQL features
 rather than vendor-specific SQL features. We
 excluded questions that were vaguely described or obviously
 wrong, and discarded questions that had been proved
 to be unsolvable by using SQL (e.g., computing a
 transitive closure).
-We collected \pnum forum questions related to writing a SQL query.
+We collected \pnum recent forum questions related to writing a SQL query.
 \todo{merge same types. exclude jdbc, why relative few}
 \end{itemize}
 
@@ -57,21 +57,23 @@ We collected \pnum forum questions related to writing a SQL query.
 \subsection{Evaluation Procedure}
 
 We used \ourtool to solve each textbook exercise and forum
-question. If an exericse or problem had
-been associated with example input and output,
-we directly applied \ourtool on the existing example.
-Otherwise, we manually wrote some examples.
+question. If an exericse or problem
+was associated with example input and output,
+we directly applied \ourtool on those examples.
+Otherwise, we manually wrote some example input and output.
 To reduce the bias in writing
 examples, all examples are writting by a different graduate
-student from University of Washington other than
+student (whose research field is not database-related) from University of Washington other than
 \ourtool's developers.
 
 We checked \ourtool's correctness by comparing its
-output with the desired SQL queries. Specifically,
+output with the expected SQL queries. Specifically,
 for textbook exericses, we compared \ourtool's output with
-their correct answers, and for forum questions, we
-manually determined whether the output query can fulfill
-the query task or not.
+their correct answers; for forum questions, we
+manually wrote the correct SQL query and then determined
+whether \ourtool can produce it.
+%the output query can fulfill
+%the query task or not.
 
 For some textbook exercises and forum questions,
 \ourtool inferred a SQL query that satisfied the input-output
@@ -82,7 +84,7 @@ repeated this process and recorded the number of
 interactions until \ourtool sythesized a desirable SQL query.
 
 
-Our experiments were run on a 2.67GHz Intel Core PC
+All experiments were run on a 2.67GHz Intel Core PC
 with 4GB physical memory (2GB was allocated for the JVM),
 running Windows 7.
 
@@ -225,24 +227,29 @@ for three reasons. \todo{reasons}
 
 \noindent \textbf{\textit{Limitations.}}
 The experiments indicate three limitations
-of our technique. First, the supported SQL
-subset may not be expressive enough to write
-database queries for certain tasks. \todo{not solved problems} As our
-future work, we plan to include more SQL features
-to the supported subset, and improve the current
-sythesis algorithm.
+of our technique. First, some query tasks
+cannot be formulated by our SQL subset (Section~\ref{sec:langsubset})
+due to some unsupported features, such as
+nested queries. This limitation is expected;
+and our future work
+should address this by including more SQL
+features in \ourtool.
 Second, on some examples, the learned query
-condition, though correct, may not be accurate; and requires
-users to provide more informative examples.
+conditions, though correct, are not precise
+enough; and require users to provide more informative examples.
 Take the example input and output in Figure~\ref{fig:rank}
 as an example, \ourtool produces a SQL
-query \CodeIn{select name from student where score > 3}
-\todo{exam}
-which perfectly satisify the examples. However, if
-the query conditoin of the desirable SQL query
-should be \CodeIn{score > 2}, users must provide
-one more record in the input table with score 3 
+query \CodeIn{select name from student where score > 2}
+to satisfy the examples. However, if
+the conditoin of the expected query
+is \CodeIn{score > 3}, users must provide
+one more tuple in the input table, such as "Chris, 3"
+(a tuple with value ``Chris'' in the name column and ``3''
+in the score column), while keeping the output table
+the same, 
 to guide \ourtool to learn the correct query condition.
+%Such imprecision is not caused by the limitation of
+%\ourtool; rather, it reflects.
 Third, \ourtool requires
 users to provide noise-free input-output examples.
 Even in the presence of a small amount of user-input
@@ -260,15 +267,15 @@ in our evaluation. First, the \exnum textbook exercises
 and \pnum forum questions, though covering
 a wide variety of SQL features, may not be representative enough.
 Thus, we can not claim the results can be generalized to an
-arbitrary scenario. Second, we only compared
+arbitrary use-case scenario. Second, we only compared
 \ourtool with the \textit{Query by Output} technique~\cite{Tran:2009}.
 Using other query inference or recommendation techniques
 might achieve different results. Third, our
 experiments focus on evaluating \ourtool's generality 
 and accuracy. Even though all experiments are carried
 out by a different person other than \ourtool's developers,
-it is unknown about \ourtool's general usability for other
-end-users. To address this issue, we plan to conduct
+it is unknown about \ourtool's general usability in practice.
+To address this issue, we plan to conduct
 a user study in our future work.
 
 

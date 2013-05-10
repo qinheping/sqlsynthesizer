@@ -3,21 +3,21 @@
 \label{sec:related}
 
 This section discusses two categories
-of closely-related work on reverse query processing 
+of closely-related work on reverse engineering SQL queries 
 and automated program synthesis.
 
 
-\subsection{Reverse Query Processing}
+\subsection{Reverse Engineering SQL Queries}
 
-Reverse query processing is a well-known technique in the database
+Reverse engineering SQL queries is a well-known technique in the database
 community~\cite{Zloof:1975, Tran:2009, DasSarma:2010} to
-enhance the usability of a database system. 
+enhance a database system's usability. 
 Zloof's pioneering work on \textit{Query by Example} (QBE)~\cite{Zloof:1975}
 provided a high-level query language and a
 form-based Graphical User Interface (GUI) for
 writing database queries. To use the QBE system, 
-users need to learn its query language,
-formulate a query with the language, and then fill in
+users need to learn its own query language,
+formulate a query with the language, and fill in
 the appropriate skeleton tables on the GUI.
 By contrast, \ourtool mitigates such learning curves
 by only requiring users to provide some representative
@@ -42,16 +42,17 @@ an SQL query, and the query's output (on the database); and computes
 one or more equivalent queries that produce the
 same output on the input database.
 Second, QBO can only infer simple select-project-join queries,
-while excluding many useful SQL features, such as aggregate
-functions, \CodeIn{Having} clauses, and \CodeIn{Group by}
-clauses. Thus, queries inferred by QBO cannot be applied to many of the other
-real-world cases that we studied in Section~\ref{sec:evaluation}.
-The key limitation of QBO is that it
-only considers existing data values
+while excluding many useful SQL features, such as aggregates,
+the \CodeIn{Having} clause, and the \CodeIn{Group by}
+clause. As we demonstrated in in Section~\ref{sec:evaluation},
+ queries inferred by QBO cannot be applied to many of the other
+real-world cases.
+QBO's key limitation stems from the fact that it
+only considers existing tuple values
 in the input tables as features, when learning
-a set of classification rules. 
+a set of classification rules as query conditions. 
 By contrast, \ourtool remedies this limitation by enhancing
-the existing input table values with two kinds of
+the existing tuple values with two kinds of
 additional features (Section~\ref{sec:condition}).
 
 
@@ -62,9 +63,9 @@ the view query is restricted to a specific family of queries.
 VDP can be solved as a special case in \ourtool where there is only one
 input table and one output table. Furthermore, the main contribution
 of Sarma et al's work is the complexity analysis of
-three variants of the view definitions problem, and there is no
+three variants of the view definitions problem; there is no
 tool implementation or empirical studies to evaluate
-their proposed technique.
+the proposed technique.
 
 %Compared to \ourtool, there are three key differences:
 %(1) VDP aims to infer a relation from a large representative
@@ -107,10 +108,10 @@ the Wrangler tool, developed in the HCI community,
 provides a visual programming-by-demonstration
 interface to table transformations for data cleaning~\cite{Kandel:2011}.
 Theses two techniques, though well-suited for tasks
-like text extraction or mass editing, are insufficient for
-sythesizing a database query, since they donot support
-many database operations like joining
-tables, aggregations, etc.
+like text extraction, are inappliable to
+sythesizing a database query, since they use completely
+different abstractions than SQL and lack the support
+for many database operations like table joining, aggregations, etc.
 %For example, while text extraction and mass editing
 %are quite valuable for data transformation, the above tools
 %lack other needed operations such as table joinning,
@@ -125,15 +126,17 @@ table, their system can infer an excel macro that filters,
 duplicates, and/or reorganizes table cells to generate the output table.
 \ourtool differs in multiple respects.
 First, excel macros have significantly different
-abstractions and semantics than the SQL language.
+semantics than the SQL language.
 An excel macro can express a variety of table transformation operations
 (e.g., table re-shaping), but are not capable to formulate database queries.
 Second, Harris and Gulwani's approach treats table cells
 as atomic units, and thus has different expressiveness
-than \ourtool. Their technique can generate macros to
-transform one table to another, but does not support queries
-involving table joining, aggregation, or even column projection.
-\todo{examples}
+than \ourtool. For instance, their technique can generate macros to
+transform one table to another, but can not join multiple
+tables or group query results by certain table columns. 
+%does not support queries
+%involving conditions table joining, aggregation, or even column projection.
+%\todo{examples}
 
 
 %By contrast, \ourtool provides
@@ -152,12 +155,14 @@ logs to recommend relevant clauses or SQL snippets (e.g., the table
 names for the \CodeIn{from} clause) based on the partial query that
 the user has typed so far.
 Compard to \ourtool, both SQLShare and SnipSuggest assume the
-existence of a comprehensive query log (either by the user herself or other users)
+existence of a comprehensive query log (produced either
+by the user herself or other users)
 that contains valuable information.
 %as a user articulates an increasingly larger fragment of a query.
-However, such assumption often does not hold for many database users in practice.
-\ourtool eliminates this assumption by using user-provided
-examples \todo{not completed.}
+However, such assumption often does not hold for
+many database users in practice.
+\ourtool eliminates this assumption and infers 
+SQL queries by using user-provided examples.
 
 
 Cheung et al~\cite{abs-1208-2013} presented a technique to infer SQL
@@ -167,13 +172,14 @@ like Java) that can be pushed into SQL queries.
 Compared to \ourtool, their work is designed for developers
 to improve a database application's performance,
 rather than helping non-expert end-users
-write correct SQL queries from scratch. In addition,
-\todo{If end-users wish to}
-to use their technique to sythesize a SQL query, 
-an end-user must write a snippet of imperative code to
-describe the query task. However, comparing to providing 
-example input and output as required by \ourtool, writing correct imperative code
-can be too challenging for most typical end-users, and would
+write correct SQL queries from scratch. 
+If an end-user wishes to use their technique to 
+sythesize a SQL query, she must write a snippet of
+imperative code to describe the query task.
+Comparing to providing example input
+and output as required by \ourtool,
+writing correct imperative code can be too challenging
+for a typical end-user, and thus would
 substantially degrade the technique's usability in practice.
 
 
