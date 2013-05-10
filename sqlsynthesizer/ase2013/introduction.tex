@@ -38,13 +38,13 @@ Those end-users are not professional programmers, but are experts in some
 other domains. They need to retrieve a variety of information from their
 database and use the information to support their business decisions.
 Although most end-users can clearly describe \textit{what} the task is, they
-are often stucked with the process of \textit{how} to
+are often stuck with the process of \textit{how} to
 write a correct database query (i.e., a SQL query) even after
 receiving step-by-step, detailed,
 and syntactically correct instructions.
 Thus, typical end-users often need to
 seek information from online help forums, or ask
-SQL experts. This process can be repetative, laborious, and frustrating.
+SQL experts. This process can be repetitive, laborious, and frustrating.
 To assist non-expert end-users in conducting database query tasks,
 %For them, they need an \textit{intelligent} tool
 %to assist them to perform database query tasks. 
@@ -127,11 +127,11 @@ and should not be expected, to invest.
 In this paper, we present a technique (and its tool
 implementation, called \ourtool) to automatically synthesize SQL queries
 from input-output examples\footnote{
-SQL queries in this paper refer to the read-only
+The SQL queries in this paper refer to the read-only
 database queries, which do not modify the database content.}.
 Although input-output examples may lead to
 underspecification, writing them, as opposed to writing
-declarative sepcifications or imperative code
+declarative specifications or imperative code
 of any form, is one of the most straightforward ways
 to describe \textit{what} the task is and is more
 natural for a typical end-user to use.
@@ -139,7 +139,7 @@ natural for a typical end-user to use.
 %table(s) and output table from the end-users, and then automatically
 %infers a SQL query (or multiple queries, if exist) that queries
 %against the input tables and returns the output example.
-If the sythesized SQL query is applied
+If the synthesized SQL query is applied
 to the example input, then it produces the example output; and if the
 SQL query is applied to other similar inputs (potentially much larger tables),
 then the SQL query produces a corresponding output.
@@ -181,7 +181,7 @@ language is inherently complex; a SQL query can consist
 of many parts, such as joins, aggregates,
 the \CodeIn{GROUP BY} clause, and the \CodeIn{ORDER BY} clause.
 Searching for a SQL query
-to satisify the given input-output examples,
+to satisfy the given input-output examples,
 as proved by Sarma et al.~\cite{DasSarma:2010},
 is a PSPACE-hard problem. Thus,
 a brute-force approach such as exhaustively
@@ -220,12 +220,12 @@ and expressive rules, which transform the input
 example into the output example. Then, it
 searches for possible aggregates and columns in
 the \CodeIn{ORDER BY} clause; and
-outputs a list of syntactically-valid
+outputs a list of syntactically-valid candidate
 queries. 
 
 
-\item \textbf{Solution Ranking.} If multiple SQL
-queries satisify the given input-output examples,
+\item \textbf{Candidate Ranking.} If multiple SQL
+queries satisfy the given input-output examples,
 \ourtool employs the Occam's razor principle to
 rank more likely queries higher in the output.
 \end{itemize}
@@ -240,7 +240,7 @@ an example input and output pair,
 annotations or hints of any form. 
 This distinguishes our work from competing techniques such as
 specification-based query inference~\cite{Zloof:1975} and
-query sythensis from imperative code~\cite{abs-1208-2013}.
+query synthesis from imperative code~\cite{abs-1208-2013}.
 
 \item \textbf{It supports a wide range of SQL queries.}
 Similar approaches in the literature support

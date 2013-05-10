@@ -1,4 +1,4 @@
-\subsection{Query Skeleton Creation}
+\subsection{Skeleton Creation}
 \label{sec:skeleton}
 
 %\todo{why need a skeleton. We divide the whole inference
@@ -14,7 +14,7 @@ and aggregate functions, will be determined in
 the next step.
 
 A query skeleton captures the most basic structure of
-a SQL query; creating it is the first step of sythesizing
+a SQL query; creating it is the first step of synthesizing
 a complete query. \ourtool performs a simple scan over
 the examples, and employs several heuristics to determine
 the table set, joining columns, and project columns.
@@ -40,7 +40,7 @@ example output, we add the input table to the table set the same
 number of times.\todo{xx}
 
 The rationale behind this heuristic is that if a table column
-appears multiple times in the output, it may indiciate that the
+appears multiple times in the output, it may indicate that the
 table would be joined multiple times.
 
 
@@ -52,7 +52,7 @@ table would be joined multiple times.
 there are many ways to join them. Enumerating all possibilities
 leads to a huge number of joining conditions and would quickly
 become intractable. To make it feasible, we use
-three simple but effective effective rules to capture
+three simple but effective rules to capture
 the most likely ways to join tables in practice.
 %based We observe that, in practice, two tables are
 %often joined via the following
@@ -109,7 +109,8 @@ table, while column {\CodeIn{max\_Score}} must be created by using an aggregatio
 \begin{figure}[t]
 	\centering
 		\includegraphics[width=0.45\textwidth]{sql_skeleton.pdf}
-	\caption{The SQL skeleton created for the motivating example
+        \vspace{-3mm}
+	\caption{A query skeleton created for the motivating example
 in Figure~\ref{fig:motivating}.}
 	\label{fig:skeleton}
 \end{figure}

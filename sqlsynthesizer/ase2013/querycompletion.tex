@@ -1,14 +1,17 @@
-\subsection{SQL Query Completion}
+\subsection{Query Completion}
 \label{sec:completion}
 
 
 \begin{figure*}[t]
-  \centering
-  \includegraphics[scale=0.65]{fullexample}
-  \vspace*{-1.0ex}\caption {{\label{fig:fullexample}
-  Illustration of xxx 
-}}
-
+    \centering
+    \includegraphics[scale=0.75]{featurex}
+	\caption{Illustration of the aggregation features and the comparison
+    features enriched by \ourtool. (Left) An example input table with
+    two columns: C1 and C2. (Center) The aggregation features enriched by
+    \ourtool for the input table. (Right) The comparison features
+    enriched by \ourtool for the input table.
+}
+	\label{tbl:com}
 \end{figure*}
 
 In this step, \ourtool takes as input a query skeleton, and
@@ -36,7 +39,7 @@ learning algorithm to infer a set of rules as query conditions. However,
 a key challenge to effectively employ the decision tree algorithm is how to devise
 expressive features. Existing approaches~\cite{Tran:2009} simply use
 data values in each tuple as features. Although using data values as
-features is sufficent for simple query conditions like
+features is sufficient for simple query conditions like
 ``\CodeIn{student.level = 'senior'}'' , it suffers from losing much useful \textit{structure information}
 needed in a SQL query, and fails to infer complex query conditions
 like ``\CodeIn{count(enrolled.course\_id) > 3} (after grouping by
@@ -88,16 +91,25 @@ for the SQL inference problem.
 
 
 
+
 \begin{figure*}[t]
-    \centering
-    \includegraphics[scale=0.75]{featurex}
-	\caption{Illustration of the aggregation features and the comparison
-    features enriched by \ourtool. (Left) An example input table with
-    two columns: C1 and C2. (Center) The aggregation features enriched by
-    \ourtool for the input table. (Right) The comparison features
-    enriched by \ourtool for the input table.
-}
-	\label{tbl:com}
+  \centering
+  \includegraphics[scale=0.65]{fullexample}
+  \vspace*{-5.0ex}\caption {{\label{fig:fullexample}
+  Illustration of how additional features added by \ourtool
+  helps in inferring query conditions. (a) shows \ourtool
+  enriches the original table (Left: the
+  result of joining table \CodeIn{student} with table
+  \CodeIn{enrolled} on the \CodeIn{student\_id} column)
+  with additional features. For brevity, only relevant
+  aggregation features are shown. Using the added aggregation
+  features, \ourtool infers two query conditions that
+  transform the original table into the table show in (b).
+  (c) shows the output table, which is produced by projecting the
+   table in (b)
+  on its column: name, and an aggregate: \CodeIn{MAX}(score).
+}}
+
 \end{figure*}
 
 
