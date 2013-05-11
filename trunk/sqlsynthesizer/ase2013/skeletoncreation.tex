@@ -5,124 +5,149 @@
 %into three tasks}
 
 
-A query skeleton is a partially-complete SQL query.
-It consists of three parts: the tables used in
-the query, the table columns used to join tables, and the table
-columns used to project the query results.
-Other elements in the query, such as query conditions
-and aggregate functions, will be determined in
-the next step.
+A query skeleton is a partially-complete SQL query
+used to capture the very basic structure of the result query.
+It consists of three parts: query tables,
+query join conditions, projection columns.
+To create it, \ourtool performs a simple scan over
+the examples, and uses several heuristics to determine
+each part.
+%Other elements in the query, such as query conditions
+%and aggregate functions, will be determined in
+%the next step.
 
-A query skeleton captures the most basic structure of
-a SQL query; creating it is the first step of synthesizing
-a complete query. \ourtool performs a simple scan over
-the examples, and employs several heuristics to determine
-the table set, joining columns, and project columns.
+%A query skeleton captures the most basic structure of
+%a SQL query; creating it is the first step of synthesizing
+%a complete query. \ourtool performs a simple scan over
+%the examples, and employs several heuristics to determine
+%the table set, joining columns, and project columns.
 
-\todo{why heuristics. the source of PSPACE}
+%\todo{why heuristics. the source of PSPACE}
 
 %\item
 \vspace{1mm}
-{\textbf{Determining the Table Set.}} 
-We observe that End-users are often unwilling to provide more than enough
-input: every table in the example input
-is expected to be used (at least once) in the result query.
-Thus, we assume that every input table
-should be used in the query. 
-%By default, the table set contains all given input tables.
-On the other hand, it is possible that one input table will be
-used for multiple times in a query.
-\ourtool does not forbid this case,
-rather, it uses a heuristic
-to estimate the table set: if one column from
-an input table appears multiple times in the
-example output, we add the input table to the table set the same
-number of times.\todo{xx}
+{\textbf{Determining query tables.}} 
+A typical end-user is often unwilling to provide more than enough
+example input. Thus, we assume every example input table
+should be used (at least once) in the result query.
+By default, the query tables are all example input tables.
+Yet it is possible that one input table will be
+used multiple times in a query (e.g., in the case of
+self join). \ourtool does not forbid this case;
+it uses a heuristic to estimate the query tables.
+If the same column from an input table appears $N$ ($N >$ 1) times in the
+output table, it is highly likely that the table containing
+that column will used multiple times in the query, such
+as joined with different tables.
+%be joined with other tables multiple times and forms 
+%different values on the same projection column.
+Thus, \ourtool replicates the input table $N$ times in
+the query table set.
+%the same number of times.\todo{xx}
 
-The rationale behind this heuristic is that if a table column
-appears multiple times in the output, it may indicate that the
-table would be joined multiple times.
+%The rationale behind this heuristic is that if a table column
+%appears multiple times in the output, it may indicate that the
+%table would be joined multiple times.
 
 
 
 %\item
 \vspace{1mm}
 %\noindent
-{\textbf{Determining the Joining Columns. }} Given a set of tables,
-there are many ways to join them. Enumerating all possibilities
-leads to a huge number of joining conditions and would quickly
-become intractable. To make it feasible, we use
-three simple but effective rules to capture
-the most likely ways to join tables in practice.
-%based We observe that, in practice, two tables are
-%often joined via the following
-%three cases: 
-First, tables are often joined on their primary keys with
-the same data type. For example, in Figure~\ref{fig:motivating},
-the \CodeIn{student} table can be joined with the \CodeIn{enrolled}
-table on the \CodeIn{student\_id} column.
-By contrast, it is unlikely to join two tables on columns
-with different types. Second, tables are often joined
-on columns with the same name, since columns with the same name
-often such as joining the \CodeIn{student} table
-with the \CodeIn{enrolled} table on the
-\CodeIn{student\_name} column. Third, it is only meaningful
-to join two tables on columns that have the same data type and some
-overlapped values. \todo{revise}
-
-\ourtool restricts the search space in uses the above three rules \todo{need to revise}
-
-%It is straightforward to check the first 
-%two cases to identify possible joining columns. For the third case, our technique scans the given input tables to check ``value similarity''
-%between two arbitrary columns, and selects columns whose ``value similarity'' is above a fixed threshold as joining columns.
-\todo{need to implement above.}
-\todo{mention how many skeletons will be created}
-\todo{give an algorithm}
+{\textbf{Determining join conditions. }} There
+are many ways to join all query tables; enumerating
+all possibilities may lead to a large number of
+join conditions and would quickly
+become intractable. \ourtool uses
+two rules to join two tables in 
+the most common ways in practice. For the case of
+multiple tables, \ourtool repeatedly joins
+two tables until all tables get joined.
+In the first rule, \ourtool seeks to join
+tables on columns with the
+same name and the same data type. For example,
+in Figure~\ref{fig:motivating}, the \CodeIn{student} table
+is joined with the \CodeIn{enrolled} table on the
+\CodeIn{student\_id} column, which exists in both
+tables and has the same data type.
+If such columns do not exist in between two
+query tables, \ourtool uses the second rule to
+join tables on the columns with the same data type
+(even with different names).
+For example, suppose the column name \CodeIn{student\_id}
+in the \CodeIn{student} table of Figure~\ref{fig:motivating}(a)
+is changed to \CodeIn{student\_key}, \ourtool will no longer
+find a column with the same name and data type between
+table \CodeIn{student} and table \CodeIn{enrolled}. In this case,
+\ourtool will identify three possible join conditions
+by only considering columns with the same data type:
+\CodeIn{student\_key = student\_id}, \CodeIn{student\_key = course\_id},
+and \CodeIn{student\_key = score}; and then creates 
+three skeletons, each of which uses one join condition. 
 
 %\item
 %\vspace{1mm}
 %\noindent 
-{\textbf{Determining the Output Columns.}} For each
-column in the output table, \ourtool first checks whether
-its column name appears in any of the input table.
+{\textbf{Determining projection columns.}} \ourtool
+scans each column in the output table, and checks whether
+the column name appears in any of the input tables.
 If so, \ourtool uses the matched column from the input
-table as the output column.
-Otherwise, the output column
-must be produced by using an aggregate function.
-\todo{same names}
-Consider the example in Figure~\ref{fig:motivating},
-\ourtool determines that column {\CodeIn{name}} comes from the \CodeIn{student}
-table, while column {\CodeIn{max\_Score}} must be created by using an aggregation operator.
-\todo{If there is no column name}
+table as the projection column in the skeleton.
+Otherwise, the column in the output must be produced by using an aggregate.
+Take the output table in Figure~\ref{fig:motivating} as an
+example, \ourtool identifies the \CodeIn{name} column
+is from the \CodeIn{student} table and
+the \CodeIn{max\_score} column must be created by using
+an aggregate over some column.
+
+
+Note that, if multiple columns (with the same name and data type)
+in different input tables has the same name as a column in the output table, \ourtool
+can safely uses an abitrary one; since columns with the
+same name and data type will be used in join conditions and
+are guaranteed to have the same value in the jo
+\todo{xx}
+
+
+
 %which the querying result would be projected, our technique checks whether each output
 %table column name appears in any input tables. If so, we used the matched column
 %from the input table as the output column.  Our technique keeps track of those aggregation columns
 %and search for proper aggregates in the next phase (Section~\ref{sec:agg_search}). 
-\todo{check the values in the output column}
+%\todo{check the values in the output column}
 
-\todo{It is possible that multiple skeleton can be created. add an algorithm here.}
 \vspace{1mm}
 
 
 
+%\input{featurex}
 
 \begin{figure}[t]
 	\centering
 		\includegraphics[width=0.45\textwidth]{sql_skeleton.pdf}
         \vspace{-3mm}
 	\caption{A query skeleton created for the motivating example
-in Figure~\ref{fig:motivating}.}
+in Figure~\ref{fig:motivating}. The missing parts (in red) will
+be completed in Section~\ref{sec:completion}.}
 	\label{fig:skeleton}
 \end{figure}
 
-Figure~\ref{fig:skeleton} shows the created query skeleton
-for the motivating example in Figure~\ref{fig:motivating}.
-In this skeleton,  three unknown structures represented by
-$<$Aggregation$>$ or $<$Conditions$>$ are in red, and
-will be filled in the next phase. \todo{revise text}
+
+As mentioned earlier, \ourtool can create multiple skeletons
+for a given example input-output pair. Each skeleton
+shares the same query tables and project columns, but differs
+in the join conditions.
+For the example in Figure~\ref{fig:motivating},
+\ourtool creates one query skeleton shown in Figure~\ref{fig:skeleton}.
+
+%The number of created skeletons equals to the number of
+%possible join conditions, and each skeleton only differs
+%n its join conditions.  
+%In this skeleton,  three unknown structures represented by
+%$<$Aggregation$>$ or $<$Conditions$>$ are in red, and
+%will be filled in the next phase. \todo{revise text}
 
 
-\todo{how to create group by}
 
 % which indicates aggregation and group by.
 
