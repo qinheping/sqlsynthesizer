@@ -16,10 +16,17 @@ output examples, but does not address the intention that the user wants;
 \ourtool can be used interactively by asking users to give more
 informative examples and then refine the inferred queries.
 
+Using the SQL query in Figure~\ref{fig:queryex} as an example, the ``Skeleton Creation''
+step infers its project column, query tables, and join conditions; and
+the ``Query Completion'' step infers the remaining parts (i.e., aggregates,
+query conditions, the \CodeIn{GROUP BY} clause, the
+\CodeIn{HAVING} clause, and the \CodeIn{ORDER BY} clause).
+
 Figure~\ref{fig:algorithm} sketches \ourtool's high-level algorithm.
 Line 2 corresponds to the first ``Query Skeleton
 Creation'' step. Lines 3 -- 13 correspond to the second ``Query Completion''
-step, in which \ourtool searches for the query conditions (line 4),
+step, in which \ourtool searches for the query conditions (line 4)\footnote{
+Including conditions used in the \CodeIn{HAVIGN} clause.},
 aggregates (line 5), and columns in the \CodeIn{ORDER BY} clause (line 6).
 \ourtool then assembles a list of candidate SQL queries (line 7), and
 validates their correctness on the examples (lines 8 -- 11).
