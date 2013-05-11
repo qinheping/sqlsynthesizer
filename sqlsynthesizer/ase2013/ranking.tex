@@ -4,13 +4,15 @@
 
 It is possible that multiple SQL queries satisfying
 the given input-output examples will be returned.
-This may adversely impact end-users who want to
-perform simple query tasks but now need
-to select the query of their intent.
-To alleviate this problem, we employ
+To help end-users select their expected queries,
+\ourtool ranks more likely queries higher in the output.
+%This may adversely impact end-users who want to
+%perform simple query tasks but now need
+%to select the query of their intent.
+%To alleviate this problem, 
+Specifically, \ourtool employs
 the Occam's razor principle, which states that the
-simplest explanation is usually the correct one, to
-rank a more likely query higher in the output list.
+simplest explanation is usually the correct one.
 A simpler query is less likely to overfit the given examples
 than a complex query, even when both of them
 can transform the example input to the example output.
@@ -22,10 +24,10 @@ can transform the example input to the example output.
 A SQL query is simpler than another one if it uses
 fewer query conditions (including conditions in the \CodeIn{Having}
 and \CodeIn{from} clauses) or the expressions (including
-aggregates) in each query condition are pairwise simpler
-(e.g., expression \CodeIn{Count(student\_id)} is simpler than
+aggregates) in each query condition or clause are pairwise simpler.
+For example, expression \CodeIn{Count(student\_id)} is simpler than
 \CodeIn{Count(Distinct student\_id)}.
-Simpler query conditions suggests the extraction logics
+Simpler query conditions and expressions often suggest the extraction logics
 are more common and general.
 
 In our implementation, \ourtool computes a cost for each
@@ -33,8 +35,8 @@ query, and prefers queries with lower costs. The cost
 for a SQL query is computing approximately by summarizing
 the number of conditions, aggregates,
 and other expressions
-appearing in the \CodeIn{group by} and \CodeIn{order by} clauses.
-This heuristic, though fairly simple, has been observed
+appearing in the \CodeIn{GROUP BY} and \CodeIn{ORDER BY} clauses.
+This heuristic has been observed
 to work well.
 Figure~\ref{fig:rank} shows an example.
 
@@ -48,7 +50,7 @@ query candidate ranking heuristic. \ourtool produces two
 queries for the given input-output examples. Based on
 the heuristic in Section~\ref{sec:ranking}, the first query
 differs from the second query by using simpler conditions,
-and thus is ranks higher.
+and thus is ranked higher.
 }}
 \end{figure}
 

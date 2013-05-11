@@ -5,10 +5,10 @@
 %into three tasks}
 
 
-A query skeleton is a partially-complete SQL query
-used to capture the very basic structure of the result query.
+A query skeleton is a partially-completed SQL query
+that captures the basic structure of the result query.
 It consists of three parts: query tables,
-query join conditions, projection columns.
+join conditions, and projection columns.
 To create it, \ourtool performs a simple scan over
 the examples, and uses several heuristics to determine
 each part.
@@ -29,15 +29,15 @@ each part.
 {\textbf{Determining query tables.}} 
 A typical end-user is often unwilling to provide more than enough
 example input. Thus, we assume every example input table
-should be used (at least once) in the result query.
+is used (at least once) in the result query.
 By default, the query tables are all example input tables.
 Yet it is possible that one input table will be
 used multiple times in a query (e.g., in the case of
 self join). \ourtool does not forbid this case;
 it uses a heuristic to estimate the query tables.
 If the same column from an input table appears $N$ ($N >$ 1) times in the
-output table, it is highly likely that the table containing
-that column will used multiple times in the query, such
+output table, it is highly likely that the input table containing
+that column will be used multiple times in the query, such
 as joined with different tables.
 %be joined with other tables multiple times and forms 
 %different values on the same projection column.
@@ -59,25 +59,26 @@ are many ways to join all query tables; enumerating
 all possibilities may lead to a large number of
 join conditions and would quickly
 become intractable. \ourtool uses
-two rules to join two tables in 
-the most common ways in practice. For the case of
+two rules to determine join conditions between two tables.
+%the most common ways in practice.
+In the case of
 multiple tables, \ourtool repeatedly joins
 two tables until all tables get joined.
-In the first rule, \ourtool seeks to join
-tables on columns with the
+First, \ourtool seeks to join
+tables on the columns with the
 same name and the same data type. For example,
 in Figure~\ref{fig:motivating}, the \CodeIn{student} table
 is joined with the \CodeIn{enrolled} table on the
 \CodeIn{student\_id} column, which exists in both
 tables and has the same data type.
-If such columns do not exist in between two
-query tables, \ourtool uses the second rule to
+If such columns do not exist,
+\ourtool uses the second rule to
 join tables on the columns with the same data type
 (even with different names).
 For example, suppose the column name \CodeIn{student\_id}
 in the \CodeIn{student} table of Figure~\ref{fig:motivating}(a)
 is changed to \CodeIn{student\_key}, \ourtool will no longer
-find a column with the same name and data type between
+find a column with the same name and data type in
 table \CodeIn{student} and table \CodeIn{enrolled}. In this case,
 \ourtool will identify three possible join conditions
 by only considering columns with the same data type:
@@ -90,7 +91,7 @@ three skeletons, each of which uses one join condition.
 %\noindent 
 {\textbf{Determining projection columns.}} \ourtool
 scans each column in the output table, and checks whether
-the column name appears in any of the input tables.
+the column name appears in an input table.
 If so, \ourtool uses the matched column from the input
 table as the projection column in the skeleton.
 Otherwise, the column in the output must be produced by using an aggregate.
@@ -101,12 +102,12 @@ the \CodeIn{max\_score} column must be created by using
 an aggregate over some column.
 
 
-Note that, if multiple columns (with the same name and data type)
-in different input tables has the same name as a column in the output table, \ourtool
-can safely uses an abitrary one; since columns with the
-same name and data type will be used in join conditions and
-are guaranteed to have the same value in the jo
-\todo{xx}
+%Note that, if multiple columns (with the same name and data type)
+%in different input tables has the same name as a column in the output table, \ourtool
+%can safely uses an abitrary one; since columns with the
+%same name and data type will be used in join conditions and
+%are guaranteed to have the same value in the jo
+%\todo{xx}
 
 
 
@@ -133,10 +134,11 @@ be completed in Section~\ref{sec:completion}.}
 \end{figure}
 
 
-As mentioned earlier, \ourtool can create multiple skeletons
-for a given example input-output pair. Each skeleton
-shares the same query tables and project columns, but differs
-in the join conditions.
+For an example input and output pair,
+depending on the number of join conditions,
+\ourtool may create multiple skeletons,
+each of which shares the same query tables and
+projection columns, but differs in the join condition.
 For the example in Figure~\ref{fig:motivating},
 \ourtool creates one query skeleton shown in Figure~\ref{fig:skeleton}.
 
