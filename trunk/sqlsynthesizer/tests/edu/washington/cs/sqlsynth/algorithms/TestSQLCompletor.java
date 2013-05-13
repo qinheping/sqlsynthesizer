@@ -50,6 +50,8 @@ public class TestSQLCompletor extends TestCase {
 			System.out.println(t.toString());
 		}
 		System.out.println("Number of tables: " + tables.size());
+		System.out.println("The skeleton: ");
+		System.out.println(skeleton);
 		
 //		if(tables != null) {
 //			return;
