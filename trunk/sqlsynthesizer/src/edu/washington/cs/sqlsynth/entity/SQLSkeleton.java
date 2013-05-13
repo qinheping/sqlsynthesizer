@@ -156,6 +156,11 @@ public class SQLSkeleton {
 		sb.append("(");
 		int count = 0;
 		for(Pair<TableColumn, TableColumn> p : this.joinColumns) {
+			if(TableUtils.USE_SAME_NAME_JOIN) {
+				if(!p.a.getColumnName().equals(p.b.getColumnName())) {
+					continue;
+				}
+			}
 			if(count != 0) {
 				sb.append(" and ");
 			}
@@ -190,11 +195,12 @@ public class SQLSkeleton {
 			sb.append("\t");
 		}
 		sb.append(Globals.lineSep);
-		sb.append("Join column pairs: ");
-		for(Pair<TableColumn, TableColumn> p : this.joinColumns) {
-			sb.append(p.a.getFullName() + " join " + p.b.getFullName());
-			sb.append("\t");
-		}
+		sb.append("Join column pairs: (after filtering) ");
+		sb.append(this.getAllJoinConditions());
+//		for(Pair<TableColumn, TableColumn> p : this.joinColumns) {
+//			sb.append(p.a.getFullName() + " join " + p.b.getFullName());
+//			sb.append("\t");
+//		}
 		sb.append(Globals.lineSep);
 		sb.append("Output columns: ");
 		for(int index : this.getProjectColumns().keySet()) {
