@@ -277,6 +277,98 @@ public class TestSQLCompletor extends TestCase {
 		}
 	}
 	
+	public void test5_1_7()
+	{	
+		TableUtils.USE_SAME_NAME_JOIN = true;
+		TableUtils.JOIN_ALL_TABLES = true;
+		DbConnector.NO_ORDER_MATCHING = true;
+		
+		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_7/student");
+		
+		TableInstance output = TableInstanceReader.readTableFromFile("./dat/5_1_7/output");
+		
+		Collection<TableInstance> inputs = new LinkedList<TableInstance>();
+		inputs.add(input1);
+		SQLSkeletonCreator creator = new SQLSkeletonCreator(inputs, output);
+		SQLSkeleton skeleton = creator.inferSQLSkeleton();
+		
+		List<TableInstance> tables = skeleton.computeJoinTableWithoutUnmatches();
+		
+		for(TableInstance t : tables) {
+			System.out.println(t.toString());
+		}
+		System.out.println("Number of tables: " + tables.size());
+		
+		
+		System.out.println("input 1:");
+		System.out.println(input1);
+		
+		System.out.println("number of join columns: " + skeleton.getJoinPairNum());
+		
+		SQLQueryCompletor completor = new SQLQueryCompletor(skeleton);
+		completor.addInputTable(input1);
+		completor.setOutputTable(output);
+		
+		List<SQLQuery> queries = completor.inferSQLQueries();
+		System.out.println("number of inferred queries: " + queries.size());
+		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+		System.out.println();
+		queries = completor.validateQueriesOnDb(queries);
+		//after validating on my sql
+		System.out.println("The final output....");
+		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+	}
+	
+	
+	public void test5_1_8()
+	{	
+		TableUtils.USE_SAME_NAME_JOIN = true;
+		TableUtils.JOIN_ALL_TABLES = true;
+		DbConnector.NO_ORDER_MATCHING = true;
+		
+		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_8/student");
+		
+		TableInstance output = TableInstanceReader.readTableFromFile("./dat/5_1_8/output");
+		
+		Collection<TableInstance> inputs = new LinkedList<TableInstance>();
+		inputs.add(input1);
+		SQLSkeletonCreator creator = new SQLSkeletonCreator(inputs, output);
+		SQLSkeleton skeleton = creator.inferSQLSkeleton();
+		
+		List<TableInstance> tables = skeleton.computeJoinTableWithoutUnmatches();
+		
+		for(TableInstance t : tables) {
+			System.out.println(t.toString());
+		}
+		System.out.println("Number of tables: " + tables.size());
+		
+		
+		System.out.println("input 1:");
+		System.out.println(input1);
+		
+		System.out.println("number of join columns: " + skeleton.getJoinPairNum());
+		
+		SQLQueryCompletor completor = new SQLQueryCompletor(skeleton);
+		completor.addInputTable(input1);
+		completor.setOutputTable(output);
+		
+		List<SQLQuery> queries = completor.inferSQLQueries();
+		System.out.println("number of inferred queries: " + queries.size());
+		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+		System.out.println();
+		queries = completor.validateQueriesOnDb(queries);
+		//after validating on my sql
+		System.out.println("The final output....");
+		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+	}
 	
 
 	public void test5_1_3()
