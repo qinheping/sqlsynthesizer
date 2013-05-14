@@ -15,7 +15,7 @@
 \label{sec:example}
 
 We use an example, described below, to illustrate the use
-of \ourtool. The example is taken fromexample described a classic
+of \ourtool. The example is taken from a classic
 database textbook~\cite{cowbook} (Chapter 5, Exercise 1)
 and has been simplified for illustration purpose\footnote{
 This exercise defines 2 tables: \CodeIn{student}
@@ -34,20 +34,20 @@ enrolled in more than 2 courses.}
 Despite the simplicity of the problem description,
 writing a correct SQL query  can be non-trivial for a typical
 end-user. An end-user must carefully choose the
-right SQL features to use them correctly
+right SQL features and use them correctly
 to fullfil the described task.
 %Although most users can clearly understand the
 %question, they must choose the right SQL
 %features and use them correctly.
 
-As an alternative, users can use our \ourtool technique to obtain
+As an alternative, users can use \ourtool to obtain
 the desirable query.
 As illustrated in Figure~\ref{fig:motivating},
 to use \ourtool, an end-user only needs to provide it with
 some small, representative example input and output tables
 (Figures~\ref{fig:motivating}(a) and~\ref{fig:motivating}(c)).
 Then, \ourtool works in a fully-automatic, push-button
-way in inferring a SQL query that satisfies the given
+way to infer a SQL query that satisfies the given
 example input and output.
 
  %illustrate in Figure~\ref{fig:motivating}, an alternative
@@ -57,7 +57,7 @@ example input and output.
 
 The SQL query, shown in Figure~\ref{fig:motivating}(b),
 first joins two tables on the common \CodeIn{student\_id} column,
-and then groups the joined result by the \CodeIn{student\_id}
+and then groups the joined results by the \CodeIn{student\_id}
 column. Further, the query selects all senior
 students (using a query condition in the \CodeIn{WHERE}
 clause) who are enrolled in more than 2 courses

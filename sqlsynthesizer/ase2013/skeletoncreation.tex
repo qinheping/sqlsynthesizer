@@ -5,7 +5,7 @@
 %into three tasks}
 
 
-A query skeleton is a partially-completed SQL query
+A query skeleton is an incomplete SQL query
 that captures the basic structure of the result query.
 It consists of three parts: query tables,
 join conditions, and projection columns.
@@ -36,9 +36,9 @@ used multiple times in a query (e.g., in the case of
 self join). \ourtool does not forbid this case;
 it uses a heuristic to estimate the query tables.
 If the same column from an input table appears $N$ ($N >$ 1) times in the
-output table, it is highly likely that the input table containing
-that column will be used multiple times in the query, such
-as joined with different tables.
+output table, it is highly likely that the input table
+will be used multiple times in the query, such
+as being joined with different tables.
 %be joined with other tables multiple times and forms 
 %different values on the same projection column.
 Thus, \ourtool replicates the input table $N$ times in
@@ -56,16 +56,15 @@ the query table set.
 %\noindent
 {\textbf{Determining join conditions. }} There
 are many ways to join all query tables; enumerating
-all possibilities may lead to a large number of
-join conditions and would quickly
-become intractable. \ourtool uses
+all possibilities may yield a large number of
+join conditions and quickly become intractable. \ourtool uses
 two rules to determine join conditions between two tables.
 %the most common ways in practice.
 In the case of
 multiple tables, \ourtool repeatedly joins
 two tables until all tables get joined.
 First, \ourtool seeks to join
-tables on the columns with the
+tables on columns with the
 same name and the same data type. For example,
 in Figure~\ref{fig:motivating}, the \CodeIn{student} table
 is joined with the \CodeIn{enrolled} table on the
@@ -73,7 +72,7 @@ is joined with the \CodeIn{enrolled} table on the
 tables and has the same data type.
 If such columns do not exist,
 \ourtool uses the second rule to
-join tables on the columns with the same data type
+join tables on columns with the same data type
 (even with different names).
 For example, suppose the column name \CodeIn{student\_id}
 in the \CodeIn{student} table of Figure~\ref{fig:motivating}(a)
@@ -137,8 +136,8 @@ be completed in Section~\ref{sec:completion}.}
 For an example input and output pair,
 depending on the number of join conditions,
 \ourtool may create multiple skeletons,
-each of which shares the same query tables and
-projection columns, but differs in the join condition.
+which share the same query tables and
+projection columns, but differ in the join condition.
 For the example in Figure~\ref{fig:motivating},
 \ourtool creates one query skeleton shown in Figure~\ref{fig:skeleton}.
 

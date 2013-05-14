@@ -10,11 +10,11 @@ To help end-users select their expected queries,
 %perform simple query tasks but now need
 %to select the query of their intent.
 %To alleviate this problem, 
-Specifically, \ourtool employs
+To do so, \ourtool employs
 the Occam's razor principle, which states that the
 simplest explanation is usually the correct one.
 A simpler query is less likely to overfit the given examples
-than a complex query, even when both of them
+than a complex one, even when both of them
 can transform the example input to the example output.
 
 
@@ -22,22 +22,24 @@ can transform the example input to the example output.
 %SQL queries by defining a partial order between them. Some of
 %these choices are subjective, but have been observed to work well.
 A SQL query is simpler than another one if it uses
-fewer query conditions (including conditions in the \CodeIn{Having}
-and \CodeIn{from} clauses) or the expressions (including
+fewer query conditions (including conditions in the \CodeIn{HAVING}
+and \CodeIn{FROM} clauses) or the expressions (including
 aggregates) in each query condition or clause are pairwise simpler.
-For example, expression \CodeIn{Count(student\_id)} is simpler than
-\CodeIn{Count(Distinct student\_id)}.
+For example, expression \CodeIn{COUNT(student\_id)} is simpler than
+\CodeIn{COUNT(DISTINCT student\_id)}.
 Simpler query conditions and expressions often suggest the extraction logics
 are more common and general.
 
 In our implementation, \ourtool computes a cost for each
 query, and prefers queries with lower costs. The cost
-for a SQL query is computing approximately by summarizing
-the number of conditions, aggregates,
+for a SQL query is computed by summarizing
+the costs of all conditions, aggregates,
 and other expressions
 appearing in the \CodeIn{GROUP BY} and \CodeIn{ORDER BY} clauses.
-This heuristic has been observed
-to work well.
+(The cost of each condition, aggregate and expression
+is approximated by its length.)
+%This heuristic has been observed
+%to work well.
 Figure~\ref{fig:rank} shows an example.
 
 

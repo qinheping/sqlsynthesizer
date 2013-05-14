@@ -8,16 +8,17 @@ creates a set of query skeletons from the given examples;
 infers the missing parts in each query skeleton and outputs
 a list of syntactically-valid queries that satisfy
 the provided example input and output; and (3) the ``Candidate Ranking'' step (Section~\ref{sec:ranking})
-ranks all synthesized SQL queries and place the more likely ones near the top. 
+ranks all synthesized SQL queries and places the more likely ones near the top. 
 Users can inspect the query list and select an expected query
 from it.
 If the synthesized SQL queries satisfy the example input and
-output, but do not address the intention that the user wants;
-\ourtool can be used interactively by getting more
-informative examples from the end-user and then refining the result queries.
+output, but do not address the user's intention,
+\ourtool can be used interactively by requesting more
+informative examples from the end-user and then
+update the result queries.
 
 Take the query in Figure~\ref{fig:queryex} as an example,
-for each SQL query, the ``Skeleton Creation''
+the ``Skeleton Creation''
 step infers its projection columns, query tables, and join conditions; and
 the ``Query Completion'' step infers the remaining parts (i.e., aggregates,
 query conditions, the \CodeIn{GROUP BY} clause, the
@@ -43,7 +44,7 @@ Line 14 corresponds to the ``Query Ranking'' step.
 \vspace{-4mm}
 \textbf{Output}: a ranked list of SQL queries\\
 \vspace{1mm}
-synthesizeSQLQueries({$V_{old}$, $V_{new}$, $T$})\\
+synthesizeSQLQueries({$T_{I}$, $T_{o}$})\\
 \vspace{-5mm}
 \begin{algorithmic}[1]
 \STATE $\mathit{queryList}$ $\leftarrow$ an empty list\\
