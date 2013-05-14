@@ -5,9 +5,13 @@
 The big data revolution over the past few years has resulted
 in significant advances in digitization of massive amounts
 of data and accessibility of computational devices to massive
-proportions of the population. A key challenge faced by many
-enterprise and computer end-users nowadays is the management
-of their increasingly large and complex databases.
+proportions of the population. There is a growing population
+of non-expert database end-users, who need to perform
+analysis on their databases, but have limited programming knowledge.
+
+%A key challenge faced by many
+%enterprise and computer end-users nowadays is the management
+%of their increasingly large and complex databases.
 %, which can contain
 %hundreds and even thousands of tables. 
 
@@ -21,15 +25,8 @@ of their increasingly large and complex databases.
 %\noindent \textbf{\textit{Motivation.}}
 Although the relational database management system (RDBMS) and the
 de facto query language (SQL) are perfectly adequate for most end-users'
-needs~\cite{Howe:2011}, the costs associated with deployment and
-use of database software and SQL are prohibitive. 
-For example, as pointed out in~\cite{Gray:2005},
-conventional RDBMS software remains underused
-in the long tail of science: a large number of users, such as the
-research scientists who are in relatively small labs and individual
-researchers, have limited IT training, staff and infrastructure yet
-they collectively produce a large bulk of scientific knowledge. 
-
+needs, 
+the costs associated with use of database and SQL are non-trivial~\cite{Howe:2011}. 
 The problem is exacerbated by the fact that many end-users
 have myriad diverse backgrounds including 
 business analysts, commodity traders, human resource managers,
@@ -43,15 +40,15 @@ write a correct database query (i.e., a SQL query).
 % even after
 %receiving step-by-step, detailed,
 %and syntactically correct instructions.
-Non-expert end-users often need to
+Thus, non-expert end-users often need to
 seek information from online help forums, or ask
 SQL experts. This process can be repetitive, laborious, and frustrating.
-To assist non-expert end-users in conducting database query tasks,
+To assist non-expert end-users in performing database query tasks,
 %For them, they need an \textit{intelligent} tool
 %to assist them to perform database query tasks. 
 a highly accessible tool that can be used to ``describe''
 their needs and ``connect'' their intentions to executable
-SQL queries would be highly desirable.
+SQL queries would be valuable. %highly desirable.
 
 %simply can not get the SQL query correct,
 %either due to the syntax complexity of the SQL language itself,
@@ -109,7 +106,7 @@ serve as a fully expressive medium  for
 communicating a user's intention to a database. However, 
 general programming languages have never been easy for
 end-users who are not professional programmers.  Learning
-a practical programming language (even a simplified, high-level domain
+a practical programming language (even a simplified domain
 specific language, such as MDX~\cite{mdx}) often requires a substantial amount
 of time and energy that a typical end-user would not prefer,
 and should not be expected, to invest. 

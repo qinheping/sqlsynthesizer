@@ -59,7 +59,7 @@ column in the joined table, \ourtool first tries
 to group all tuples by \textit{each} tuple's
 value, and then applies every applicable aggregate\footnote{
 \CodeIn{COUNT}, \CodeIn{COUNT DISTINCT}, \CodeIn{MAX},
-\CodeIn{MIN}, and \CodeIn{AVG} for a numeric type column;
+\CodeIn{MIN}, \CodeIn{SUM}, and \CodeIn{AVG} for a numeric type column;
 and \CodeIn{COUNT}, and \CodeIn{COUNT DISTINCT} for
 a string type column} to each of the
  \textit{remaining} columns to compute the corresponding aggregation result. 
@@ -108,11 +108,11 @@ example in Figure~\ref{fig:motivating}.
 \begin{figure*}[t]
   \centering
   \includegraphics[scale=0.65]{fullexample}
-  \vspace*{-5.0ex}\caption {{\label{fig:fullexample}
+  \vspace*{-3.0ex}\caption {{\label{fig:fullexample}
   Illustration of how additional features added by \ourtool
   helps in inferring query conditions for the example in Figure~\ref{fig:motivating}.
   (a) shows \ourtool
-  enriches the original table (Left: the
+  enriches the original tuple values (Left: the
   result of joining table \CodeIn{student} with table
   \CodeIn{enrolled} on the \CodeIn{student\_id} column)
   with additional features. For brevity, only relevant
@@ -129,19 +129,20 @@ example in Figure~\ref{fig:motivating}.
 
 
 \ourtool next divides the learned conditions into two disjoint parts,
-and places each part into the appropriate clause.
+and places each part to the appropriate clause.
 Specifically, \ourtool places conditions
 using aggregates to the \CodeIn{HAVING}
 clause, and places other conditions to the \CodeIn{WHERE} clause.
 This is based on the SQL language's specification:
 query conditions using aggregates are valid only when they
-are used \textit{after} the \CodeIn{GROUP BY} clause.
+are used \textit{together with} the \CodeIn{GROUP BY} clause
+and \textit{inside} the \CodeIn{HAVING} clause.
 Take the conditions inferred in Figure~\ref{fig:fullexample}
-as an example, \ourtool puts the query
+as an example, \ourtool places the query
 condition: \CodeIn{student.level =`senior'}
 in the \CodeIn{WHERE} clause,
-puts condition: \CodeIn{COUNT(enrolled.course\_id) > 2}
-in the \CodeIn{HAVING} clause, and puts
+places condition: \CodeIn{COUNT(enrolled.course\_id) > 2}
+in the \CodeIn{HAVING} clause, and places 
 column \CodeIn{student\_id} to the \CodeIn{GROUP BY} clause.
 
 
@@ -173,7 +174,7 @@ or \CodeIn{COUNT DISTINCT} aggregates, or
 using the \CodeIn{MAX} aggregate over a column of integer type.
 On the other hand, some aggregates cannot be applied on
 table columns of certain types. For example, the \CodeIn{AVG}
-aggregate cannot be applied to columns of string type.
+and \CodeIn{SUM} aggregates cannot be applied to columns of string type.
 \ourtool encodes such knowledge to prune the search space.
 %avoid unnecessary search.
 

@@ -32,8 +32,7 @@ example input. Thus, we assume every example input table
 is used (at least once) in the result query.
 By default, the query tables are all example input tables.
 Yet it is possible that one input table will be
-used multiple times in a query (e.g., in the case of
-self join). \ourtool does not forbid this case;
+used multiple times in a query. \ourtool does not forbid this case;
 it uses a heuristic to estimate the query tables.
 If the same column from an input table appears $N$ ($N >$ 1) times in the
 output table, it is highly likely that the input table
@@ -57,12 +56,11 @@ the query table set.
 {\textbf{Determining join conditions. }} There
 are many ways to join all query tables; enumerating
 all possibilities may yield a large number of
-join conditions and quickly become intractable. \ourtool uses
-two rules to determine join conditions between two tables.
-%the most common ways in practice.
-In the case of
-multiple tables, \ourtool repeatedly joins
-two tables until all tables get joined.
+join conditions and is feasible in practice. 
+To determine the most likely join conditions among them,
+\ourtool uses two rules to repeatedly join
+two different tables in the query tables,
+until all tables get joined.
 First, \ourtool seeks to join
 tables on columns with the
 same name and the same data type. For example,
@@ -93,11 +91,11 @@ scans each column in the output table, and checks whether
 the column name appears in an input table.
 If so, \ourtool uses the matched column from the input
 table as the projection column in the skeleton.
-Otherwise, the column in the output must be produced by using an aggregate.
+Otherwise, the output column must be created by using an aggregate.
 Take the output table in Figure~\ref{fig:motivating} as an
-example, \ourtool identifies the \CodeIn{name} column
+example, \ourtool determines that the \CodeIn{name} column
 is from the \CodeIn{student} table and
-the \CodeIn{max\_score} column must be created by using
+the \CodeIn{max\_score} column is created by using
 an aggregate over some column.
 
 
