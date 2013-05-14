@@ -23,7 +23,7 @@ formulate a query with the language, and fill in
 the appropriate skeleton tables on the GUI.
 By contrast, \ourtool mitigates such learning curves
 by only requiring users to provide some representative
-examples to describe their query intentions
+examples to describe their intentions
 
   %In other words, to derive a SQL query with the QBE system,
 %end-users must learn a new query formulation language
@@ -45,17 +45,18 @@ one or more equivalent queries that produce the
 same output on the input database.
 Second, QBO can only infer simple select-project-join queries,
 while excluding many useful SQL features, such as aggregates,
-the \CodeIn{Having} clause, and the \CodeIn{Group by}
-clause. As we demonstrated in in Section~\ref{sec:evaluation},
- queries inferred by QBO cannot be applied to many of the other
-real-world cases.
-QBO's key limitation stems from the fact that it
+the \CodeIn{HAVING} clause, and the \CodeIn{GROUP BY}
+clause. As we demonstrated in Section~\ref{sec:evaluation},
+QBO cannot infer queries for many use-case scenarios.
+Its key limitation stems from the fact that it
 only considers existing tuple values
-in the input tables as features, when learning
-a set of classification rules as query conditions. 
-By contrast, \ourtool remedies this limitation by enhancing
+in the input tables as features when learning
+query conditions. 
+By contrast, as shown in Section~\ref{sec:condition},
+\ourtool addresses this limitation by enhancing
 the existing tuple values with two kinds of
-additional features (Section~\ref{sec:condition}).
+additional features, and thus is able to learn more
+complex conditions.
 
 
 Recently, Sarma et al.~\cite{DasSarma:2010} studied the \textit{View Definitions Problem} (VDP).
@@ -96,13 +97,13 @@ in some underlying language from specifications that can range
 from logical declarative specifications to examples or
 demonstrations~\cite{Harris:2011, singh:2012, Gulwani:2011,
 Kandel:2011, Fisher08Pads,Lau:2003:PDU, Lau:2000:VSA, Barbosa:2010:MLA, Arasu:2009:LST}.
-It has been used recently for many applications
-such as synthesis of efficient low-level code~\cite{Solar-Lezama:2005},
-data structure manipulations~\cite{Fisher:2008},
-geometry constructions~\cite{Gulwani:2011:SGC},
-snippets of excel macros~\cite{Harris:2011},
-relational data representations~\cite{Barbosa:2010:MLA, Arasu:2009:LST} and string
-expressions~\cite{singh:2012, Gulwani:2011}.
+It has been used recently for many applications.
+%such as synthesis of efficient low-level code~\cite{Solar-Lezama:2005},
+%data structure manipulations~\cite{Fisher:2008},
+%geometry constructions~\cite{Gulwani:2011:SGC},
+%snippets of excel macros~\cite{Harris:2011},
+%relational data representations~\cite{Barbosa:2010:MLA, Arasu:2009:LST} and string
+%expressions~\cite{singh:2012, Gulwani:2011}.
 
 
 The PADS~\cite{Fisher:2008} system takes a large sample
@@ -112,10 +113,17 @@ the Wrangler tool, developed in the HCI community,
 provides a visual programming-by-demonstration
 interface to table transformations for data cleaning~\cite{Kandel:2011}.
 These two techniques, though well-suited for tasks
-like text extraction, are inapplicable to
-synthesizing  a database query, since they use completely
-different abstractions than SQL and lack the support
-for many database operations like table joining, aggregations, etc.
+like text extraction, cannot be used to 
+synthesize a database query.
+This is because text extraction tasks
+use completely different abstractions than a database query task,
+and the existing tools lack the support for many database operations
+such as joins and aggregation.
+
+%text extraction tasks
+%use completely different abstractions than a database query. and lack the support
+%for many database operations like table joining, aggregations, etc.
+
 %For example, while text extraction and mass editing
 %are quite valuable for data transformation, the above tools
 %lack other needed operations such as table joinning,
@@ -127,7 +135,7 @@ Harris and Gulwani described a system for learning excel
 spreadsheet transformation macros from an example
 input-output pair~\cite{Harris:2011}. Given one input table and one output
 table, their system can infer an excel macro that filters,
-duplicates, and/or reorganizes table cells to generate the output table.
+duplicates, and/or re-organizes table cells to generate the output table.
 \ourtool differs in multiple respects.
 First, excel macros have significantly different
 semantics than the SQL language.
@@ -137,7 +145,7 @@ Second, Harris and Gulwani's approach treats table cells
 as atomic units, and thus has different expressiveness
 than \ourtool. For instance, their technique can generate macros to
 transform one table to another, but cannot join multiple
-tables or group query results by certain table columns. 
+tables or aggregate query results by certain table columns. 
 %does not support queries
 %involving conditions table joining, aggregation, or even column projection.
 %\todo{examples}
@@ -149,18 +157,17 @@ tables or group query results by certain table columns.
 
 
 Some recent work proposed query recommendations systems to reduce
-the obstacles to using relational databases~\cite{Howe:2011, Khoussainova:2010}. 
+the obstacles to using databases~\cite{Howe:2011, Khoussainova:2010}. 
 SQLShare~\cite{Howe:2011} is a cloud-based service that allows
 users to upload their data and SQL queries. 
 Each uploaded query is saved as a view, allowing other users
 to compose and reuse. SnipSuggest~\cite{Khoussainova:2010} is a SQL autocompletion
 system. As a user types a query, SnipSuggest mines existing query
 logs to recommend relevant clauses or SQL snippets (e.g., the table
-names for the \CodeIn{from} clause) based on the partial query that
+names for the \CodeIn{FROM} clause) based on the partial query that
 the user has typed so far.
 Compared to \ourtool, both SQLShare and SnipSuggest assume the
-existence of a comprehensive query log (produced either
-by the user herself or other users)
+existence of a comprehensive query log
 that contains valuable information.
 %as a user articulates an increasingly larger fragment of a query.
 However, such assumption often does not hold for
@@ -182,9 +189,9 @@ synthesize a SQL query, she must write a snippet of
 imperative code to describe the query task.
 Comparing to providing example input
 and output as required by \ourtool,
-writing correct imperative code can be too challenging
+writing correct imperative code is too challenging
 for a typical end-user, and thus would
-substantially degrade the technique's usability in practice.
+substantially degrade the technique's usability.
 
 
 %also cite this~\cite{Cheung:2012:UPS}, combining machine learning with program synthesis.

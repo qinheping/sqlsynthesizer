@@ -7,7 +7,7 @@
   in writing a database query. There were 12 participants
   in the survey, and each participant was asked to
   select the top 10 widely-used SQL features.
-  SQL features with no selection are omitted in this Figure
+  SQL features with no vote are omitted in this Figure
   for brevity.
 }}
 \end{figure}
@@ -62,11 +62,12 @@ a table name or a column name.
 \section{A SQL Subset Supported in \ourtool}
 \label{sec:langsubset}
 
-The problem of finding SQL queries satisfying
-an example input and output pair is PSPACE-hard~\cite{DasSarma:2010}. 
-To make it tractable,
-instead of supporting all features in the standard
-SQL language, \ourtool focuses on a widely-used SQL subset
+%The problem of finding a SQL query satisfying
+%an example input and output pair is PSPACE-hard~\cite{DasSarma:2010}. 
+%To make it tractable,
+%instead of supporting all features in the standard
+%SQL language, 
+\ourtool focuses on a widely-used SQL subset
 using which a large class of query tasks can be performed.
 Unfortunately, when designing the SQL
 subset, we found that no empirical
@@ -103,13 +104,13 @@ to confirm whether our design would be sufficient in practice.
 Our online survey consists of 6 questions that can be
 divided into three parts. The first part includes
 simple demographic questions about participants.
-In the second part, participants were asked to select
+In the second part, participants are asked to select
 the top 10 most widely-used SQL features in their minds.
 Instead of directly asking participants about the SQL
 features, which might be vague and difficult to respond,
-we presented them a list of \textit{all} standard
+we present them a list of \textit{all} standard
 SQL features in writing a query.
-Additionally, participants were asked to report their 
+Additionally, participants are asked to report their 
 own experience in using SQL in the third part of the survey.
 
 %Before distributing our survey, we conducted pilot
@@ -124,7 +125,7 @@ We sent out invitation to the graduate students at
 University of Washington, and posted our survey on
 professional online forums (e.g., StackOverflow).
 As of April 2013, we received \respnum responses.
-On average, the respondents have 9.5 years of experience
+On average, the respondents had 9.5 years of experience
 in software development (max: 15, min: 5),
 and 5.5 years of experience in
 using database (max: 10, min: 2). In addition, two
@@ -137,7 +138,8 @@ Figure~\ref{fig:survey} summaries the survey results.
 \label{sec:syntax}
 
 Based on the survey results, we design a subset
-of the standard SQL language, and show its syntax in Figure~\ref{fig:syntax}.
+of the standard SQL language, whose
+syntax is shown in Figure~\ref{fig:syntax}.
 %Its semantics are the same as the standard SQL language,
 %and are omitted here for brevity.
 %shown in
@@ -151,9 +153,9 @@ features voted by the survey participants
 in Figure~\ref{fig:survey}, except for the \CodeIn{IN} keyword.
 In addition, the SQL subset supports the \CodeIn{HAVING}
 keyword since \CodeIn{HAVING} is often used together with the \CodeIn{GROUP BY} clause.
-Our SQL subset, though by means complete in writing all
+Our SQL subset, though by no means complete in writing all
 possible queries, has significantly
-enriched the SQL subset supported by the existing query inference
+enriched the SQL subsets supported by the existing query inference
 work~\cite{DasSarma:2010, Tran:2009}. Besides being able to write the
 standard select-from-where queries as in~\cite{DasSarma:2010, Tran:2009},
 our SQL subset also supports table joins, aggregates
@@ -185,9 +187,14 @@ used by non-expert end-users.
 Third, other features, such as \CodeIn{IN}, \CodeIn{UNION}, and \CodeIn{NOT EXIST},
 are used to write sub-queries or nested queries, which are the major source
 of the PSPACE-hardness in query inference~\cite{DasSarma:2010}.
-Similarly, the \CodeIn{LIKE} keyword is used for string pattern matching
-and can introduce unmanageable overhead during inference. 
-We exclude them for the sake of tractability.
+Similarly, the \CodeIn{LIKE} keyword is used for string
+wildcard matching; inferring its matching
+patterns can be expensive. Thus, 
+for the sake of efficiency. we exclude all these keywords.
+
+%would quickly become intractable during 
+%pattern matching
+%and can introduce unmanageable overhead during inference. 
 %in order to make the synthesis problem more tractable.
 
 %is also discarded, since it is used for
@@ -207,14 +214,14 @@ We exclude them for the sake of tractability.
 After proposing the SQL subset in Figure~\ref{fig:syntax},
 we performed follow-up email interviews to gain
 participants' feedback about it. Participants were first asked to rate
-the practical usefulness of the SQL subset in Figure~\ref{fig:syntax}
+the sufficiency of the SQL subset in Figure~\ref{fig:syntax}
 in writing real-world database queries,
 on a 6-point scale (5-completely
 sufficient; 0-not sufficient at all;
 and in-between values indicating intermediate sufficiency),
 and then to provide their comments.
 
-The average rating the proposed SQL subset is 4.5. Most of
+The average rating of the proposed SQL subset is 4.5. Most of
 the participants rated it 5, or 4. Only one participant rated
 it 3, because this participant misinterpreted the language
 syntax and thought it does not support table joins.

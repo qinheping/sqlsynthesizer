@@ -17,18 +17,18 @@ of their increasingly large and complex databases.
 
 
 %\subsection{End-users' Difficulties in Writing SQL Queries}
-\vspace{1mm}
-\noindent \textbf{\textit{Motivation.}}
+%\vspace{1mm}
+%\noindent \textbf{\textit{Motivation.}}
 Although the relational database management system (RDBMS) and the
-de facto language (SQL) are perfectly adequate for most end-users'
+de facto query language (SQL) are perfectly adequate for most end-users'
 needs~\cite{Howe:2011}, the costs associated with deployment and
 use of database software and SQL are prohibitive. 
 For example, as pointed out in~\cite{Gray:2005},
 conventional RDBMS software remains underused
-in the long tail of science: the large number of users, such as the
+in the long tail of science: a large number of users, such as the
 research scientists who are in relatively small labs and individual
 researchers, have limited IT training, staff and infrastructure yet
-collectively produce the bulk of scientific knowledge. 
+they collectively produce a large bulk of scientific knowledge. 
 
 The problem is exacerbated by the fact that many end-users
 have myriad diverse backgrounds including 
@@ -87,11 +87,11 @@ SQL queries would be highly desirable.
 
 \vspace{1mm}
 \noindent \textbf{\textit{Existing solutions.}}
-\textit{Graphical User Interfaces} (GUIs) and \textit{general programming languages}
+\textit{Graphical User Interfaces} (GUIs) and \textit{programming languages}
 are two state-of-the-art approaches in helping end-users perform
 database queries. However, both approaches are far from satisfactory.
 
-Many RDBMS come with a well-designed GUI with tons of features.
+Many RDBMS come with a well-designed GUI with lots of features.
 However, 
 %as a database management system often comes with tons
 %of features, end-users struggle to find the correct feature or
@@ -103,11 +103,11 @@ as a GUI supports more and more customization features, users
 may struggle to discover those features, which can significantly
 degrade its usability. 
 
-General programming languages, such as SQL,
+Programming languages, such as SQL,
 Java (with JDBC), or other domain specific query languages, 
 serve as a fully expressive medium  for
 communicating a user's intention to a database. However, 
-general purpose programming languages have never been easy for
+general programming languages have never been easy for
 end-users who are not professional programmers.  Learning
 a practical programming language (even a simplified, high-level domain
 specific language, such as MDX~\cite{mdx}) often requires a substantial amount
@@ -142,8 +142,9 @@ for end-users to describe \textit{what} the task is.
 %against the input tables and returns the output example.
 If the synthesized SQL query is applied
 to the example input, then it produces the example output; and if the
-SQL query is applied to other similar inputs (potentially much larger tables),
-then the SQL query produces a corresponding output.
+synthesized SQL query is applied to other
+similar inputs (potentially much larger tables),
+then it produces a corresponding output.
 
 
 %\ourtool uses such input-output examples
@@ -163,14 +164,14 @@ multiple, huge database tables by constructing small, representative
 input and output example tables. 
 We also envision \ourtool to be useful in an online education
 setting (i.e., an online database course). Recently, several
-education initiatives such as EdX, Coursera,
-and Udacity are teaming up with experts to provide
+education initiatives such as EdX~\cite{edx}, Coursera~\cite{coursera},
+and Udacity~\cite{udacity} are teaming up with experts to provide
 high quality online courses
 to several thousands of students worldwide.
 One challenge, which is not present in a traditional classroom
-setting, is to provide answers on questions raised by a large
+setting, is to provide answers to questions raised by a large
 number of students. A tool, like \ourtool,
-that has the potential of answer SQL query related questions
+that has the potential of answering SQL query related questions
 would be useful.
 %preferrable in \todo{teaching a database course.}
 %helping end-users writing a wide range of SQL queries.
@@ -189,7 +190,7 @@ a brute-force approach such as exhaustively
 enumerating all
 syntactically-valid SQL queries and then
 filtering away those do not satisfy the examples
-would quickly become intractable in practice. 
+becomes intractable in practice. 
 Second, a SQL query has a rich set of operations: it
 needs to be evaluated on \textit{multiple} input tables;
 it needs to perform data grouping, selection, and ordering
@@ -200,7 +201,8 @@ All such operations must be inferred properly and efficiently.% This requires \t
 %re-shapes one input table to one output table~\cite{Harris:2011},
 
 
-To make example-based SQL query synthesis feasible in practice,
+To address these challenges and make example-based
+SQL query synthesis feasible in practice,
 our \ourtool technique focuses on a widely-used SQL subset (Section~\ref{sec:langsubset}),
 and uses three steps to link a user's intention to
 a desirable query (Section~\ref{sec:approach}):
@@ -210,19 +212,18 @@ a desirable query (Section~\ref{sec:approach}):
 \begin{itemize}
 \item \textbf{Skeleton Creation.} \ourtool scans the
 given input-output examples and heuristically
-determine the table joins and projection columns in
+determines the table joins and projection columns in
 the result query. Then, it creates an
 incomplete SQL query (called, query skeleton) to
 capture the basic structure of the result query.
 
 \item \textbf{Query Completion.} \ourtool
 uses a machine learning algorithm to infer a set of accurate
-and expressive rules, which transform the input
+and expressive rules, which transforms the input
 example into the output example. Then, it
 searches for possible aggregates and columns in
 the \CodeIn{ORDER BY} clause; and then
-builds a list of syntactically-valid candidate
-queries. 
+builds a list candidate queries. 
 
 
 \item \textbf{Candidate Ranking.} If multiple SQL
@@ -245,7 +246,7 @@ query synthesis from imperative code~\cite{abs-1208-2013}.
 
 \item \textbf{It supports a wide range of SQL queries.}
 Similar approaches in the literature support
-a small subset of the SQL language; most of them
+a small subset of the SQL language; and most of them
 can only infer simple select-from-where
 queries on a single table~\cite{Zloof:1975, DasSarma:2010, Tran:2009, DasSarma:2010, abs-1208-2013}. By contrast, 
 \ourtool significantly enriches the supported SQL subset.
@@ -274,8 +275,7 @@ the \CodeIn{ORDER BY} clause, and the \CodeIn{HAVING} clause.
 We evaluated \ourtool's generality and accuracy
 in two aspects. First, we used \ourtool to solve
 \exnum SQL exercises from a classic database textbook~\cite{cowbook}. 
-Textbook exercises are good resource
-to evaluate \ourtool's generality, since they
+We used textbook exercises because they
 are often designed to cover a wide range of SQL features.
 Some exercises are even designed on purpose to cover some less realistic,
 corner cases in using SQL.
@@ -290,7 +290,7 @@ for \solexnum out of \exnum textbook exercises and
 all \pnum forum problems, within a very
 small amount of time (\avgtime minute per exercise or problem, on average).
 \ourtool's accuracy and speed make it an attractive
-approach to help for end-users to use.% write SQL queries.
+tool for end-users to use.% write SQL queries.
 
 %\subsection{Contributions}
 

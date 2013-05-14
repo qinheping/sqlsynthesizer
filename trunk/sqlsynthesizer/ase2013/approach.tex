@@ -5,7 +5,7 @@
 This section first gives an overview of \ourtool's
 workflow and high-level algorithm in Section~\ref{sec:algorithm}, and
 then explains \ourtool's three steps in details (Section~\ref{sec:skeleton},
-Section~\ref{sec:condition}, and Section~\ref{sec:ranking}).
+Section~\ref{sec:completion}, and Section~\ref{sec:ranking}).
 
 
 
@@ -20,7 +20,10 @@ Section~\ref{sec:condition}, and Section~\ref{sec:ranking}).
 
 \input{together}
 
+\input{featurex}
+
 \input{skeletoncreation}
+
 
 \input{querycompletion}
 
@@ -40,8 +43,8 @@ to infer possible joins, tables used in the \CodeIn{from} clause,
 and columns in the \CodeIn{select} clause.
 Such heuristics are necessary, since they provide a
 good approximate solution to the problem of finding SQL queries
-from examples, which has been proved to be
-PSPACE-hard and is thus intractable in practice.
+from examples. %, which has been proved to be
+%PSPACE-hard and is thus intractable in practice.
 Although \ourtool cannot guarantee to infer correct SQL queries
 for all cases, as demonstrated in Section~\ref{sec:evaluation},
 we find \ourtool

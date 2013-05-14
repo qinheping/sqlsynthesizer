@@ -38,7 +38,7 @@ are even designed on purpose to cover some less realistic,
 corner cases in using SQL. As shown in Figure~\ref{tab:results},
 each textbook exercises involves at least 3 tables. It was unintuitive
 for us to write the correct query by simply looking at the problem
-description in the exercise.
+description.
 
 \item We searched SQL query related questions raised by real-world
 database users from 3 popular online forums~\cite{stackoverflow, tutorialized, dbjournal}.
@@ -62,16 +62,18 @@ was associated with example input and output,
 we directly applied \ourtool on those examples.
 Otherwise, we manually wrote some example input and output.
 To reduce the bias in writing
-examples, all examples are written by a different graduate
-student (whose research field is not database-related) from University of Washington other than
+examples, all examples are written by a graduate
+student (whose research field is not database-related) from University of Washington rather than
 \ourtool's developers.
 
 We checked \ourtool's correctness by comparing its
-output with the expected SQL queries. Specifically,
-for textbook exercises, we compared \ourtool's output with
+output with the expected SQL queries.
+For textbook exercises, we compared \ourtool's output with
 their correct answers; for forum questions, we
-manually wrote the correct SQL query and then determined
-whether \ourtool can produce it.
+manually wrote the correct SQL query and then
+compared it with \ourtool's output.
+%determined
+%whether \ourtool can produce it.
 %the output query can fulfill
 %the query task or not.
 
@@ -81,7 +83,7 @@ examples, but did not behave as we expected when applied
 to other inputs. We manually found another input on which the
 SQL query mis-behaved and re-applied \ourtool to the new input. We
 repeated this process and recorded the number of
-interactions until \ourtool synthesized a desirable SQL query.
+interactions until \ourtool synthesized a correct SQL query.
 
 
 All experiments were run on a 2.67GHz Intel Core PC
@@ -181,7 +183,7 @@ for three reasons. \todo{reasons}
 The experiments indicate three limitations
 of our technique. First, some query tasks
 cannot be formulated by our SQL subset (Section~\ref{sec:langsubset})
-due to some unsupported features, such as
+due to unsupported features, such as
 nested queries. This limitation is expected;
 and our future work
 should address this by including more SQL
@@ -195,10 +197,10 @@ query \CodeIn{select name from student where score > 2}
 to satisfy the examples. However, if
 the condition of the expected query
 is \CodeIn{score > 3}, users must provide
-one more tuple in the input table, such as "Chris, 3"
-(a tuple with value ``Chris'' in the name column and ``3''
+one more tuple to the input table, such as "Chris, 3"
+(a tuple with ``Chris'' in the name column and ``3''
 in the score column), while keeping the output table
-the same, 
+unchanged, 
 to guide \ourtool to learn the correct query condition.
 %Such imprecision is not caused by the limitation of
 %\ourtool; rather, it reflects.
@@ -225,7 +227,7 @@ Using other query inference or recommendation techniques
 might achieve different results. Third, our
 experiments focus on evaluating \ourtool's generality 
 and accuracy. Even though all experiments are carried
-out by a different person other than \ourtool's developers,
+out by a different person rather than \ourtool's developers,
 it is unknown about \ourtool's general usability in practice.
 To address this issue, we plan to conduct
 a user study in our future work.
@@ -235,7 +237,7 @@ a user study in our future work.
 \noindent \textbf{\textit{Experimental Conclusions.}}
 We have three chief findings: \textbf{(1)}
 The supported SQL subset in \ourtool is
-expressive enough to describe a variety of database queries.
+able to describe a variety of database queries.
 \textbf{(2)} \ourtool can efficiently synthesize desirable SQL
 queries with a small amount of human
 efforts and small input-output examples.

@@ -1,15 +1,21 @@
+
+
 \subsection{Query Completion}
 \label{sec:completion}
 
-\input{featurex}
 
-In this step, \ourtool completes the missing query conditions, the
-\CodeIn{GROUP BY} and \CodeIn{HAVING} clause (Section~\ref{sec:condition}),
-aggregates (Section~\ref{sec:agg_search}), and
-the \CodeIn{ORDER BY} clause (Section~\ref{sec:orderby})
-in each query skeleton, and
+In this step, \ourtool completes the missing parts
+in each query skeleton, and then
 outputs a list of SQL queries
-that satisfy the given example input and output.
+that satisfy the given example input and output pair.
+
+% query conditions, the
+%\CodeIn{GROUP BY} and \CodeIn{HAVING} clause (Section~\ref{sec:condition}),
+%aggregates (Section~\ref{sec:agg_search}), and
+%the \CodeIn{ORDER BY} clause (Section~\ref{sec:orderby})
+%in each query skeleton, and
+%outputs a list of SQL queries
+%that satisfy the given example input and output pair.
 
 
 %The SQL skeleton produced by the first step, though incomplete,
@@ -23,13 +29,12 @@ that satisfy the given example input and output.
 \ourtool casts the problem of \textit{inferring query conditions} as
  \textit{learning appropriate rules} that can perfectly divide a search space
 into a positive part and a negative part. In our context, the search space
-is all tuples from joining all query tables; the positive part
+is all tuples from joining query tables; the positive part
 includes all tuples in the output table; and the negative part includes the rest
 tuples.
 
 The standard way for rule learning is using a decision-tree-based
-algorithm. However, how to design a good feature set
-becomes a key challenge.
+algorithm. However, the key challenge is how to design a good feature set.
 Existing approaches~\cite{Tran:2009} simply use
 tuple values in the input table(s) as features, 
 and limits their abilities in inferring more
@@ -42,8 +47,7 @@ or conditions comparing values of two table columns
 (e.g., \CodeIn{enrolled.course\_id > enrolled.score}).
 
 
-
-\ourtool addresses this challenge by adding two types of
+To address this challenge, \ourtool adds two types of
 additional features to each tuple, and uses
 the existing tuple values together with the additional features
 for rule learning.
@@ -51,14 +55,14 @@ for rule learning.
 \begin{itemize}
 
 \item {\textbf{Aggregation Features}}. For each
-column in an input table, \ourtool tries
+column in the joined table, \ourtool first tries
 to group all tuples by \textit{each} tuple's
-value, and then applies every applicable aggregate (i.e.,
+value, and then applies every applicable aggregate\footnote{
 \CodeIn{COUNT}, \CodeIn{COUNT DISTINCT}, \CodeIn{MAX},
 \CodeIn{MIN}, and \CodeIn{AVG} for a numeric type column;
 and \CodeIn{COUNT}, and \CodeIn{COUNT DISTINCT} for
-a string type column) to every
- \textit{other} column to compute the aggregation result. 
+a string type column} to each of the
+ \textit{remaining} columns to compute the corresponding aggregation result. 
 The ``Aggregation Features'' part in Figure~\ref{fig:features}
 shows an example.
 
@@ -82,21 +86,16 @@ shows an example.
 %Using both tuple values and the enhanced features,
 \ourtool employs a variant of the decision tree algorithm,
 called PART~\cite{Frank:1998}, to learn a set of rules
-as query conditions.
-PART has two notable advantages over the
-original decision tree algorithm~\cite{Quinlan:1986}.
-First, it uses a ``divide-and-conquer'' strategy to incrementally
-build rules and remove data instances (i.e., tuples) that have already been covered until
-no more data instances are left, and thus is faster.
-Second, PART consumes less memory, since it builds a decision
-tree incrementally, prunes falsified branches on-the-fly,
-and only keeps the minimal tree structure in memory.
-
-Using additional features added by \ourtool, a learning
-algorithm like PART is able to discover rules that are
+as query conditions. We choose PART
+because it uses a ``divide-and-conquer'' strategy to 
+build rules incrementally, and thus is faster
+and consumes less memory than
+the original decision tree algorithm~\cite{Quinlan:1986}.
+Using additional features added by \ourtool, the
+PART algorithm is able to discover rules that are
 hard to identify by merely using the original tuple values as features.
 Figure~\ref{fig:fullexample} shows how such additional features
-help in rule learning for the motivating
+help in learning rules for the motivating
 example in Figure~\ref{fig:motivating}.
 
 
@@ -129,11 +128,11 @@ example in Figure~\ref{fig:motivating}.
 \end{figure*}
 
 
-\ourtool next divides the learnt conditions into two disjoint parts:
-and put each part into the appropriate place.
-Specifically, \ourtool puts conditions
+\ourtool next divides the learned conditions into two disjoint parts,
+and places each part into the appropriate clause.
+Specifically, \ourtool places conditions
 using aggregates to the \CodeIn{HAVING}
-clause; and puts other conditions to the \CodeIn{WHERE} clause.
+clause, and places other conditions to the \CodeIn{WHERE} clause.
 This is based on the SQL language's specification:
 query conditions using aggregates are valid only when they
 are used \textit{after} the \CodeIn{GROUP BY} clause.
@@ -154,32 +153,34 @@ column \CodeIn{student\_id} to the \CodeIn{GROUP BY} clause.
 \label{sec:agg_search}
 
 For every column in the output table that has no matched
-column in the input tables,
-\ourtool repeatedly applies each aggregate on
-every input table column; and then outputs the aggregate (with the
-input table column) that produces the same output 
-in the output table. To speed up the exhaustive search,
+column in the input table(s),
+\ourtool searches for the desirable aggregate by
+repeatedly applying each aggregate on
+every input table column; and then checking whether
+the aggregate (with the input table column) produces the same output 
+as in the output table. To speed up the exhaustive search,
 \ourtool uses two sound heuristics to filter away infeasible
 combinations.
 
 
 \begin{itemize}
 \item \ourtool only applies an aggregate
-to its \textit{type-compatible} table column. Specifically,
+to its \textit{type-compatible} table columns. Specifically,
 the data values in an output column must be compatible with an
-aggregator's return type. For instance, if an output column
+aggregate's return type. For instance, if an output column
 contains float values, it cannot be produced by using the \CodeIn{COUNT}
-or \CodeIn{COUNT DISTINCT} aggregators, or 
-using the \CodeIn{MAX} aggregator over a column with integer type.
+or \CodeIn{COUNT DISTINCT} aggregates, or 
+using the \CodeIn{MAX} aggregate over a column of integer type.
 On the other hand, some aggregates cannot be applied on
-table columns with certain types. For example, the \CodeIn{AVG}
-aggregate cannot be applied to columns with string type.
-%\ourtool encodes such knowledge to avoid unnecessary search.
+table columns of certain types. For example, the \CodeIn{AVG}
+aggregate cannot be applied to columns of string type.
+\ourtool encodes such knowledge to prune the search space.
+%avoid unnecessary search.
 
 \item \ourtool checks whether each value in the output
 column has appeared in the input table. If not, the
 output column cannot be produced by using
-using the \CodeIn{MAX} or \CodeIn{MIN} aggregator.
+the \CodeIn{MAX} or \CodeIn{MIN} aggregate.
 %such as \CodeIn{MAX} and \CodeIn{min},
 %is used, each value in the output column must has appeared in the input table.
 \end{itemize}
@@ -197,9 +198,9 @@ table is produced by using the \CodeIn{MAX(score)} aggregate.
 \label{sec:orderby}
 \ourtool scans the values of each column in the output table. If
 the data values in a column are sorted, \ourtool
-append the column name to the \CodeIn{ORDER BY} clause.
+appends the column name to the \CodeIn{ORDER BY} clause.
 
 For the output table in Figure~\ref{fig:motivating}, \ourtool
 determines no column should be added to the \CodeIn{ORDER BY} clause,
-since either output column is sorted.
+since neither output column is sorted.
 
