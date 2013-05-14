@@ -159,7 +159,7 @@ enriched the SQL subsets supported by the existing query inference
 work~\cite{DasSarma:2010, Tran:2009}. Besides being able to write the
 standard select-from-where queries as in~\cite{DasSarma:2010, Tran:2009},
 our SQL subset also supports table joins, aggregates
-(i.e., \CodeIn{COUNT}, \CodeIn{MAX}, \CodeIn{MIN}, and \CodeIn{AVG}),
+(e.g., \CodeIn{COUNT}, \CodeIn{MAX}, \CodeIn{MIN}, and \CodeIn{AVG}),
 the \CodeIn{GROUP BY} clause, the \CodeIn{ORDER BY} clause,
 and the \CodeIn{HAVING} clause. For readers who are not
 familiar with the basic SQL idioms, we show an example query
@@ -188,9 +188,10 @@ Third, other features, such as \CodeIn{IN}, \CodeIn{UNION}, and \CodeIn{NOT EXIS
 are used to write sub-queries or nested queries, which are the major source
 of the PSPACE-hardness in query inference~\cite{DasSarma:2010}.
 Similarly, the \CodeIn{LIKE} keyword is used for string
-wildcard matching; inferring its matching
+wildcard matching; determining its matching
 patterns can be expensive. Thus, 
-for the sake of efficiency. we exclude all these keywords.
+for the sake of inference efficiency, we exclude all these keywords.
+\todo{xx}
 
 %would quickly become intractable during 
 %pattern matching
@@ -230,8 +231,10 @@ syntax and thought it does not support table joins.
 %critical in sythesizing a correct SQL query \todo{xxx}
 
 Overall, based on the feedback by experienced IT professionals,
-we think our SQL subset contains adequate SQL features
-in writing database queries that most end-users need.
+we think our SQL subset is usable
+for end-users in writing common database queries.
+%contains adequate SQL features
+%in writing database queries that most end-users need.
 
 \begin{figure}[t]
   \centering
