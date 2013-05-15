@@ -30,6 +30,8 @@ public class SQLQueryCompletor {
 	public SQLQueryCompletor(SQLSkeleton skeleton) {
 		this.skeleton = skeleton;
 	}
+	
+	public static boolean NESTED_CONDITION = false;
 
 	public List<SQLQuery> inferSQLQueries() {
 		//it calls QueryConditionSearcher to infer conditions
@@ -196,6 +198,12 @@ public class SQLQueryCompletor {
 			boolean checked = connector.checkSQLQueryWithOutput(outputTable, query);
 			if(checked) {
 				queries.add(query);
+			}
+			if(SQLQueryCompletor.NESTED_CONDITION) {
+				checked = connector.checkSQLQueryWithOutputNestedConditions(outputTable, query);
+				if(checked) {
+					queries.add(query);
+				}
 			}
 		}
 		return queries;

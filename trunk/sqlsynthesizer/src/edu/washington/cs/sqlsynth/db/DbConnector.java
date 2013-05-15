@@ -239,6 +239,9 @@ public class DbConnector {
 	public boolean checkSQLQueryWithOutput(TableInstance output, SQLQuery sql) {
 		return checkSQLQueryWithOutput(output, sql.toSQLString());
 	}
+	public boolean checkSQLQueryWithOutputNestedConditions(TableInstance output, SQLQuery sql) {
+		return checkSQLQueryWithOutput(output, sql.toNestedSQLString());
+	}
 	private static String COMMA = ",";
 	boolean checkSQLQueryWithOutput(TableInstance output, String sql) {
 		//convert all to string for comparison

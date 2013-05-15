@@ -450,6 +450,7 @@ public class TestSQLCompletor extends TestCase {
 	//NOTE this can not be figured by our language subset
 	public void test5_1_9()
 	{
+		SQLQueryCompletor.NESTED_CONDITION = true;
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_9/id_class_5_1_9");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_1_9/id_faculty_5_1_9");
 		TableInstance output = TableInstanceReader.readTableFromFile("./dat/5_1_9/output_5_1_9");
@@ -476,12 +477,11 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		System.out.println("Before validating, number of queries: " + queries.size());
 		queries = completor.validateQueriesOnDb(queries);
 		//after validating on my sql
 		System.out.println("The final output....");
-		for(SQLQuery q : queries) {
-			System.out.println(q.toSQLString());
-		}
+		this.outputQueries(queries);
 	}
 	
 	
@@ -1099,9 +1099,13 @@ public class TestSQLCompletor extends TestCase {
 		}
 	}
 	
-	public void testDull() {
-		for(int i = 0; i<5; ++i) {
-			System.out.println(i);
+	private void outputQueries(List<SQLQuery> queries) {
+		for(SQLQuery q : queries) {
+			if(SQLQueryCompletor.NESTED_CONDITION) {
+				System.out.println(q.toNestedSQLString());
+			} else {
+			    System.out.println(q.toSQLString());
+			}
 		}
 	}
 	
@@ -1109,6 +1113,7 @@ public class TestSQLCompletor extends TestCase {
 	public void tearDown() {
 		DbConnector.NO_ORDER_MATCHING = false;
 		SQLSkeleton.REMOVE_DUPLICATE = false;
+		SQLQueryCompletor.NESTED_CONDITION = false;
 	}
 	
 }
