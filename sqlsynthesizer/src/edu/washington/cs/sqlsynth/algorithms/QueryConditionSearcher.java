@@ -670,7 +670,7 @@ public class QueryConditionSearcher {
 			String allConditions = testTree.getRulesFromTree();
 			
 //			System.out.println("all conditions: " + allConditions);
-			String[] lines = allConditions.split("\n");//System.getProperty("line.separator")); FIXME
+			String[] lines = allConditions.split("\n");//System.getProperty("line.separator")); 
 //			System.out.println("line num: " + lines.length);
 			
 			for (int j = 0; j<lines.length; ++j)
@@ -718,7 +718,8 @@ public class QueryConditionSearcher {
 							exprComMap.put(currentKey, forQueryTranslateCom.get(currentKey));
 						}
 					}
-					queryCond = QueryCondition.parse(columnMap, exprMap, exprComMap, lines[j]);
+					// TODO
+//					queryCond = QueryCondition.parse(columnMap, exprMap, exprComMap, lines[j]);
 					
 				}
 				else
