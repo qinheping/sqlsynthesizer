@@ -122,6 +122,21 @@ public class TestTableInstance extends TestCase {
 		}
 	}
 	
+	public void testTableMaxMinAfterGroupBy() {
+		TableInstance t = TableInstanceReader.readTableFromFile("./dat/testtablestatistics/2_sample_columns");
+		System.out.println(t);
+		String c = "age";
+		String ref = "major";
+		for(int rowNum = 0; rowNum < t.getRowNum(); rowNum++) {
+			System.out.println("-------------");
+			System.out.println("row: " + rowNum);
+			int result = t.getComparisonResultWithMaxAfterGroupBy(c, ref, rowNum);
+			System.out.println("comparing c and max(c) by ref: " + result);
+			result = t.getComparisonResultWithMinAfterGroupBy(c, ref, rowNum);
+			System.out.println("comparing c and min(c) by ref: " + result);
+		}
+	}
+	
 	public void testGroupByMultiColumns() {
 		TableInstance t = TableInstanceReader.readTableFromFile("./dat/groupbymulticolumns/class_enroll.txt");
 		System.out.println(t);
