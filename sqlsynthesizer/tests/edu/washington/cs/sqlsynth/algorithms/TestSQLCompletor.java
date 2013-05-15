@@ -735,6 +735,7 @@ public class TestSQLCompletor extends TestCase {
 	
 	public void test5_2_4()
 	{
+		SQLQueryCompletor.NESTED_CONDITION = true;
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_4/parts");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_2_4/catalog");
 		TableInstance input3 = TableInstanceReader.readTableFromFile("./dat/5_2_4/suppliers");
