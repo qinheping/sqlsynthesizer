@@ -123,11 +123,13 @@ and should not be expected, to invest.
 \vspace{1mm}
 \noindent \textbf{\textit{Our solution: synthesizing SQL queries from input-output examples}}
 In this paper, we present a technique (and its tool
-implementation, called \ourtool) to automatically synthesize SQL queries
+implementation, called \ourtool) to automatically
+synthesize SQL queries
+\footnote{
+Note that all queries in this paper refer to SQL queries
+that only retrieve data from a database and
+do not update a database.}
 from input-output examples.
-%\footnote{
-%All SQL queries in this paper refer to the read-only
-%database queries, which do not modify the database content.}.
 Although input-output examples may lead to
 underspecification, writing them, as opposed to writing
 declarative specifications or imperative code
@@ -200,9 +202,9 @@ All such operations must be inferred properly and efficiently.% This requires \t
 
 To address these challenges and make example-based
 SQL query synthesis feasible in practice,
-our \ourtool technique focuses on a widely-used SQL subset (Section~\ref{sec:langsubset}),
+\ourtool focuses on a widely-used SQL subset (Section~\ref{sec:langsubset}),
 and uses three steps to link a user's intention to
-a desirable query (Section~\ref{sec:approach}):
+a SQL query (Section~\ref{sec:approach}):
 
 
 

@@ -187,11 +187,11 @@ used by non-expert end-users.
 Third, other features, such as \CodeIn{IN}, \CodeIn{UNION}, and \CodeIn{NOT EXIST},
 are used to write sub-queries or nested queries, which are the major source
 of the PSPACE-hardness in query inference~\cite{DasSarma:2010}.
-Similarly, the \CodeIn{LIKE} keyword is used for string
+Related, the \CodeIn{LIKE} keyword is designed for string
 wildcard matching; determining its matching
-patterns can be expensive. Thus, 
-for the sake of inference efficiency, we exclude all these keywords.
-\todo{xx}
+patterns requires systematic search and can be
+expensive in practice. Thus, 
+for the sake of inference efficiency, we exclude these keywords.
 
 %would quickly become intractable during 
 %pattern matching
@@ -231,7 +231,7 @@ syntax and thought it does not support table joins.
 %critical in sythesizing a correct SQL query \todo{xxx}
 
 Overall, based on the feedback by experienced IT professionals,
-we think our SQL subset is usable
+we believe our SQL subset is usable
 for end-users in writing common database queries.
 %contains adequate SQL features
 %in writing database queries that most end-users need.

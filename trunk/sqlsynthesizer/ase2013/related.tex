@@ -11,9 +11,9 @@ and automated program synthesis.
 
 \vspace{1mm}
 \noindent{\textbf{\textit{Reverse Engineering SQL Queries.}}}
-Reverse engineering SQL queries is a well-known technique in the database
+Reverse engineering SQL queries is a technique in the database
 community~\cite{Zloof:1975, Tran:2009, DasSarma:2010} to
-enhance a database system's usability. 
+improve a database's usability. 
 Zloof's pioneering work on \textit{Query by Example} (QBE)~\cite{Zloof:1975}
 provided a high-level query language and a
 form-based Graphical User Interface (GUI) for
@@ -39,7 +39,7 @@ to find a set of semantically-equivalent SQL queries
 to a given input query. QBO is related to but
 significantly differs from \ourtool in two aspects.
 First, QBO has a rather different goal and requires
-different inputs : it takes as inputs a database,
+slightly different inputs : it takes as inputs a database,
 an SQL query, and the query's output (on the database); and computes
 one or more equivalent queries that produce the
 same output on the input database.
@@ -156,11 +156,12 @@ tables or aggregate query results by certain table columns.
 %friendly to end users. \todo{However, }
 
 
-Some recent work proposed query recommendations systems to reduce
-the obstacles to using databases~\cite{Howe:2011, Khoussainova:2010}. 
-SQLShare~\cite{Howe:2011} is a cloud-based service that allows
-users to upload their data and SQL queries. 
-Each uploaded query is saved as a view, allowing other users
+Some recent work proposed query recommendations systems
+to enhance a database's usability~\cite{Howe:2011, Khoussainova:2010}. 
+SQLShare~\cite{Howe:2011} is a web service that allows
+users to upload their data and SQL queries,
+%Each uploaded query is saved as a view, 
+permitting other users
 to compose and reuse. SnipSuggest~\cite{Khoussainova:2010} is a SQL autocompletion
 system. As a user types a query, SnipSuggest mines existing query
 logs to recommend relevant clauses or SQL snippets (e.g., the table
@@ -173,15 +174,15 @@ that contains valuable information.
 However, such assumption often does not hold for
 many database users in practice.
 \ourtool eliminates this assumption and infers 
-SQL queries by using user-provided examples.
+SQL queries using user-provided examples.
 
 
-Cheung et al~\cite{abs-1208-2013} presented a technique to infer SQL
+Cheung et al.~\cite{abs-1208-2013} presented a technique to infer SQL
 queries from imperative code. Their technique identifies
 fragments of application logic (written in an imperative language
 like Java) that can be pushed into SQL queries. 
-Compared to \ourtool, their work is designed for developers
-to improve a database application's performance,
+Compared to \ourtool, their work aims to help developers
+improve a database application's performance,
 rather than helping non-expert end-users
 write correct SQL queries from scratch. 
 If an end-user wishes to use their technique to 
@@ -191,7 +192,7 @@ Comparing to providing example input
 and output as required by \ourtool,
 writing correct imperative code is too challenging
 for a typical end-user, and thus would
-substantially degrade the technique's usability.
+inevitably degrade the technique's usability.
 
 
 %also cite this~\cite{Cheung:2012:UPS}, combining machine learning with program synthesis.
