@@ -832,6 +832,9 @@ public class TestSQLCompletor extends TestCase {
 	
 	public void test5_2_6()
 	{
+		
+		SQLQueryCompletor.SEC_ORDER_FEA_CONDITION = true;
+		
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_6/suppliers");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_2_6/catalog");
 		TableInstance output = TableInstanceReader.readTableFromFile("./dat/5_2_6/output");
