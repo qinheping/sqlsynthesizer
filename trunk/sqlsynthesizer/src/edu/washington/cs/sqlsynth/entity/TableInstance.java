@@ -393,6 +393,40 @@ public class TableInstance {
     }
     
     /**
+     * return 1 if the current column has the max value, otherwise return 0.
+     * 
+     * e.g.,
+     * 
+     * age major
+     * 12  a
+     * 20  a
+     * 
+     * the first row is NOT the max of the same major, while the second row is.
+     * 
+     * Here, column is age, and groupByColumn is major
+     * */
+    public int getComparisonResultWithMaxAfterGroupBy(String column, String groupByColumn, int rowNum) {
+    	Utils.checkTrue(rowNum > -1 && rowNum < this.rowNum, "The provided row num: "
+				+ rowNum + " is illegal, it should >= 0 and < " + this.rowNum);
+    	this.checkColumnsExistence(column, groupByColumn);
+    	TableColumn col = this.getColumnByName(column);
+    	TableColumn referCol = this.getColumnByName(groupByColumn);
+    	Utils.checkTrue(col.isIntegerType());
+    	//get the max value
+    	Object referValue = referCol.getValue(rowNum);
+    	List<Integer> values = new LinkedList<Integer>();
+    	for(int i = 0; i < this.rowNum; i++) {
+    		if(referValue.equals(referCol.getValue(i))) {
+    			values.add(Integer.parseInt(col.getValue(i).toString()));
+    		}
+    	}
+    	Utils.checkTrue(!values.isEmpty());
+    	Integer max = Collections.max(values);
+    	Integer v = Integer.parseInt(col.getValue(rowNum).toString());
+    	return max == v ? 1 : 0;
+    }
+    
+    /**
      * It compares the value of column1 with the MIN value of column minColumn.
      * return 1:  >
      * return 0: =
@@ -414,6 +448,27 @@ public class TableInstance {
     	} else {
     		return -1;
     	}
+    }
+    
+     public int getComparisonResultWithMinAfterGroupBy(String column, String groupByColumn, int rowNum) {
+    	 Utils.checkTrue(rowNum > -1 && rowNum < this.rowNum, "The provided row num: "
+ 				+ rowNum + " is illegal, it should >= 0 and < " + this.rowNum);
+     	this.checkColumnsExistence(column, groupByColumn);
+     	TableColumn col = this.getColumnByName(column);
+     	TableColumn referCol = this.getColumnByName(groupByColumn);
+     	Utils.checkTrue(col.isIntegerType());
+     	//get the max value
+     	Object referValue = referCol.getValue(rowNum);
+     	List<Integer> values = new LinkedList<Integer>();
+     	for(int i = 0; i < this.rowNum; i++) {
+     		if(referValue.equals(referCol.getValue(i))) {
+     			values.add(Integer.parseInt(col.getValue(i).toString()));
+     		}
+     	}
+     	Utils.checkTrue(!values.isEmpty());
+     	Integer min = Collections.min(values);
+     	Integer v = Integer.parseInt(col.getValue(rowNum).toString());
+     	return min == v ? 1 : 0;
     }
     
     /**
