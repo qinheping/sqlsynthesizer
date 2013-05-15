@@ -14,7 +14,8 @@ import java.util.Iterator;
 
 import java.io.*;
 
-
+import edu.washington.cs.sqlsynth.entity.ComparisionExpr;
+import edu.washington.cs.sqlsynth.entity.ComparisionExpr.ComparisionType;
 import edu.washington.cs.sqlsynth.entity.AggregateExpr.AggregateType;
 import edu.washington.cs.sqlsynth.entity.BTree;
 import edu.washington.cs.sqlsynth.entity.AggregateExpr;
@@ -262,14 +263,14 @@ public class QueryConditionSearcher {
 									
 								if (!forQueryTranslateAgg.containsKey(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismax"))
 								{
-									ComparisonExpr expr = new ComparisionExpr(c, ComparisionType.ISMAX);
+									ComparisionExpr expr = new ComparisionExpr(c, ComparisionType.ISMAX);
 									forQueryTranslateCom.put(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismax", expr);
 
 								}
 								
 								if (!forQueryTranslateAgg.containsKey(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismin"))
 								{
-									ComparisonExpr expr = new ComparisionExpr(c, ComparisionType.ISMIN);
+									ComparisionExpr expr = new ComparisionExpr(c, ComparisionType.ISMIN);
 									forQueryTranslateCom.put(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismin", expr);
 
 								}
