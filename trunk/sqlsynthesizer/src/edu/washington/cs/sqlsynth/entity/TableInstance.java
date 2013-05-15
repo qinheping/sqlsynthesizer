@@ -346,6 +346,77 @@ public class TableInstance {
 	}
     
     /**
+     * The return value 1 means the value of column1 is > columns2
+     * The return value 0 means the value of column1 is = columns2
+     * The return value -1 means the value of column1 is < columns2
+     * */
+    public int getComparisonResult(String column1, String column2, int rowNum) {
+    	Utils.checkTrue(rowNum > -1 && rowNum < this.rowNum, "The provided row num: "
+				+ rowNum + " is illegal, it should >= 0 and < " + this.rowNum);
+    	this.checkColumnsExistence(column1, column2);
+    	TableColumn tc1 = this.getColumnByName(column1);
+    	TableColumn tc2 = this.getColumnByName(column2);
+    	Utils.checkTrue(tc1.isIntegerType() && tc2.isIntegerType());
+    	Integer v1 = Integer.parseInt(tc1.getValue(rowNum).toString());
+    	Integer v2 = Integer.parseInt(tc2.getValue(rowNum).toString());
+    	if(v1 > v2) {
+    		return 1;
+    	} else if (v1 == v2) {
+    		return 0;
+    	} else {
+    		return -1;
+    	}
+    }
+    
+    /**
+     * It compares the value of column1 with the MAX value of column maxColumn.
+     * return 1:  >
+     * return 0: =
+     * return -1: <
+     * */
+    public int getComparisonResultWithMax(String column1, String maxColumn, int rowNum) {
+    	Utils.checkTrue(rowNum > -1 && rowNum < this.rowNum, "The provided row num: "
+				+ rowNum + " is illegal, it should >= 0 and < " + this.rowNum);
+    	this.checkColumnsExistence(column1, maxColumn);
+    	TableColumn tc = this.getColumnByName(column1);
+    	TableColumn maxCol = this.getColumnByName(maxColumn);
+    	Utils.checkTrue(tc.isIntegerType() && maxCol.isIntegerType());
+    	Integer v1 = Integer.parseInt(tc.getValue(rowNum).toString());
+    	Integer maxV = this.getMaxValue(maxColumn);
+    	if(v1 > maxV) {
+    		return 1;
+    	} else if (v1 == maxV) {
+    		return 0;
+    	} else {
+    		return -1;
+    	}
+    }
+    
+    /**
+     * It compares the value of column1 with the MIN value of column minColumn.
+     * return 1:  >
+     * return 0: =
+     * return -1: <
+     * */
+    public int getComparisonResultWithMin(String column1, String minColumn, int rowNum) {
+    	Utils.checkTrue(rowNum > -1 && rowNum < this.rowNum, "The provided row num: "
+				+ rowNum + " is illegal, it should >= 0 and < " + this.rowNum);
+    	this.checkColumnsExistence(column1, minColumn);
+    	TableColumn tc = this.getColumnByName(column1);
+    	TableColumn maxCol = this.getColumnByName(minColumn);
+    	Utils.checkTrue(tc.isIntegerType() && maxCol.isIntegerType());
+    	Integer v1 = Integer.parseInt(tc.getValue(rowNum).toString());
+    	Integer minV = this.getMinValue(minColumn);
+    	if(v1 > minV) {
+    		return 1;
+    	} else if (v1 == minV) {
+    		return 0;
+    	} else {
+    		return -1;
+    	}
+    }
+    
+    /**
      * Throw exception if one of the given column names does not exist in the table
      * */
     private void checkColumnsExistence(String...columnNames) {
