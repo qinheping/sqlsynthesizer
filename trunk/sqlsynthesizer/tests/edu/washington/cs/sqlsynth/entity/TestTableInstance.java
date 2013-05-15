@@ -93,6 +93,35 @@ public class TestTableInstance extends TestCase {
 		assertEquals(9, content.split(Globals.lineSep).length);
 	}
 	
+	/**
+	 * Column1, Column2, Column3
+	 * 100,2,200
+       2000,Tim,300
+       200,Bob,600
+       3000,Tim,700
+       4000,Bob,900
+       400,Mike,100
+       4000,Kate,200
+       50,Dup,1000
+       50,Dup,1000
+	 * */
+	public void testTableMaxMin() {
+		TableInstance t = TableInstanceReader.readTableFromFile("./dat/testtablestatistics/3_columns");
+		System.out.println(t);
+		String c1 = "Column1";
+		String c3 = "Column3";
+		for(int rowNum = 0; rowNum < t.getRowNum(); rowNum++) {
+			System.out.println("-------------");
+			System.out.println("row: " + rowNum);
+			int result = t.getComparisonResult(c1, c3, rowNum);
+			System.out.println("comparing c1 and c3: " + result);
+			result = t.getComparisonResultWithMax(c1, c3, rowNum);
+			System.out.println("comparing c1 and max(c3): " + result);
+			result = t.getComparisonResultWithMin(c3, c1, rowNum);
+			System.out.println("comparing c3 and min(c1): " + result);
+		}
+	}
+	
 	public void testGroupByMultiColumns() {
 		TableInstance t = TableInstanceReader.readTableFromFile("./dat/groupbymulticolumns/class_enroll.txt");
 		System.out.println(t);
