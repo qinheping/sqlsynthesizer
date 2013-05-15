@@ -675,6 +675,58 @@ public class TestSQLCompletor extends TestCase {
 	}
 	
 	
+	public void test5_2_1()
+	{
+		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_1/parts");
+		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_2_1/catalog");
+		TableInstance output = TableInstanceReader.readTableFromFile("./dat/5_2_1/output");
+		
+		Collection<TableInstance> inputs = new LinkedList<TableInstance>();
+		inputs.add(input1);
+		inputs.add(input2);
+		
+		SQLSkeletonCreator creator = new SQLSkeletonCreator(inputs, output);
+		SQLSkeleton skeleton = creator.inferSQLSkeleton();
+		
+		System.out.println("input 1:");
+		System.out.println(input1);
+		System.out.println("input 2:");
+		System.out.println(input2);
+		
+		
+		System.out.println("number of join columns: " + skeleton.getJoinPairNum());
+		System.out.println("columns: " + skeleton.getAllJoinConditions());
+		
+		List<TableInstance> tables = skeleton.computeJoinTableWithoutUnmatches();
+		
+		for(TableInstance t : tables) {
+			System.out.println(t.toString());
+		}
+		System.out.println("Number of tables: " + tables.size());
+//		
+//		if(tables != null) {
+//			return;
+//		}
+		
+		SQLQueryCompletor completor = new SQLQueryCompletor(skeleton);
+		completor.addInputTable(input1);
+		completor.addInputTable(input2);
+		completor.setOutputTable(output);
+		
+		List<SQLQuery> queries = completor.inferSQLQueries();
+		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+		queries = completor.validateQueriesOnDb(queries);
+		//after validating on my sql
+		System.out.println("The final output....");
+		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+		
+		//throw new Error();
+	}
+	
 	public void test5_2_2()
 	{
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_2/parts");
@@ -819,6 +871,7 @@ public class TestSQLCompletor extends TestCase {
 	
 	public void test5_2_7()
 	{
+		SQLQueryCompletor.NESTED_CONDITION = true;
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_7/parts");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_2_7/catalog");
 		TableInstance input3 = TableInstanceReader.readTableFromFile("./dat/5_2_7/suppliers");
@@ -950,6 +1003,7 @@ public class TestSQLCompletor extends TestCase {
 	
 	public void test5_2_10()
 	{
+		SQLQueryCompletor.NESTED_CONDITION = true;
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_10/parts");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_2_10/catalog");
 		TableInstance input3 = TableInstanceReader.readTableFromFile("./dat/5_2_10/suppliers");
