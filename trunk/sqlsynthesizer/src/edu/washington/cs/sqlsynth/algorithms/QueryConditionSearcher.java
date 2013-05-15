@@ -45,6 +45,7 @@ public class QueryConditionSearcher {
 	
 	private Map<String, TableColumn> forQueryTranslate;
 	private Map<String, AggregateExpr> forQueryTranslateAgg;
+	private Map<String, ComparisionExpr> forQueryTranslateCom;
 	
 	private List<QueryCondition> queryConditions;
 	
@@ -54,6 +55,7 @@ public class QueryConditionSearcher {
 		queryConditions = new LinkedList<QueryCondition>();
 		forQueryTranslate = new HashMap<String, TableColumn> ();
 		forQueryTranslateAgg = new HashMap<String, AggregateExpr> ();
+		forQueryTranslateCom = new HashMap<String, ComparisionExpr> ();
 		
 		this.getConstructionInfo();
 		this.getLabelWeightInfo();
@@ -225,6 +227,61 @@ public class QueryConditionSearcher {
 					}
 				}
 			}
+			
+			
+			if (SQLQueryCompletor.SEC_ORDER_FEA_CONDITION) {
+				for (int j = 0; j< columns.size(); ++j)
+				{
+					// only for numerical values
+					if (!(columns.get(j).getType() == TableColumn.ColumnType.String))
+					{
+						
+						for (int k = 0; k< columns.size(); ++k)
+						{
+													
+							if (columns.get(k).getType() == TableColumn.ColumnType.String)
+							{
+								attributes.addElement(new Attribute(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismax"));
+								attributes.addElement(new Attribute(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismin"));
+//								if (!forQueryTranslateAgg.containsKey(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismax"))
+//								{
+									TableColumn c = null;
+									
+									List<TableInstance> inputTables = this.completor.getInputTables();
+									for (int ii = 0; ii<inputTables.size(); ++ii)
+									{
+										if (inputTables.get(ii).hasColumn(columns.get(k).getColumnName()))
+										{
+											// 0 or 1
+											c = new TableColumn(inputTables.get(ii).getTableName(), columns.get(k).getColumnName(), ColumnType.Integer, false);
+											break;
+										}
+									}
+									
+									//TODO:: need a new expr
+									
+								if (!forQueryTranslateAgg.containsKey(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismax"))
+								{
+									ComparisonExpr expr = new ComparisionExpr(c, ComparisionType.ISMAX);
+									forQueryTranslateCom.put(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismax", expr);
+
+								}
+								
+								if (!forQueryTranslateAgg.containsKey(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismin"))
+								{
+									ComparisonExpr expr = new ComparisionExpr(c, ComparisionType.ISMIN);
+									forQueryTranslateCom.put(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismin", expr);
+
+								}
+							}
+							
+						}
+					}
+				}
+			}
+			
+			
+			
 			
 			FastVector tmpVector = new FastVector(2);
 			tmpVector.addElement("0");
@@ -466,6 +523,59 @@ public class QueryConditionSearcher {
 					}
 				}
 				
+				if (SQLQueryCompletor.SEC_ORDER_FEA_CONDITION) 
+				{	for (int k = 0; k< table.getColumnNum(); ++k)
+					{
+						if (!(table.getColumn(k).getType() == TableColumn.ColumnType.String))
+						{
+							for (int l = 0; l< table.getColumnNum(); ++l)
+							{
+								if (table.getColumn(l).getType() == TableColumn.ColumnType.String)
+								{
+									List<TableInstance> inputTables = completor.getInputTables();
+									boolean flag = false;
+									for (int m = 0; m<inputTables.size(); ++m)
+									{
+										TableInstance tmpTable = inputTables.get(m);
+										if (tmpTable.hasColumn(table.getColumn(l).getColumnName()) && tmpTable.hasColumn(table.getColumn(k).getColumnName()))
+										{
+											int rowNum = -1;
+											TableColumn col = tmpTable.getColumnByName(table.getColumn(k).getColumnName());
+										
+											for (int n = 0; n<tmpTable.getRowNum(); ++n)
+											{
+												if (col.getValue(n).toString().equals(table.getColumn(k).getValue(j).toString()))
+												{
+													rowNum = n;
+													break;
+												}
+											}
+										
+//										inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getUniqueCountOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), rowNum));
+											inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getComparisonResultWithMax(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), rowNum));
+											inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getComparisonResultWithMin(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), rowNum));
+
+											flag = true;
+											break;
+										}
+									}
+									if (!flag)
+									{
+									// Different from previous version, may actually increase dimensionality of feature space, and bring problem in generating query conditions
+//										inst.setValue(allData.get(i).attribute(attCount++), table.getUniqueCountOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), j));
+										inst.setValue(allData.get(i).attribute(attCount++), table.getComparisonResultWithMax(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), j));
+										inst.setValue(allData.get(i).attribute(attCount++), table.getComparisonResultWithMin(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), j));
+								//	inst.setValue(allData.get(i).attribute(attCount++), 0);
+									}
+
+								}
+							
+							}
+						}
+					}
+				}
+				
+				
 				if (usedIdx.contains(j))
 				{
 					int classIdx = allData.get(i).numAttributes() - 1;
@@ -594,15 +704,36 @@ public class QueryConditionSearcher {
 					}
 				}
 //				System.out.println("lines[j]:" + lines[j]);
-				QueryCondition queryCond = QueryCondition.parse(columnMap, exprMap, lines[j]);
+				
+				QueryCondition queryCond = null;
+				
+				if (SQLQueryCompletor.SEC_ORDER_FEA_CONDITION) {
+					Map<String, ComparisionExpr> exprComMap = new HashMap<String, ComparisionExpr>();
+					Iterator<String> iterKeyCom = forQueryTranslateCom.keySet().iterator();
+					
+					while (iterKeyCom.hasNext()) {
+						String currentKey = iterKeyCom.next();
+						if (cond.contains(currentKey)) {
+							exprComMap.put(currentKey, forQueryTranslateCom.get(currentKey));
+						}
+					}
+					queryCond = QueryCondition.parse(columnMap, exprMap, exprComMap, lines[j]);
+					
+				}
+				else
+				{
+					queryCond = QueryCondition.parse(columnMap, exprMap, lines[j]);
+				}
 				if(queryCond != null) {
 				    queryConditions.add(queryCond);
 				    System.out.println(queryCond.toSQLCode());
 				}
 			}
+			
+			
 
 			
-			System.out.println("----------------------------------   More to do here   ----------------------------------");
+//			System.out.println("----------------------------------   More to do here   ----------------------------------");
 		}
 	}
 	

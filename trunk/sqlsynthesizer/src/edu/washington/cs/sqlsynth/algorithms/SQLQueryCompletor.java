@@ -32,6 +32,10 @@ public class SQLQueryCompletor {
 	}
 	
 	public static boolean NESTED_CONDITION = false;
+	
+	// add a flag for 2nd order features, add by Yuyin
+	public static boolean SEC_ORDER_FEA_CONDITION = false;
+	
 
 	public List<SQLQuery> inferSQLQueries() {
 		//it calls QueryConditionSearcher to infer conditions
