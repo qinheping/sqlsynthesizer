@@ -20,6 +20,8 @@ public class SQLQuery {
 	
 	private QueryCondition havingCond = null;
 	
+	private List<TableColumn> orderbyColumns = new LinkedList<TableColumn>();
+	
 	/**
 	 * SQL union (SQL Query)
 	 * FIXME currently, the union list only contains 1 SQLQuery, see
@@ -82,6 +84,11 @@ public class SQLQuery {
 
 	public void setGroupbyColumns(List<TableColumn> groupbyColumns) {
 		this.groupbyColumns = groupbyColumns;
+	}
+	
+	public void setOrderbyColumns(List<TableColumn> orderbyColumns) {
+		Utils.checkNotNull(orderbyColumns);
+		this.orderbyColumns = orderbyColumns;
 	}
 
 	public SQLSkeleton getSkeleton() {
@@ -324,6 +331,16 @@ public class SQLQuery {
 		if(this.havingCond != null) {
 			sb.append(" having ");
 			sb.append(this.havingCond.toSQLCode());
+		}
+		if(!this.orderbyColumns.isEmpty()) {
+			sb.append(" order by ");
+			count = 0;
+			for(TableColumn c: this.orderbyColumns) {
+				if(count != 0) {
+					sb.append(", ");
+				}
+				sb.append(c.getFullName());
+			}
 		}
 		if(!this.unions.isEmpty()) {
 			Utils.checkTrue(this.unions.size() == 1);
