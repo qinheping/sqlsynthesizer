@@ -26,6 +26,8 @@ public class TestSQLCompletor extends TestCase {
 	
 	public void test5_1_1()
 	{	
+		long startTime = System.currentTimeMillis();
+		
 		TableUtils.USE_SAME_NAME_JOIN = true;
 		TableUtils.JOIN_ALL_TABLES = true;
 		DbConnector.NO_ORDER_MATCHING = true;
@@ -88,11 +90,15 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 	}
 	
 	
 	public void test5_1_2()
 	{	
+		long startTime = System.currentTimeMillis();
 		TableUtils.USE_SAME_NAME_JOIN = true;
 		TableUtils.JOIN_ALL_TABLES = true;
 		DbConnector.NO_ORDER_MATCHING = true;
@@ -153,12 +159,15 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 	}
 	
 	
 	
 	public void test5_1_4()
 	{	
+		long startTime = System.currentTimeMillis();
 		TableUtils.USE_SAME_NAME_JOIN = true;
 		TableUtils.JOIN_ALL_TABLES = true;
 		DbConnector.NO_ORDER_MATCHING = true;
@@ -214,12 +223,16 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 	}
 	
 	
 	
 	public void test5_1_6()
 	{	
+		long startTime = System.currentTimeMillis();
 		TableUtils.USE_SAME_NAME_JOIN = true;
 		TableUtils.JOIN_ALL_TABLES = true;
 		DbConnector.NO_ORDER_MATCHING = true;
@@ -275,10 +288,14 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 	}
 	
 	public void test5_1_7()
 	{	
+		long startTime = System.currentTimeMillis();
 		TableUtils.USE_SAME_NAME_JOIN = true;
 		TableUtils.JOIN_ALL_TABLES = true;
 		DbConnector.NO_ORDER_MATCHING = true;
@@ -321,11 +338,14 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 	}
 	
 	
 	public void test5_1_8()
 	{	
+		long startTime = System.currentTimeMillis();
 		TableUtils.USE_SAME_NAME_JOIN = true;
 		TableUtils.JOIN_ALL_TABLES = true;
 		DbConnector.NO_ORDER_MATCHING = true;
@@ -368,11 +388,14 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 	}
 	
 
 	public void test5_1_3()
 	{	
+		long startTime = System.currentTimeMillis();
 		DbConnector.NO_ORDER_MATCHING = true;
 		
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_3/id_class_5_1_3");
@@ -409,10 +432,13 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 	}
 	
 	public void test5_1_5()
 	{
+		long startTime = System.currentTimeMillis();
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_5/id_class_5_1_5");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_1_5/id_faculty_5_1_5");
 		TableInstance output = TableInstanceReader.readTableFromFile("./dat/5_1_5/output_5_1_5");
@@ -445,11 +471,14 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 	}
 	
 	//NOTE this can not be figured by our language subset
 	public void test5_1_9()
 	{
+		long startTime = System.currentTimeMillis();
 		SQLQueryCompletor.NESTED_CONDITION = true;
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_9/id_class_5_1_9");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_1_9/id_faculty_5_1_9");
@@ -482,11 +511,15 @@ public class TestSQLCompletor extends TestCase {
 		//after validating on my sql
 		System.out.println("The final output....");
 		this.outputQueries(queries);
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 	}
 	
 	
 	public void test5_1_10()
 	{
+		long startTime = System.currentTimeMillis();
+		
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_1_10/student");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_1_10/enrolled");
 		TableInstance output = TableInstanceReader.readTableFromFile("./dat/5_1_10/output");
@@ -519,6 +552,8 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 	}
 	
 	
@@ -677,6 +712,7 @@ public class TestSQLCompletor extends TestCase {
 	
 	public void test5_2_1()
 	{
+		long startTime = System.currentTimeMillis();
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_1/parts");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_2_1/catalog");
 		TableInstance output = TableInstanceReader.readTableFromFile("./dat/5_2_1/output");
@@ -723,12 +759,14 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
-		
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 		//throw new Error();
 	}
 	
 	public void test5_2_2()
 	{
+		long startTime = System.currentTimeMillis();
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_2/parts");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_2_2/catalog");
 		TableInstance input3 = TableInstanceReader.readTableFromFile("./dat/5_2_2/suppliers");
@@ -780,13 +818,15 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
-		
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 		//throw new Error();
 	}
 	
 	
 	public void test5_2_4()
 	{
+		long startTime = System.currentTimeMillis();
 		SQLQueryCompletor.NESTED_CONDITION = true;
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_4/parts");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_2_4/catalog");
@@ -827,6 +867,8 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 	}
 	
 	
@@ -883,6 +925,7 @@ public class TestSQLCompletor extends TestCase {
 	
 	public void test5_2_7()
 	{
+		long startTime = System.currentTimeMillis();
 		SQLQueryCompletor.NESTED_CONDITION = true;
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_7/parts");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_2_7/catalog");
@@ -923,12 +966,15 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 	}
 	
 	
 	
 	public void test5_2_8()
 	{
+		long startTime = System.currentTimeMillis();
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_8/parts");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_2_8/catalog");
 		TableInstance input3 = TableInstanceReader.readTableFromFile("./dat/5_2_8/suppliers");
@@ -968,6 +1014,8 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 	}
 	
 	public void test5_2_9()
