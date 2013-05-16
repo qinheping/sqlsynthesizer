@@ -130,9 +130,9 @@ public class TestTableInstance extends TestCase {
 		for(int rowNum = 0; rowNum < t.getRowNum(); rowNum++) {
 			System.out.println("-------------");
 			System.out.println("row: " + rowNum);
-			int result = t.getComparisonResultWithMaxAfterGroupBy(c, ref, rowNum);
+			int result = t.getComparisonResultWithMaxAfterGroupBy(c, ref, rowNum) == true? 1:0;
 			System.out.println("comparing c and max(c) by ref: " + result);
-			result = t.getComparisonResultWithMinAfterGroupBy(c, ref, rowNum);
+			result = t.getComparisonResultWithMinAfterGroupBy(c, ref, rowNum) == true? 1:0;
 			System.out.println("comparing c and min(c) by ref: " + result);
 		}
 	}

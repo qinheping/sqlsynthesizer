@@ -405,7 +405,7 @@ public class TableInstance {
      * 
      * Here, column is age, and groupByColumn is major
      * */
-    public int getComparisonResultWithMaxAfterGroupBy(String column, String groupByColumn, int rowNum) {
+    public boolean getComparisonResultWithMaxAfterGroupBy(String column, String groupByColumn, int rowNum) {
     	Utils.checkTrue(rowNum > -1 && rowNum < this.rowNum, "The provided row num: "
 				+ rowNum + " is illegal, it should >= 0 and < " + this.rowNum);
     	this.checkColumnsExistence(column, groupByColumn);
@@ -423,7 +423,7 @@ public class TableInstance {
     	Utils.checkTrue(!values.isEmpty());
     	Integer max = Collections.max(values);
     	Integer v = Integer.parseInt(col.getValue(rowNum).toString());
-    	return max == v ? 1 : 0;
+    	return max == v ? true : false;
     }
     
     /**
@@ -450,7 +450,7 @@ public class TableInstance {
     	}
     }
     
-     public int getComparisonResultWithMinAfterGroupBy(String column, String groupByColumn, int rowNum) {
+     public boolean getComparisonResultWithMinAfterGroupBy(String column, String groupByColumn, int rowNum) {
     	 Utils.checkTrue(rowNum > -1 && rowNum < this.rowNum, "The provided row num: "
  				+ rowNum + " is illegal, it should >= 0 and < " + this.rowNum);
      	this.checkColumnsExistence(column, groupByColumn);
@@ -468,7 +468,7 @@ public class TableInstance {
      	Utils.checkTrue(!values.isEmpty());
      	Integer min = Collections.min(values);
      	Integer v = Integer.parseInt(col.getValue(rowNum).toString());
-     	return min == v ? 1 : 0;
+     	return min == v ? true : false;
     }
     
     /**
