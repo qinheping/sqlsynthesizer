@@ -722,15 +722,59 @@ public class QueryConditionSearcher {
 					Map<String, ComparisionExpr> exprComMap = new HashMap<String, ComparisionExpr>();
 					Iterator<String> iterKeyCom = forQueryTranslateCom.keySet().iterator();
 					
+					ComparisionExpr leftCmpExpr = null;
 					while (iterKeyCom.hasNext()) {
 						String currentKey = iterKeyCom.next();
 						if (cond.contains(currentKey)) {
+							leftCmpExpr = forQueryTranslateCom.get(currentKey);
 							exprComMap.put(currentKey, forQueryTranslateCom.get(currentKey));
 						}
 					}
 					// TODO
-//					queryCond = QueryCondition.parse(columnMap, exprMap, exprComMap, lines[j]);
+//					xx
+					System.out.println(lines[j]);
+//					throw new Error();
+					//queryCond = QueryCondition.parse(columnMap, exprMap, exprComMap, lines[j]);
 					
+					String predicate = lines[j];
+					
+//					ComparisionExpr leftCmpExpr = tmpCompMap.get(leftPart);
+					System.out.println(leftCmpExpr);
+					System.out.println(predicate);
+					String sub = predicate.substring(0, predicate.indexOf("_is"));
+					System.out.println(sub);
+					String compareColumn = sub.substring(0, sub.indexOf("_"));
+					String referColumn = sub.substring(sub.indexOf("_") + 1);
+					System.out.println(compareColumn);
+					System.out.println(referColumn);
+					String tableName = leftCmpExpr.getColumn().getTableName();
+					System.out.println("table: " + leftCmpExpr.getColumn().getTableName());
+					StringBuilder sb = new StringBuilder();
+					sb.append("select ");
+					if(leftCmpExpr.getT().equals(ComparisionExpr.ComparisionType.ISMAX)) {
+					    sb.append("max");
+					} else {
+						sb.append("min");
+					}
+					sb.append("(");
+					sb.append(tableName);
+					sb.append(".");
+					sb.append(compareColumn);
+					sb.append(")");
+					sb.append(" from ");
+					sb.append(tableName);
+					sb.append(" where ");
+					sb.append(" c1.");
+					sb.append(referColumn);
+					sb.append("=");
+					sb.append(tableName);
+					sb.append(".");
+					sb.append(referColumn);
+					System.out.println(sb);
+					SQLQueryCompletor.extra_cond = "c1." + compareColumn + "=(" + sb.toString() + ")";
+					SQLQueryCompletor.out_table = tableName;
+					System.out.println(SQLQueryCompletor.extra_cond);
+//					throw new Error();
 				}
 				else
 				{
