@@ -1,5 +1,5 @@
-id,entryid,result
-1,1,N
-2,1,L
-3,2,L
-4,3,L
+v_key,entryid,result
+v1,e1,N
+v2,e1,L
+v3,e2,L
+v4,e3,L
