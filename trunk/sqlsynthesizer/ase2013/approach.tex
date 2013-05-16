@@ -20,9 +20,9 @@ Section~\ref{sec:completion}, and Section~\ref{sec:ranking}).
 
 \input{together}
 
-\input{featurex}
 
 \input{skeletoncreation}
+\input{featurex}
 
 
 \input{querycompletion}
@@ -39,8 +39,7 @@ Section~\ref{sec:completion}, and Section~\ref{sec:ranking}).
 technique is neither sound nor complete. The primary
 reason is that several steps (e.g., the Query Skeleton Creation
 step in Section~\ref{sec:skeleton}) use heuristics
-to infer possible joins, tables used in the \CodeIn{from} clause,
-and columns in the \CodeIn{select} clause.
+to infer query tables, join conditions, and projection columns.
 Such heuristics are necessary, since they provide a
 good approximate solution to the problem of finding SQL queries
 from examples. %, which has been proved to be

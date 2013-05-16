@@ -37,8 +37,8 @@ The standard way for rule learning is using a decision-tree-based
 algorithm. However, the key challenge is how to design a good feature set.
 Existing approaches~\cite{Tran:2009} simply use
 tuple values in the input table(s) as features, 
-and limits their abilities in inferring more
-complex query conditions. In particular,
+and limits their abilities in inferring non-trivial
+query conditions. In particular,
 merely using tuple values as features can only infer
 conditions comparing a column value with a constant
 (e.g., \CodeIn{student.level = 'senior'}), but
@@ -55,8 +55,8 @@ for rule learning.
 \begin{itemize}
 
 \item {\textbf{Aggregation Features}}. For each
-column in the joined table, \ourtool first tries
-to group all tuples by \textit{each} tuple's
+column in the joined table, \ourtool 
+groups all tuples by \textit{each} tuple's
 value, and then applies every applicable aggregate\footnote{
 \CodeIn{COUNT}, \CodeIn{COUNT DISTINCT}, \CodeIn{MAX},
 \CodeIn{MIN}, \CodeIn{SUM}, and \CodeIn{AVG} for a numeric type column;
@@ -133,16 +133,16 @@ and places each part to the appropriate clause.
 Specifically, \ourtool places conditions
 using aggregates to the \CodeIn{HAVING}
 clause, and places other conditions to the \CodeIn{WHERE} clause.
-This is based on the SQL language's specification:
+This is based on the SQL language specification:
 query conditions using aggregates are valid only when they
-are used \textit{together with} the \CodeIn{GROUP BY} clause
-and \textit{inside} the \CodeIn{HAVING} clause.
+are used {together with} the \CodeIn{GROUP BY} clause
+and are used in the \CodeIn{HAVING} clause.
 Take the conditions inferred in Figure~\ref{fig:fullexample}
-as an example, \ourtool places the query
+as an example, \ourtool puts the query
 condition: \CodeIn{student.level =`senior'}
 in the \CodeIn{WHERE} clause,
-places condition: \CodeIn{COUNT(enrolled.course\_id) > 2}
-in the \CodeIn{HAVING} clause, and places 
+puts condition: \CodeIn{COUNT(enrolled.course\_id) > 2}
+in the \CodeIn{HAVING} clause, and puts 
 column \CodeIn{student\_id} to the \CodeIn{GROUP BY} clause.
 
 
@@ -167,7 +167,7 @@ combinations.
 \begin{itemize}
 \item \ourtool only applies an aggregate
 to its \textit{type-compatible} table columns. Specifically,
-the data values in an output column must be compatible with an
+the value type in an output column must be compatible with an
 aggregate's return type. For instance, if an output column
 contains float values, it cannot be produced by using the \CodeIn{COUNT}
 or \CodeIn{COUNT DISTINCT} aggregates, or 
@@ -195,7 +195,7 @@ table is produced by using the \CodeIn{MAX(score)} aggregate.
 %searching space and makes our tool find the desirable aggregates faster.
 
 %\todo{Order by structure, relatively each to add}
-\subsubsection{Searching for columns in the \CodeIn{ORDER BY} column}
+\subsubsection{Searching for columns in the \CodeIn{ORDER BY} clause}
 \label{sec:orderby}
 \ourtool scans the values of each column in the output table. If
 the data values in a column are sorted, \ourtool
