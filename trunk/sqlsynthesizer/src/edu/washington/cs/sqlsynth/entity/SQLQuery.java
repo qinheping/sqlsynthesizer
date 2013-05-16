@@ -252,6 +252,9 @@ public class SQLQuery {
 	
 	//FIXME definitely not complete yet
 	public String toSQLString() {
+		if(SQLQueryCompletor.extra_cond != null) {
+			return this.toSQLStringWithExtraCond();
+		}
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append(" select ");
@@ -351,6 +354,124 @@ public class SQLQuery {
 //			this.unions.get(0).toSQLString();
 			sb.append(")");
 		}
+		
+		return sb.toString();
+	}
+	
+	public String toSQLStringWithExtraCond() {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(" select ");
+		int count = 0;
+		for(int i = 0; i < this.skeleton.getOutputColumnNum(); i++) {
+			if(count != 0) {
+				sb.append(", ");
+			}
+			//FIXME
+			if(count == 0) {
+			    sb.append(" distinct ");
+			}
+			if(this.skeleton.getProjectColumns().containsKey(i)) {
+				if(this.skeleton.getProjectColumns().get(i).getTableName().equals(SQLQueryCompletor.out_table)) {
+					sb.append("c1.");
+					sb.append(this.skeleton.getProjectColumns().get(i).getColumnName());
+				} else { 
+				    sb.append(this.skeleton.getProjectColumns().get(i).getFullName());
+				}
+			} else if(this.getAggregateExprs().containsKey(i)) {
+				sb.append(this.getAggregateExprs().get(i).toSQL());
+			} else {
+				System.out.println(this.skeleton);
+				System.out.println(this.getAggregateExprs());
+				Utils.checkTrue(false, "The i: " + i);
+			}
+			count++;
+		}
+		
+//		for(TableColumn c : this.skeleton.getProjectColumns().values()) {
+//			if(count != 0) {
+//				sb.append(", ");
+//			}
+//			sb.append(c.getFullName());
+//			count++;
+//		}
+		sb.append(" from ");
+		for(int i = 0; i < skeleton.getTables().size(); i++) {
+			if(i!= 0) {
+				sb.append(", ");
+			}
+			sb.append(skeleton.getTables().get(i).getTableName());
+			if(skeleton.getTables().get(i).getTableName().equals(SQLQueryCompletor.out_table)) {
+				sb.append(" c1 ");
+			}
+		}
+		String condition = skeleton.getAllJoinConditions();
+		if(!condition.isEmpty() || this.condition != null || this.notExistQuery != null) {
+		    
+		    StringBuilder cond = new StringBuilder();
+    		if(!condition.isEmpty()) {
+    			cond.append(skeleton.getAllJoinConditions());
+    		}
+    		if(!condition.isEmpty() && this.condition != null && !this.condition.isEmpty()) {
+    			cond.append(" and ");
+    		}
+    		if(this.condition != null && !this.condition.isEmpty()) {
+    			cond.append(this.condition.toSQLCode());
+    		}
+    		
+    		if(this.notExistQuery != null) {
+    			if(condition.isEmpty() && this.condition == null) {
+    				//do nothing, do not need an and here
+    			} else {
+    			    cond.append(" and "); //has condition node above
+    			}
+    			cond.append(this.notExistQuery.toSQLString());
+    		}
+    		
+    		String curr_cond = cond.toString();
+    		String replaced = curr_cond.replaceAll(SQLQueryCompletor.out_table, "c1");
+    		
+    		cond.delete(0, cond.length());
+    		
+    		cond.append(replaced);
+    		cond.append(" and ");
+    		cond.append(SQLQueryCompletor.extra_cond);
+    		
+    		if(!cond.toString().trim().isEmpty()) {
+    		    sb.append(" where ");
+    		    sb.append(cond.toString());
+    		}
+		}
+		if(!this.groupbyColumns.isEmpty()) {
+			sb.append(" group by ");
+			count = 0;
+			for(TableColumn c: this.groupbyColumns) {
+				if(count != 0) {
+					sb.append(", ");
+				}
+				sb.append(c.getFullName());
+			}
+		}
+		if(this.havingCond != null) {
+			sb.append(" having ");
+			sb.append(this.havingCond.toSQLCode());
+		}
+		if(!this.orderbyColumns.isEmpty()) {
+			sb.append(" order by ");
+			count = 0;
+			for(TableColumn c: this.orderbyColumns) {
+				if(count != 0) {
+					sb.append(", ");
+				}
+				sb.append(c.getFullName());
+			}
+		}
+		
+		System.out.println(sb.toString());
+		
+//		if(true) {
+//			throw new Error();
+//		}
 		
 		return sb.toString();
 	}

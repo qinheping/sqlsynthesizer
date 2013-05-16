@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.Set;
 
 import plume.Pair;
 
+import edu.washington.cs.sqlsynth.algorithms.SQLQueryCompletor;
 import edu.washington.cs.sqlsynth.entity.ConditionNode.OP;
 import edu.washington.cs.sqlsynth.util.Utils;
 
@@ -258,6 +260,17 @@ public class QueryCondition {
 		return parse(columnMap, new HashMap<String, AggregateExpr>(), cond);
 	}
 	
+	//XXX ugly ugly hacking for paper deadline
+	private static Map<String, ComparisionExpr> tmpCompMap = new LinkedHashMap<String, ComparisionExpr>();
+	public static QueryCondition parse(Map<String, TableColumn> columnMap, Map<String, AggregateExpr> aggMap, 
+			Map<String, ComparisionExpr> exprComMap, String cond) {
+		Utils.checkNotNull(exprComMap);
+		tmpCompMap.putAll(exprComMap);
+		QueryCondition qc = parse(columnMap, aggMap, cond);
+		tmpCompMap.clear();
+		return qc;
+	}
+	
 	public static QueryCondition parse(Map<String, TableColumn> columnMap, Map<String, AggregateExpr> aggMap, String cond) {
 		if(cond.isEmpty()) {
 			return null;
@@ -430,8 +443,13 @@ public class QueryCondition {
 		
 		TableColumn leftColumn = columnMap.get(leftPart);
 		AggregateExpr leftAgg = aggMap.get(leftPart);
-		Utils.checkTrue(leftColumn != null || leftAgg != null, "Not exist? " + leftPart); //FIXME not accurate
-		Utils.checkTrue(leftColumn == null || leftAgg == null, "All exist? " + leftPart); //FIXME not accurate
+//		if(SQLQueryCompletor.SEC_ORDER_FEA_CONDITION) {
+//			
+//		} else 
+		{
+		    Utils.checkTrue(leftColumn != null || leftAgg != null, "Not exist? " + leftPart); //FIXME not accurate
+		    Utils.checkTrue(leftColumn == null || leftAgg == null, "All exist? " + leftPart); //FIXME not accurate
+		}
 		ConditionExpr leftExpr = leftColumn != null ? new ConditionExpr(leftColumn) : new ConditionExpr(leftAgg);
 		
 		TableColumn rightColumn = columnMap.get(rightPart);

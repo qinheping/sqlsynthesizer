@@ -35,6 +35,10 @@ public class SQLQueryCompletor {
 	
 	// add a flag for 2nd order features, add by Yuyin
 	public static boolean SEC_ORDER_FEA_CONDITION = false;
+	//XXX ugly ugly hack
+	public static String extra_cond = null;
+	public static String out_table = null;
+	public static String out_column = null;
 	
 
 	public List<SQLQuery> inferSQLQueries() {
