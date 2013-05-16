@@ -105,13 +105,13 @@ to confirm whether our design would be sufficient in practice.
 Our online survey consists of 6 questions that can be
 divided into three parts. The first part includes
 simple demographic questions about participants.
-In the second part, participants are asked to select
+In the second part, participants were asked to select
 the top 10 most widely-used SQL features in their minds.
 Instead of directly asking participants about the SQL
 features, which might be vague and difficult to respond,
 we present them a list of \textit{all} standard
 SQL features in writing a query.
-Additionally, participants are asked to report their 
+Additionally, participants were asked to report their 
 own experience in using SQL in the third part of the survey.
 
 %Before distributing our survey, we conducted pilot
@@ -186,13 +186,13 @@ Second, some features, such as
 provide special ways to join tables, and are less likely to be
 used by non-expert end-users.
 Third, other features, such as \CodeIn{IN}, \CodeIn{UNION}, and \CodeIn{NOT EXIST},
-are used to write sub-queries or nested queries, which are the major source
+are used to write sub-queries or nested queries, which are the major sources
 of the PSPACE-hardness in query inference~\cite{DasSarma:2010}.
 Related, the \CodeIn{LIKE} keyword is designed for string
 wildcard matching; determining its matching
 patterns requires systematic search and can be
 expensive in practice. Thus, 
-for the sake of inference efficiency, we exclude these keywords.
+for the sake of inference efficiency, we excluded these keywords.
 
 %would quickly become intractable during 
 %pattern matching

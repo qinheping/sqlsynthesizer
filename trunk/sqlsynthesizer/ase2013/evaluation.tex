@@ -61,7 +61,7 @@ We collected \pnum non-trivial forum questions related to writing a SQL query
 (available at:~\cite{forumq}), among which
 two questions even did not receive any reply.
 Writing a good forum post is often harder than asking
-around a SQL expert (since the post has to clearly 
+a SQL expert (since the post has to clearly 
 describe the problem), and these end-users had already tried but
 failed to find the correct SQL query before they wrote the post.
 \end{itemize}
@@ -207,10 +207,9 @@ clause, and the \CodeIn{HAVING} clause.
 We implemented QBO, annotated
 each example table as it required, and run it
 on the same benchmarks. The results are shown in Figure~\ref{tab:results}.
-For all \exnum database exercises
-and \pnum forum questions, QBO only produces correct answers
-for XXX and XXX of them, respectively.
-Without surprise, \textit{all}
+QBO produces correct answers
+for only 2 textbook exercises and none of the forum questions.
+Without surprise, 
 benchmarks solved by QBO can also be solved by \ourtool.
 QBO's poor performance is primarily caused by its
 limited support for learning join conditions,
@@ -223,7 +222,7 @@ existing techniques either require different input
 or a snippet of Java code~\cite{abs-1208-2013}), 
 or produce completely different
 output (e.g., an excel transformation macro~\cite{Harris:2011}, or a
-text editing script~\cite{Kandel:2011}) than \ourtool.
+text editing script~\cite{Kandel:2011}) from \ourtool.
 Thus, it is hard to conduct a meaningful comparison.
 
 \subsection{Experimental Discussion}
@@ -237,9 +236,9 @@ nested queries. This limitation is expected;
 and our future work
 should address this by including more SQL
 features in \ourtool.
-Second, on some examples, the learned query
+Second, for some examples, the learned query
 conditions, though correct, are not precise
-enough; and require users to provide more informative examples.
+enough. It require users to provide more informative examples.
 Take the example input and output in Figure~\ref{fig:rank}
 as an example, \ourtool produces a SQL
 query \CodeIn{SELECT name FROM student WHERE score > 2}
@@ -269,7 +268,7 @@ There are three major threats to validity
 in our evaluation. First, the \exnum textbook exercises
 and \pnum forum questions, though covering
 a wide variety of SQL features, may not be representative enough.
-Thus, we can not claim the results can be generalized to an
+Thus, we cannot claim the results can be generalized to an
 arbitrary use-case scenario. Second, we only compared
 \ourtool with the \textit{Query by Output} technique~\cite{Tran:2009}.
 Using other query inference or recommendation techniques
