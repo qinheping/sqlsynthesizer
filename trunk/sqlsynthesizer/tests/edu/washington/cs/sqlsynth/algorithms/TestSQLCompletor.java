@@ -881,6 +881,7 @@ public class TestSQLCompletor extends TestCase {
 	 * */
 	public void test5_2_6()
 	{
+		long startTime = System.currentTimeMillis();
 		
 		SQLQueryCompletor.SEC_ORDER_FEA_CONDITION = true;
 		DbConnector.NO_ORDER_MATCHING = true;
@@ -920,6 +921,8 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 	}
 	
 	
