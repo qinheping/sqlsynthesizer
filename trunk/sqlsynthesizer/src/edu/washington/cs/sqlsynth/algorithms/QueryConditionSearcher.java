@@ -231,6 +231,14 @@ public class QueryConditionSearcher {
 			
 			
 			if (SQLQueryCompletor.SEC_ORDER_FEA_CONDITION) {
+				
+				FastVector tmpVector = new FastVector();
+				
+				tmpVector.addElement("true");
+				tmpVector.addElement("false");
+				
+//				attributes.addElement(new Attribute(columns.get(j).getColumnName(), tmpVector));
+				
 				for (int j = 0; j< columns.size(); ++j)
 				{
 					// only for numerical values
@@ -242,8 +250,8 @@ public class QueryConditionSearcher {
 													
 							if (columns.get(k).getType() == TableColumn.ColumnType.String)
 							{
-								attributes.addElement(new Attribute(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismax"));
-								attributes.addElement(new Attribute(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismin"));
+								attributes.addElement(new Attribute(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismax", tmpVector));
+								attributes.addElement(new Attribute(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismin", tmpVector));
 //								if (!forQueryTranslateAgg.containsKey(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismax"))
 //								{
 									TableColumn c = null;
@@ -264,6 +272,8 @@ public class QueryConditionSearcher {
 								if (!forQueryTranslateAgg.containsKey(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismax"))
 								{
 									ComparisionExpr expr = new ComparisionExpr(c, ComparisionType.ISMAX);
+									// FIXIT not quite sure...
+//									expr.setReferColumn(columns.get(j), columns.get(k).getColumnName());
 									forQueryTranslateCom.put(columns.get(j).getColumnName()+"_"+columns.get(k).getColumnName()+"_ismax", expr);
 
 								}
@@ -535,37 +545,37 @@ public class QueryConditionSearcher {
 								{
 									List<TableInstance> inputTables = completor.getInputTables();
 									boolean flag = false;
-									for (int m = 0; m<inputTables.size(); ++m)
-									{
-										TableInstance tmpTable = inputTables.get(m);
-										if (tmpTable.hasColumn(table.getColumn(l).getColumnName()) && tmpTable.hasColumn(table.getColumn(k).getColumnName()))
-										{
-											int rowNum = -1;
-											TableColumn col = tmpTable.getColumnByName(table.getColumn(k).getColumnName());
-										
-											for (int n = 0; n<tmpTable.getRowNum(); ++n)
-											{
-												if (col.getValue(n).toString().equals(table.getColumn(k).getValue(j).toString()))
-												{
-													rowNum = n;
-													break;
-												}
-											}
-										
-//										inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getUniqueCountOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), rowNum));
-											inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getComparisonResultWithMax(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), rowNum));
-											inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getComparisonResultWithMin(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), rowNum));
-
-											flag = true;
-											break;
-										}
-									}
+//									for (int m = 0; m<inputTables.size(); ++m)
+//									{
+//										TableInstance tmpTable = inputTables.get(m);
+//										if (tmpTable.hasColumn(table.getColumn(l).getColumnName()) && tmpTable.hasColumn(table.getColumn(k).getColumnName()))
+//										{
+//											int rowNum = -1;
+//											TableColumn col = tmpTable.getColumnByName(table.getColumn(k).getColumnName());
+//										
+//											for (int n = 0; n<tmpTable.getRowNum(); ++n)
+//											{
+//												if (col.getValue(n).toString().equals(table.getColumn(k).getValue(j).toString()))
+//												{
+//													rowNum = n;
+//													break;
+//												}
+//											}
+//										
+////										inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getUniqueCountOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), rowNum));
+//											inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getComparisonResultWithMaxAfterGroupBy(table.getColumn(k).getColumnName(), table.getColumn(l).getColumnName(), rowNum) == true? "true":"false");
+//											inst.setValue(allData.get(i).attribute(attCount++), tmpTable.getComparisonResultWithMinAfterGroupBy(table.getColumn(k).getColumnName(), table.getColumn(l).getColumnName(), rowNum) == true? "true":"false");
+//
+//											flag = true;
+//											break;
+//										}
+//									}
 									if (!flag)
 									{
 									// Different from previous version, may actually increase dimensionality of feature space, and bring problem in generating query conditions
 //										inst.setValue(allData.get(i).attribute(attCount++), table.getUniqueCountOfSameKey(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), j));
-										inst.setValue(allData.get(i).attribute(attCount++), table.getComparisonResultWithMax(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), j));
-										inst.setValue(allData.get(i).attribute(attCount++), table.getComparisonResultWithMin(table.getColumn(l).getColumnName(), table.getColumn(k).getColumnName(), j));
+										inst.setValue(allData.get(i).attribute(attCount++), table.getComparisonResultWithMaxAfterGroupBy(table.getColumn(k).getColumnName(), table.getColumn(l).getColumnName(), j) == true? "true":"false");
+										inst.setValue(allData.get(i).attribute(attCount++), table.getComparisonResultWithMinAfterGroupBy(table.getColumn(k).getColumnName(), table.getColumn(l).getColumnName(), j) == true? "true":"false");
 								//	inst.setValue(allData.get(i).attribute(attCount++), 0);
 									}
 
