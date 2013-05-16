@@ -185,16 +185,16 @@ a typical user often gave up after XXX interactions.
 \todo{xxx}
 
 
-\subsubsection{Comparison with an Existing Technique}.
+\subsubsection{Comparison with an Existing Technique}
 \label{sec:comparison}
-
 We compared \ourtool with \textit{Query By Output} (QBO), an
 approach to infer SQL queries~\cite{Tran:2009} from examples.
 We chose QBO because it is the most recent technique and also one
 of the most accurate SQL query inference techniques in
 the literature. QBO requires an example input-output pair, and
 uses the decision tree algorithm to infer a query.
-However, QBO has three fundamental limitations. First, 
+However, it
+has three fundamental limitations. First, 
 it can only join two tables on their key columns (annotated by users), and requires
 users to specify how to project the results
 by annotating the projection columns.
@@ -204,9 +204,9 @@ infer simple query conditions. Third, QBO does not support
 many useful SQL features, such as aggregates, the \CodeIn{GROUP BY}
 clause, and the \CodeIn{HAVING} clause.
 
-We implemented QBO as a special case of \ourtool, annotated
-each example table as required by QBO, and run it
-on the same benchmarks. Its results are shown in Figure~\ref{tab:results}.
+We implemented QBO, annotated
+each example table as it required, and run it
+on the same benchmarks. The results are shown in Figure~\ref{tab:results}.
 For all \exnum database exercises
 and \pnum forum questions, QBO only produces correct answers
 for XXX and XXX of them, respectively.
@@ -217,14 +217,14 @@ limited support for learning join conditions,
 query conditions, as well as many other SQL features.
 
 We did not compared \ourtool with other related techniques~\cite{Howe:2011,
-abs-1208-2013, Harris:2011, Kandel:2011}, for two reasons. First,
-some techniques such as~\cite{Khoussainova:2010, Howe:2011, abs-1208-2013},
-require completely different input (e.g., a query log~\cite{Khoussainova:2010, Howe:2011}
-or a snippet of Java code~\cite{abs-1208-2013}) than \ourtool.
-Second, other techniques produce completely different
+abs-1208-2013, Harris:2011, Kandel:2011}, because
+existing techniques either require different input
+(e.g., a query log~\cite{Khoussainova:2010, Howe:2011}
+or a snippet of Java code~\cite{abs-1208-2013}), 
+or produce completely different
 output (e.g., an excel transformation macro~\cite{Harris:2011}, or a
-text editing script~\cite{Kandel:2011}) than \ourtool. All these
-factors make it hard to conduct a meaningful comparison.
+text editing script~\cite{Kandel:2011}) than \ourtool.
+Thus, it is hard to conduct a meaningful comparison.
 
 \subsection{Experimental Discussion}
 

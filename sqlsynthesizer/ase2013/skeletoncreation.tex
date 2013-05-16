@@ -28,7 +28,7 @@ each part.
 \vspace{1mm}
 {\textbf{Determining query tables.}} 
 A typical end-user is often unwilling to provide more than enough
-example input. Thus, we assume every example input table
+example input. Based on this observation, we assume every example input table
 is used (at least once) in the result query.
 By default, the query tables are all example input tables.
 Yet it is possible that one input table will be
@@ -56,7 +56,7 @@ the query table set.
 {\textbf{Determining join conditions. }} There
 are many ways to join all query tables; enumerating
 all possibilities may yield a large number of
-join conditions and is feasible in practice. 
+join conditions and is infeasible in practice. 
 To determine the most likely join conditions among them,
 \ourtool uses two rules to repeatedly join
 two different tables in the query tables,
@@ -71,7 +71,7 @@ tables and has the same data type.
 If such columns do not exist,
 \ourtool uses the second rule to
 join tables on columns with the same data type
-(even with different names).
+(but with different names).
 For example, suppose the column name \CodeIn{student\_id}
 in the \CodeIn{student} table of Figure~\ref{fig:motivating}(a)
 is changed to \CodeIn{student\_key}, \ourtool will no longer
@@ -89,8 +89,8 @@ three skeletons, each of which uses one join condition.
 {\textbf{Determining projection columns.}} \ourtool
 scans each column in the output table, and checks whether
 the column name appears in an input table.
-If so, \ourtool uses the matched column from the input
-table as the projection column in the skeleton.
+If so, \ourtool uses the first matched column from the input
+table as the projection column.
 Otherwise, the output column must be created by using an aggregate.
 Take the output table in Figure~\ref{fig:motivating} as an
 example, \ourtool determines that the \CodeIn{name} column
@@ -131,7 +131,7 @@ be completed in Section~\ref{sec:completion}.}
 \end{figure}
 
 
-For an example input and output pair,
+Given an example input and output pair,
 depending on the number of join conditions,
 \ourtool may create multiple skeletons,
 which share the same query tables and
