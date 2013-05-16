@@ -1,40 +1,40 @@
 \begin{figure*}[t]
 \setlength{\tabcolsep}{.24\tabcolsep}
-\begin{tabular}{|c|l|c||c|c|c|c|c||l|}
+\begin{tabular}{|c|l|c||c|c|c|c|c||c|}
 \hline
 \multicolumn{3}{|c||}{Benchmarks} & \multicolumn{5}{|c||}{\ourtool} & Query by\\
 \cline{1-8}
  ID & Source & \#Input Tables & Example Size & Rank & Time Cost (s) & Cost in Writing Examples (m) & \#Iterations & Output~\cite{Tran:2009}\\
  \hline
  \hline
- 1 &Textbook Ex 5.1.1 & 4 &  & & & & & \\
- 2 &Textbook Ex 5.1.2 & 4&  & & & & & \\
- 3 &Textbook Ex 5.1.3 & 4&  & & & & & \\
- 4 &Textbook Ex 5.1.4 & 4&  & & & & & \\
- 5 &Textbook Ex 5.1.5 & 4&  & & & & & \\
- 6 &Textbook Ex 5.1.6 & 4&  & & & & & \\
- 7 &Textbook Ex 5.1.7 & 4&  & & & & & \\
- 8 &Textbook Ex 5.1.8 & 4&  & & & & & \\
- 9 &Textbook Ex 5.1.9 & 4&  & & & & & \\
- 10 &Textbook Ex 5.1.10 & 4&  & & & & & \\
- 11 &Textbook Ex 5.1.11 & 4&  & & & & & \\
- 12 &Textbook Ex 5.1.12 & 4&  & & & & & \\
- 13 &Textbook Ex 5.2.1 & 3 &  & & & & & \\
- 14 &Textbook Ex 5.2.2 & 3&  & & & & & \\
- 15 &Textbook Ex 5.2.3 & 3&  & & & & & \\
- 16 &Textbook Ex 5.2.4 & 3&  & & & & & \\
- 17 &Textbook Ex 5.2.5 & 3&  & & & & & \\
- 18 &Textbook Ex 5.2.6 & 3&  & & & & & \\
- 19 &Textbook Ex 5.2.7 & 3&  & & & & & \\
- 20 &Textbook Ex 5.2.8 & 3&  & & & & & \\
- 21 &Textbook Ex 5.2.9 & 3&  & & & & & \\
- 22 &Textbook Ex 5.2.10 & 3&  & & & & & \\
- 23 &Textbook Ex 5.2.11 & 3&  & & & & & \\
- 24 &Forum Question 1 & &  & & & & & \\
- 25 &Forum Question 2 & &  & & & & & \\
- 26 &Forum Question 3 & &  & & & & & \\
- 27 &Forum Question 4 & &  & & & & & \\
- 28 &Forum Question 5 & &  & & & & & \\
+ 1 &Textbook Ex 5.1.1 & 4 & 28 & 1 & 8 & 4& 2& \yes\\
+ 2 &Textbook Ex 5.1.2 & 4& 35 &  1& 4 & & 10 & \no \\
+ 3 &Textbook Ex 5.1.3 & 2& 52 &  1& & 6& 3 & \no \\
+ 4 &Textbook Ex 5.1.4 & 3&  & \xx &  & & 10& \no \\
+ 5 &Textbook Ex 5.1.5 & 2& 17 &  1& 3 & 3 & 1& \no \\
+ 6 &Textbook Ex 5.1.6 & 3& 44 &  1&2 & 6& 3& \no \\
+ 7 &Textbook Ex 5.1.7 & 1& 7 &  1& 2 & 1& 1& \no \\
+ 8 &Textbook Ex 5.1.8 & 1& 7 &  1& 2 & 1 & 1& \no \\
+ 9 &Textbook Ex 5.1.9 & 2& 22 &  1& 4& 2& 5& \no \\
+ 10 &Textbook Ex 5.1.10 & 2& 19 &  1& 2& 3& 3& \yes \\
+ 11 &Textbook Ex 5.1.11 & 4&  & \xx & & & & \no \\
+ 12 &Textbook Ex 5.1.12 & 4&  & \xx & & & & \no \\
+ 13 &Textbook Ex 5.2.1 & 2 & 12 &  1& 3& 2& 1& \no \\
+ 14 &Textbook Ex 5.2.2 & 3& 18 &  1&3  & 4& 2& \no \\
+ 15 &Textbook Ex 5.2.3 & 3&  & \xx & & & & \no \\
+ 16 &Textbook Ex 5.2.4 & 3& 28 &  1&3 & 6 & 3& \no \\
+ 17 &Textbook Ex 5.2.5 & 3&  & \xx & & & & \no \\
+ 18 &Textbook Ex 5.2.6 & 3&  & ? & & & & \no \\
+ 19 &Textbook Ex 5.2.7 & 3& 25 &  1& 3& 5& 3& \no \\
+ 20 &Textbook Ex 5.2.8 & 3&  & \xx & & & & \no \\
+ 21 &Textbook Ex 5.2.9 & 3& 31 &  1& 2& 7& 3& \no \\
+ 22 &Textbook Ex 5.2.10 & 3&  & \xx& & & & \no \\
+ 23 &Textbook Ex 5.2.11 & 3&  & \xx& & & & \no \\
+ 24 &Forum Question 1 & 1 &  & & & & & \no \\
+ 25 &Forum Question 2 & 1 &  & & & & & \no \\
+ 26 &Forum Question 3 & 1 &  & & & & & \no \\
+ 27 &Forum Question 4 & 3 &  & & & & & \no \\
+ 28 &Forum Question 5 & 4 & 13 & 1 & 120 & 1 & 1 & \no \\
 \hline
 \end{tabular}
 \Caption{{\label{tab:results} Experimental results.

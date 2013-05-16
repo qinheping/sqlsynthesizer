@@ -37,7 +37,7 @@ The standard way for rule learning is using a decision-tree-based
 algorithm. However, the key challenge is how to design a good feature set.
 Existing approaches~\cite{Tran:2009} simply use
 tuple values in the input table(s) as features, 
-and limits their abilities in inferring non-trivial
+and limit their abilities in inferring non-trivial
 query conditions. In particular,
 merely using tuple values as features can only infer
 conditions comparing a column value with a constant
@@ -172,7 +172,7 @@ aggregate's return type. For instance, if an output column
 contains float values, it cannot be produced by using the \CodeIn{COUNT}
 or \CodeIn{COUNT DISTINCT} aggregates, or 
 using the \CodeIn{MAX} aggregate over a column of integer type.
-On the other hand, some aggregates cannot be applied on
+On the other hand, some aggregates cannot be applied to
 table columns of certain types. For example, the \CodeIn{AVG}
 and \CodeIn{SUM} aggregates cannot be applied to columns of string type.
 \ourtool encodes such knowledge to prune the search space.
