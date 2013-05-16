@@ -6,5 +6,6 @@ The expected SQL:
 select upedonid, count(upedonid)
 from pedon
 where upedonid != 'null'
-group by upedonid;
+group by upedonid
+having count(upedonid) > 1;
 //
