@@ -830,6 +830,13 @@ public class TestSQLCompletor extends TestCase {
 	}
 	
 	
+	/**
+	 * Here is the correct sql:
+	 * select distinct c1.part_key, suppliers.sname
+	 * from suppliers, catalog c1
+	 * where suppliers.sid = c1.sid
+	 *     and c1.cost = (select max(catalog.cost) from catalog where catalog.part_key=c1.part_key)
+	 * */
 	public void test5_2_6()
 	{
 		
@@ -863,6 +870,7 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
+		System.out.println("Number of queries before validation: " + queries.size());
 		queries = completor.validateQueriesOnDb(queries);
 		//after validating on my sql
 		System.out.println("The final output....");
