@@ -841,6 +841,7 @@ public class TestSQLCompletor extends TestCase {
 	{
 		
 		SQLQueryCompletor.SEC_ORDER_FEA_CONDITION = true;
+		DbConnector.NO_ORDER_MATCHING = true;
 		
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/5_2_6/suppliers");
 		TableInstance input2 = TableInstanceReader.readTableFromFile("./dat/5_2_6/catalog");
@@ -1180,6 +1181,10 @@ public class TestSQLCompletor extends TestCase {
 		DbConnector.NO_ORDER_MATCHING = false;
 		SQLSkeleton.REMOVE_DUPLICATE = false;
 		SQLQueryCompletor.NESTED_CONDITION = false;
+		SQLQueryCompletor.SEC_ORDER_FEA_CONDITION = false;
+		SQLQueryCompletor.extra_cond = null;
+		SQLQueryCompletor.out_column = null;
+		SQLQueryCompletor.out_table = null;
 	}
 	
 }
