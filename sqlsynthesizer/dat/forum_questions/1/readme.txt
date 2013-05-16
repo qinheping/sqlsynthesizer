@@ -1,10 +1,10 @@
 http://forums.tutorialized.com/sql-basics-113/finding-list-of-duplicate-records-with-more-than-two-duplicates-379845.html
 
-SELECT upedonid, count(upedonid) as nmbr
-FROM pedon
-WHERE upedonid != null
-GROUP BY upedonid
+//
+The expected SQL:
 
-
-just 1 column
-
+select upedonid, count(upedonid)
+from pedon
+where upedonid != 'null'
+group by upedonid;
+//
