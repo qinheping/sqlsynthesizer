@@ -1107,6 +1107,8 @@ public class TestSQLCompletor extends TestCase {
 	
 	
 	public void testForum_1() {
+		long startTime = System.currentTimeMillis();
+		
 		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/forum_questions/1/pedon");
 		TableInstance output = TableInstanceReader.readTableFromFile("./dat/forum_questions/1/output");
 		
@@ -1136,8 +1138,47 @@ public class TestSQLCompletor extends TestCase {
 		for(SQLQuery q : queries) {
 			System.out.println(q.toSQLString());
 		}
-		
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
 	}
+	
+	
+	public void testForum_2() {
+		long startTime = System.currentTimeMillis();
+		
+		TableInstance input1 = TableInstanceReader.readTableFromFile("./dat/forum_questions/2/invoices");
+		TableInstance output = TableInstanceReader.readTableFromFile("./dat/forum_questions/2/output");
+		
+		Collection<TableInstance> inputs = new LinkedList<TableInstance>();
+		inputs.add(input1);
+		
+		SQLSkeletonCreator creator = new SQLSkeletonCreator(inputs, output);
+		SQLSkeleton skeleton = creator.inferSQLSkeleton();
+		
+		System.out.println("input 1:");
+		System.out.println(input1);
+		
+		
+		System.out.println("number of join columns: " + skeleton.getJoinPairNum());
+		
+		SQLQueryCompletor completor = new SQLQueryCompletor(skeleton);
+		completor.addInputTable(input1);
+		completor.setOutputTable(output);
+		
+		List<SQLQuery> queries = completor.inferSQLQueries();
+		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+		queries = completor.validateQueriesOnDb(queries);
+		//after validating on my sql
+		System.out.println("The final output....");
+		for(SQLQuery q : queries) {
+			System.out.println(q.toSQLString());
+		}
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds");
+	}
+	
 	
 	
 	public void testExampleForPresentation()
