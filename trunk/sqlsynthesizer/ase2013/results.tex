@@ -37,24 +37,24 @@
  28 &Forum Question 5 & &  & & & & & \\
 \hline
 \end{tabular}
-\Caption{{\label{tab:results} Experimental results of SQL query synthesis.
-Column ``Benchmarks'' describes the characteristics of our benchmarks. Sub-column ``\#Input Tables''
+\Caption{{\label{tab:results} Experimental results.
+Column ``Benchmarks'' describes the characteristics of our benchmarks. Column ``\#Input Tables''
 shows the number of input tables in each benchmark. Column ``\ourtool'' shows
-\ourtool's results. Sub-column ``Example Size''
+\ourtool's results. Column ``Example Size''
 shows the number of tuples (i.e., rows) in all example input and output tables.
-Sub-column ``Rank'' shows the absolute
+Column ``Rank'' shows the absolute
 rank of the correct SQL query in \ourtool's output.
 ``\textbf{X}'' means \ourtool fails to produce a correct answer.
-Sub-column ``Cost in Writing
+Column ``Cost in Writing
 Examples (m)'' shows the total time cost of writing sufficient
-examples in minutes. Sub-column ``\#Iterations'' shows the number of
+examples in minutes. Column ``\#Iterations'' shows the number of
 interactive rounds in using \ourtool to obtain the correct query.
-Column ``Query by Output'' shows the results of using an existing
+Column ``Query by Output'' shows the results of an existing
 technique, called
 \textit{Query by Output} (QBO)~\cite{Tran:2009}. In this column,
 ``\textbf{Y}''  means QBO produces the correct SQL query, and ``\textbf{N}''
 means QBO fails to produce the correct query.
-Since QBO was implemented as a special case in \ourtool; its
+Since QBO was implemented as a special case of \ourtool; its
 time cost is similar to \ourtool and is omitted for brevity.
 }}
 \end{figure*}
