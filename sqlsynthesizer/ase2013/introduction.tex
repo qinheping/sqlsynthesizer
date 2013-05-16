@@ -85,7 +85,7 @@ SQL queries would be valuable. %highly desirable.
 \vspace{1mm}
 \noindent \textbf{\textit{Existing solutions.}}
 \textit{Graphical User Interfaces} (GUIs) and \textit{programming languages}
-are two state-of-the-art approaches in helping end-users perform
+are two state-of-the-art approaches to help end-users perform
 database queries. However, both approaches are far from satisfactory.
 
 Many RDBMS come with a well-designed GUI with lots of features.
@@ -126,14 +126,14 @@ In this paper, we present a technique (and its tool
 implementation, called \ourtool) to automatically
 synthesize SQL queries
 \footnote{
-Note that all queries in this paper refer to SQL queries
-that only retrieve data from a database and
-do not update a database.}
+All queries mentioned in this paper refer to SQL queries
+that retrieve data from a database but
+do not update its content.}
 from input-output examples.
 Although input-output examples may lead to
 underspecification, writing them, as opposed to writing
 declarative specifications or imperative code
-of any form, is one of the most straightforward and natural ways
+of any form, is one of the easiest ways
 for end-users to describe \textit{what} the task is.
 %\ourtool takes example input
 %table(s) and output table from the end-users, and then automatically
@@ -142,7 +142,7 @@ for end-users to describe \textit{what} the task is.
 If the synthesized SQL query is applied
 to the example input, then it produces the example output; and if the
 synthesized SQL query is applied to other
-similar inputs (potentially much larger tables),
+similar input (potentially much larger tables),
 then it produces a corresponding output.
 
 
@@ -211,18 +211,19 @@ a SQL query (Section~\ref{sec:approach}):
 \begin{itemize}
 \item \textbf{Skeleton Creation.} \ourtool scans the
 given input-output examples and heuristically
-determines the table joins and projection columns in
+determines table joins and projection columns in
 the result query. Then, it creates an
-incomplete SQL query (called, query skeleton) to
+incomplete SQL query (called, a query skeleton) to
 capture the basic structure of the result query.
 
 \item \textbf{Query Completion.} \ourtool
 uses a machine learning algorithm to infer a set of accurate
 and expressive rules, which transforms the input
 example into the output example. Then, it
-searches for possible aggregates and columns in
-the \CodeIn{ORDER BY} clause; and then
-builds a list candidate queries. 
+searches for other missing parts in a query skeleton,
+%possible aggregates and columns in
+%the \CodeIn{ORDER BY} clause; 
+and then builds a list of candidate queries. 
 
 
 \item \textbf{Candidate Ranking.} If multiple SQL
@@ -315,7 +316,7 @@ available at: \url{http://sqlsynthesizer.googlecode.com}.
 \item \textbf{Evaluation.} We applied \ourtool
 to \exnum textbook exercises and \pnum 
 forum questions.
-The experimental results show that \ourtool can synthesize
-a wide range of SQL queries, and it does so with
+The experimental results show that \ourtool is
+useful in synthesizing SQL queries with
 small examples (Section~\ref{sec:evaluation}).
 \end{itemize}

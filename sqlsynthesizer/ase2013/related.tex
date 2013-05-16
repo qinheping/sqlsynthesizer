@@ -2,8 +2,8 @@
 \section{Related Work}
 \label{sec:related}
 
-This section discusses two categories
-of closely-related work on reverse engineering SQL queries 
+We next discuss two categories
+of related work on reverse engineering SQL queries 
 and automated program synthesis.
 
 
@@ -18,7 +18,7 @@ Zloof's pioneering work on \textit{Query by Example} (QBE)~\cite{Zloof:1975}
 provided a high-level query language and a
 form-based Graphical User Interface (GUI) for
 writing database queries. To use the QBE system, 
-users need to learn its own query language,
+users need to learn its query language,
 formulate a query with the language, and fill in
 the appropriate skeleton tables on the GUI.
 By contrast, \ourtool mitigates such learning curves
@@ -110,14 +110,14 @@ The PADS~\cite{Fisher:2008} system takes a large sample
 of unstructured data and infers a
 format that describes the data. Related,
 the Wrangler tool, developed in the HCI community,
-provides a visual programming-by-demonstration
-interface to table transformations for data cleaning~\cite{Kandel:2011}.
+provides a visual interface for table transformations
+and data cleaning~\cite{Kandel:2011}.
 These two techniques, though well-suited for tasks
 like text extraction, cannot be used to 
 synthesize a database query.
 This is because text extraction tasks
 use completely different abstractions than a database query task,
-and the existing tools lack the support for many database operations
+and the existing tools like PADS and Wrangler lack the support for many database operations
 such as joins and aggregation.
 
 %text extraction tasks
@@ -178,9 +178,9 @@ SQL queries using user-provided examples.
 
 
 Cheung et al.~\cite{abs-1208-2013} presented a technique to infer SQL
-queries from imperative code. Their technique identifies
+queries from imperative code. Their technique transforms
 fragments of application logic (written in an imperative language
-like Java) that can be pushed into SQL queries. 
+like Java) into SQL queries. 
 Compared to \ourtool, their work aims to help developers
 improve a database application's performance,
 rather than helping non-expert end-users
@@ -189,8 +189,7 @@ If an end-user wishes to use their technique to
 synthesize a SQL query, she must write a snippet of
 imperative code to describe the query task.
 Comparing to providing example input
-and output as required by \ourtool,
-writing correct imperative code is too challenging
+and output, writing correct imperative code is too challenging
 for a typical end-user, and thus would
 inevitably degrade the technique's usability.
 
