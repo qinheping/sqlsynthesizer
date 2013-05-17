@@ -1,29 +1,28 @@
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[scale=0.75]{motivating}
-  \vspace*{-4.0ex}\caption {{\label{fig:motivating}
-  Illustration of how to use \ourtool to solve the problem in Section~\ref{sec:example}. Users provide \ourtool with
+  \includegraphics[scale=0.73]{motivating}
+  \vspace*{-2.0ex}\caption {{\label{fig:motivating}
+  Illustration of how to use \ourtool to solve the problem in Section~\ref{sec:example}.
+  The user provides \ourtool with
   two input tables (shown in (a)) and an output table (shown in (c)).
   \ourtool automatically synthesizes a SQL query (shown in (b)) that
   transforms the two input tables into the output table.
 }}
+\vspace{-1mm}
 \end{figure*}
 
 \section{Illustrating Example}
 \label{sec:example}
 
+\vspace{-1mm}
+
 We use an example, described below, to illustrate the use
 of \ourtool. The example is taken from a classic
 database textbook~\cite{cowbook} (Chapter 5, Exercise 1)
 and has been simplified for illustration purpose\footnote{
-This exercise defines 2 tables: \CodeIn{student}
-and \CodeIn{enrolled}. The \CodeIn{student} table
-contains three columns: \CodeIn{student\_id}, \CodeIn{name},
-and \CodeIn{level}. Table \CodeIn{enrolled} also contains
-three columns: \CodeIn{student\_id}, \CodeIn{course\_id},
-and \CodeIn{score}.
-}.
+This exercise defines 2 tables, whose
+schemas are shown in Figure~\ref{fig:motivating}(a).}.
 
 \begin{quote}
 \textit{Find the name and the maximum course score of each senior student
@@ -40,7 +39,7 @@ to fulfill the described task.
 %features and use them correctly.
 
 As an alternative, users can use \ourtool to obtain
-the desirable query.
+the desired query.
 %As illustrated in Figure~\ref{fig:motivating},
 To use \ourtool, an end-user only needs to provide it with
 some small, representative example input and output tables
@@ -63,7 +62,10 @@ clause) who are enrolled in more than 2 courses
 (using a condition in the \CodeIn{HAVING} clause).
 Finally, the query projects the result on the
 \CodeIn{student.name} column and uses the \CodeIn{MAX} aggregate
-to compute the maximum course score.
+to compute the maximum course score. To the best of
+our knowledge, none of the existing techniques~\cite{Tran:2009, DasSarma:2010, Harris:2011,
+ Kandel:2011}
+can infer this query from the given examples.
 
 %the \CodeIn{student} with \CodeIn{enrolled} tables,
 %then group bys the joined table by the \CodeIn{student\_id}
