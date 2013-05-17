@@ -1,4 +1,6 @@
 
+\input{results}
+
 \section{Evaluation}
 \label{sec:evaluation}
 \vspace{-1mm}
@@ -114,7 +116,6 @@ with 4GB physical memory, running Windows 7.
 
 
 
-\input{results}
 
 
 \vspace{-2mm}
@@ -211,7 +212,7 @@ rounds ranges from 1 to 3.
 We also observed that,
 for 7 failed benchmarks, the user
 gave up after 10 minutes and
-10 interaction rounds in keeping adding
+10 interaction rounds in adding
 examples and invoking \ourtool, since the synthesized
 SQL queries in each round seemed to get closer to the expected
 query but still differed in certain parts.
@@ -219,11 +220,10 @@ For 1 failed benchmark, the user immediately
 concluded that \ourtool could not produce a correct
 answer after 4 rounds, because the synthesized SQL
 query is way different than expected.
-Such observation drove us to
-continously enhance \ourtool's user experience.
-For example, informing users about the solvability of a problem
-\textit{earlier} is essential
-to improve \ourtool's usability.
+Such observation is driving us to improve \ourtool's
+user experience. For example, as our future work,
+we plan to inform users about the solvability of a problem
+\textit{earlier}. 
 
 %systematically explore the complete space, as described in Section 5
 
@@ -264,7 +264,7 @@ those techniques either require different input
 (e.g., a query log~\cite{Khoussainova:2010, Howe:2011}
 or a snippet of Java code~\cite{abs-1208-2013}), 
 or produce completely different
-output (e.g., an excel transformation macro~\cite{Harris:2011}, or a
+output (e.g., an excel macro~\cite{Harris:2011}, or a
 text editing script~\cite{Kandel:2011}) from \ourtool.
 Thus, it is hard to conduct a meaningful comparison.
 
@@ -276,55 +276,51 @@ Thus, it is hard to conduct a meaningful comparison.
 
 \noindent \textbf{\textit{Limitations.}}
 The experiments indicate three limitations
-of our technique. First, some query tasks
-cannot be formulated by our SQL subset (Section~\ref{sec:langsubset})
-due to unsupported features, such as
-nested queries. This limitation is expected;
-and our future work
-should address this by including more SQL
+of \ourtool. First, some queries
+cannot be formulated by our SQL subset
+due to unsupported features. This limitation is expected.
+Our future work
+should address it by including more SQL
 features in \ourtool.
 Second, for some examples, the learned query
 conditions, though correct, are not precise
 enough. It require users to provide more informative examples.
-Take the example input and output in Figure~\ref{fig:rank}
-as an example, \ourtool produces a SQL
+For example, in Figure~\ref{fig:rank}, \ourtool produces a 
 query \CodeIn{SELECT name FROM student WHERE score > 2}
-to satisfy the examples. However, if
-the condition of the expected query
+that satisfies the examples. However, if
+the expected query condition 
 is \CodeIn{score > 3}, users must provide
 one more tuple to the input table, such as "Chris, 3"
 (a tuple with ``Chris'' in the name column and ``3''
 in the score column), while keeping the output table
 unchanged, 
-to guide \ourtool to learn the correct query condition.
+to guide \ourtool to learn the desired condition.
 %Such imprecision is not caused by the limitation of
 %\ourtool; rather, it reflects.
 Third, \ourtool requires
 users to provide noise-free input-output examples.
-Even in the presence of a small amount of user-input
+Even in the presence of a small amount of 
 noises (e.g., a typo), \ourtool will declare failure.
 %when it fails to infer a valid SQL query.
-To overcome this limitation, we plan to design a more
-robust inference algorithm that can identify
-and tolerate user-input noises, and even suggest a fix
-to the noisy example.
+To overcome this limitation, we plan to improve \ourtool
+'s algorithm, making it tolerate small user-input noises.
+%, and even suggest a fix
+%to the noisy example.
 
 \vspace{.5mm}
 \noindent \textbf{\textit{Threats to Validity.}}
-There are three major threats to validity
+There are two major threats to validity
 in our evaluation. First, the \exnum textbook exercises
-and \pnum forum questions, though covering
-a wide variety of SQL features, may not be representative enough.
+and \pnum forum questions
+may not be representative enough.
 Thus, we cannot claim the results can be generalized to an
-arbitrary use-case scenario. Second, we only compared
-\ourtool with the \textit{Query by Output} technique~\cite{Tran:2009}.
-Using other query inference or recommendation techniques
-might achieve different results. Third, our
+arbitrary use-case scenario. Second, our
 experiments focus on evaluating \ourtool's generality 
 and accuracy. Even though all experiments are carried
 out by a different person rather than \ourtool's developers,
-it is unknown about \ourtool's general usability.
-A user study is needed to eliminate this threat.
+a user study is needed to investigate
+\ourtool's general usability.
+%A user study is needed to eliminate this threat.
 %To address this issue, we plan to conduct
 %a user study in our future work.
 

@@ -6,15 +6,17 @@
 
 It is possible that multiple SQL queries satisfying
 the given input-output examples will be returned.
-To help end-users select their expected queries,
-\ourtool ranks more likely queries higher in the output.
+%To help end-users select their expected queries,
+%\ourtool ranks more likely queries higher in the output.
 %This may adversely impact end-users who want to
 %perform simple query tasks but now need
 %to select the query of their intent.
 %To alleviate this problem, 
-To do so, \ourtool employs
-the Occam's razor principle, which states that the
-simplest explanation is usually the correct one.
+%To do so, 
+\ourtool employs the Occam's razor principle,
+which states that the simplest explanation is
+usually the correct one, to rank simpler queries higher in
+the output.
 A simpler query is less likely to overfit the given examples
 than a complex one, even when both of them
 can satisfy the example input and output.
