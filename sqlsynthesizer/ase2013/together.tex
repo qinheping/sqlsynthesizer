@@ -8,31 +8,33 @@ Figure~\ref{fig:workflow} illustrates \ourtool's workflow.
 creates a set of query skeletons from the given examples;
 (2) the ``Query Completion'' step (Section~\ref{sec:completion}) 
 infers the missing parts in each query skeleton and outputs
-a list of syntactically-valid queries that satisfy
-the provided example input and output; and (3) the ``Candidate Ranking'' step (Section~\ref{sec:ranking})
-ranks all synthesized SQL queries and places the more likely ones near the top. 
-Users can inspect the query list and select an expected query
-from it.
+a list of queries that satisfy
+the provided example input and output; and (3) the ``Candidate Ranking'' step (Section~\ref{sec:ranking}) uses the Occam's razor
+principle to rank simpler queries higher in the output.
+Users can inspect \ourtool's output to select a desired query.
 If the synthesized SQL queries satisfy the example input and
 output, but do not address the user's intention,
-\ourtool can be used interactively by requesting more
-informative examples from the end-user and then
-update the result queries.\todo{xx}
+the user can provide \ourtool with more informative examples
+and re-applied \ourtool to the new examples.
+%\ourtool can be used interactively by requesting more
+%informative examples from the end-user and then
+%update the result queries.\todo{xx}
 
-Take the query in Figure~\ref{fig:queryex} as an example,
-the ``Skeleton Creation''
-step infers its projection columns, query tables, and join conditions; and
-the ``Query Completion'' step infers the remaining parts (i.e., aggregates,
-query conditions, the \CodeIn{GROUP BY} clause, the
-\CodeIn{HAVING} clause, and the \CodeIn{ORDER BY} clause).
+%Take the query in Figure~\ref{fig:queryex} as an example,
+%the ``Skeleton Creation''
+%step infers its projection columns, query tables, and join conditions; and
+%the ``Query Completion'' step infers the remaining parts (i.e., aggregates,
+%query conditions, the \CodeIn{GROUP BY} clause, the
+%\CodeIn{HAVING} clause, and the \CodeIn{ORDER BY} clause).
 
 Figure~\ref{fig:algorithm} sketches \ourtool's high-level algorithm.
 Line 2 corresponds to the first ``Query Skeleton
 Creation'' step. Lines 3 -- 13 correspond to the second ``Query Completion''
 step, in which \ourtool searches for the query conditions (line 4)\footnote{
-Including conditions used in the \CodeIn{HAVIGN} clause.},
+Including conditions in the \CodeIn{HAVIGN} clause,
+and columns in the \CodeIn{GROUP BY} clause.},
 aggregates (line 5), and columns in the \CodeIn{ORDER BY} clause (line 6).
-\ourtool then assembles a list of candidate SQL queries (line 7), and
+\ourtool then assembles a list of candidate queries (line 7), and
 validates their correctness on the examples (lines 8 -- 11).
 Line 14 corresponds to the ``Query Ranking'' step.
 
@@ -57,7 +59,7 @@ synthesizeSQLQueries({$T_{I}$, $T_{o}$})\\
 \STATE $\mathit{columns}$ $\leftarrow$ searchForOrderBys($\mathit{T_O}$, $\mathit{skeleton}$, $\mathit{aggs}$)
 \STATE $\mathit{queries}$ $\leftarrow$ buildQueries($\mathit{skeleton}$, $\mathit{conds}$, $\mathit{aggs}$, $\mathit{columns}$)
 \FOR{each $\mathit{query}$ in $\mathit{queries}$}
-\IF{isValidOnExamples($\mathit{query}$, $\mathit{T_I}$, $\mathit{T_O}$)}
+\IF{satisfyExamples($\mathit{query}$, $\mathit{T_I}$, $\mathit{T_O}$)}
 \STATE $\mathit{queryList}$.add($\mathit{query}$)
 \ENDIF
 \ENDFOR
