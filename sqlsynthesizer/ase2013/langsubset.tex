@@ -1,16 +1,18 @@
 
 \begin{figure}[t]
   \centering
-  \includegraphics[scale=0.45]{survey}
+  \includegraphics[scale=0.55]{survey}
   \vspace*{-3.0ex}\caption {{\label{fig:survey}
   Survey results of the most widely-used SQL features
-  in writing a database query. 
+  in writing a database query. Each participant
+  selected the top 10 most common SQL features.
  % There were 12 participants
  % in the survey, and each participant was asked to
  % select the top 10 widely-used SQL features.
   SQL features with no vote are omitted 
   for brevity.
 }}
+\vspace{-1mm}
 \end{figure}
 
 \newcommand{\q}{\langle query\rangle}
@@ -57,11 +59,14 @@ a table name or a column name.
 %in Figure~\ref{fig:survey}
 }
 \label{fig:syntax}
+\vspace{-.5mm}
 \end{figure}
 
 
 \section{A SQL Subset Supported in \ourtool}
 \label{sec:langsubset}
+
+\vspace{-1mm}
 
 %The problem of finding a SQL query satisfying
 %an example input and output pair is PSPACE-hard~\cite{DasSarma:2010}. 
@@ -98,21 +103,21 @@ to confirm whether our design would be sufficient in practice.
 
 
 
+\vspace{-1mm}
 \subsection{Online Survey: Eliciting Design Requirements}
 \label{sec:survey}
 
+\vspace{-1mm}
 
 Our online survey consists of 6 questions that can be
-divided into three parts. The first part includes
-simple demographic questions about participants.
+divided into two parts. The first part includes
+demographic information including experience in using SQL.
 In the second part, participants were asked to select
 the top 10 most widely-used SQL features in their minds.
 Instead of directly asking participants about the SQL
 features, which might be vague and difficult to respond,
 we present them a list of \textit{all} standard
 SQL features in writing a query.
-Additionally, participants were asked to report their 
-own experience in using SQL in the third part of the survey.
 
 %Before distributing our survey, we conducted pilot
 %interviews with three graduate students with XXX experience
@@ -122,23 +127,25 @@ own experience in using SQL in the third part of the survey.
 %make sure that the questions are relevant and clear.
 
 
-We sent out invitation to the graduate students at
-University of Washington, and posted our survey on
-professional online forums (e.g., StackOverflow).
+We posted our survey on
+professional online forums (e.g., StackOverflow)
+and sent to graduate students at University of Washington.
 As of April 2013, we received \respnum responses.
 On average, the respondents had 9.5 years of experience
 in software development (max: 15, min: 5),
 and 5.5 years of experience in
-using database (max: 10, min: 2). In addition, two
+using databases (max: 10, min: 2). In addition, two
 participants identified themselves as database professionals.
 Figure~\ref{fig:survey} summaries the survey results.
 % about
 %the most-widely used SQL features rated by 12 participants.
 
+\vspace{-1mm}
 \subsection{Language Syntax}
 \label{sec:syntax}
+\vspace{-1mm}
 
-Based on the survey results, we design a subset
+Based on the survey results, we designed a subset
 of the standard SQL language, whose
 syntax is shown in Figure~\ref{fig:syntax}.
 %Its semantics are the same as the standard SQL language,
@@ -157,15 +164,14 @@ keyword since \CodeIn{HAVING} is often used together with the \CodeIn{GROUP BY} 
 Our SQL subset, though by no means complete in writing all
 possible queries, has significantly
 enriched the SQL subsets supported by the existing query inference
-work~\cite{DasSarma:2010, Tran:2009}. Besides being able to write the
+work~\cite{DasSarma:2010, Tran:2009}. Besides being able to write
 standard select-from-where queries as in~\cite{DasSarma:2010, Tran:2009},
 our SQL subset also supports table joins, aggregates
 (e.g., \CodeIn{COUNT}, \CodeIn{MAX}, \CodeIn{MIN}, and \CodeIn{AVG}),
 the \CodeIn{GROUP BY} clause, the \CodeIn{ORDER BY} clause,
 and the \CodeIn{HAVING} clause. For readers who are not
-familiar with the basic SQL idioms, we show an example query
-using our SQL subset in Figure~\ref{fig:queryex}, and annotate
-it with important concepts.
+familiar with the basic SQL idioms, Figure~\ref{fig:queryex}
+shows an example query using our SQL subset.
 
 
 When designing the SQL subset, we focused on standard
@@ -209,9 +215,12 @@ for the sake of inference efficiency, we excluded these keywords.
 
 
 
+\vspace{-1mm}
 
 \subsection{Follow-up Interviews: Feedback about the SQL Subset}
 \label{sec:interview}
+
+\vspace{-1mm}
 
 After proposing the SQL subset in Figure~\ref{fig:syntax},
 we performed follow-up email interviews to gain

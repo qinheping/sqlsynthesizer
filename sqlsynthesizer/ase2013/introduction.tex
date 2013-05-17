@@ -1,11 +1,10 @@
 \section{Introduction}
 \label{sec:introduction}
 
+\vspace{-1mm}
 
-The big data revolution over the past few years has resulted
-in significant advances in digitization of massive amounts
-of data and accessibility of computational devices to massive
-proportions of the population. There is a growing population
+The big data revolution has resulted in digitization of massive amounts
+of data. There is a growing population
 of non-expert database end-users, who need to perform
 analysis on their databases, but have limited programming knowledge.
 
@@ -29,10 +28,10 @@ needs,
 the costs associated with use of database and SQL are non-trivial~\cite{Howe:2011}. 
 The problem is exacerbated by the fact that many end-users
 have myriad diverse backgrounds and include
-business analysts, commodity traders, human resource managers,
+business analysts, commodity traders, 
 finance professionals, and marketing managers. 
-Those end-users are not professional programmers, but are experts in some
-other domains. They need to retrieve a variety of information from their
+They are not professional programmers.
+They need to retrieve information from their
 databases and use the information to support their business decisions.
 Although most end-users can clearly describe \textit{what} the task is, they
 are often stuck with the process of \textit{how} to
@@ -41,14 +40,12 @@ write a correct database query (i.e., a SQL query).
 %receiving step-by-step, detailed,
 %and syntactically correct instructions.
 Thus, non-expert end-users often need to
-seek information from online help forums, or ask
-SQL experts. This process can be repetitive, laborious, and frustrating.
-To assist non-expert end-users in performing database query tasks,
-%For them, they need an \textit{intelligent} tool
-%to assist them to perform database query tasks. 
-a highly accessible tool that can be used to ``describe''
+seek information from online help forums or
+SQL experts. This process can be laborious and frustrating.
+Non-expert end-users need
+a tool that can be used to ``describe''
 their needs and ``connect'' their intentions to executable
-SQL queries would be valuable. %highly desirable.
+SQL queries.
 
 %simply can not get the SQL query correct,
 %either due to the syntax complexity of the SQL language itself,
@@ -86,9 +83,9 @@ SQL queries would be valuable. %highly desirable.
 \noindent \textbf{\textit{Existing solutions.}}
 \textit{Graphical User Interfaces} (GUIs) and \textit{programming languages}
 are two state-of-the-art approaches to help end-users perform
-database queries. However, both approaches are far from satisfactory.
+database queries. However, both approaches have limitations.
 
-Many RDBMS come with a well-designed GUI with lots of features.
+Many RDBMSes come with a well-designed GUI with lots of features.
 However, 
 %as a database management system often comes with tons
 %of features, end-users struggle to find the correct feature or
@@ -100,14 +97,13 @@ as a GUI supports more and more customization features, users
 may struggle to discover those features, which can significantly
 degrade its usability. 
 
-Programming languages, such as SQL,
-Java (with JDBC), or other domain specific query languages, 
-serve as a fully expressive medium  for
+Programming languages, such as SQL
+other domain-specific query languages (e.g., Java with JDBC), 
+are a fully expressive medium  for
 communicating a user's intention to a database. However, 
 general programming languages have never been easy for
 end-users who are not professional programmers.  Learning
-a practical programming language (even a simplified domain
-specific language, such as MDX~\cite{mdx}) often requires a substantial amount
+a practical programming language (even a simplified domain-specific language, such as MDX~\cite{mdx}) often requires a substantial amount
 of time and energy that a typical end-user would not prefer,
 and should not be expected, to invest. 
 
@@ -122,10 +118,9 @@ and should not be expected, to invest.
 
 \vspace{1mm}
 \noindent \textbf{\textit{Our solution: synthesizing SQL queries from input-output examples}}
-In this paper, we present a technique (and its tool
+This paper presents a technique (and its tool
 implementation, called \ourtool) to automatically
-synthesize SQL queries
-\footnote{
+synthesize SQL queries\footnote{
 All queries mentioned in this paper refer to SQL queries
 that retrieve data from a database but
 do not update its content.}
@@ -162,11 +157,10 @@ End-users can use \ourtool to obtain a SQL query to transform
 multiple, huge database tables by constructing small, representative
 input and output example tables. 
 We also envision \ourtool to be useful in an online education
-setting (i.e., an online database course). Recently, several
-education initiatives such as EdX~\cite{edx}, Coursera~\cite{coursera},
-and Udacity~\cite{udacity} are teaming up with experts to provide
-high quality online courses
-to several thousands of students worldwide.
+setting (i.e., an online database course). 
+Education initiatives such as Udacity~\cite{udacity} and Coursera~\cite{coursera}
+ are teaming up with experts to provide
+high-quality online courses to thousands of students worldwide.
 One challenge, which is not present in a traditional classroom
 setting, is to provide answers to questions raised by a large
 number of students. A tool, like \ourtool,
@@ -202,18 +196,19 @@ All such operations must be inferred properly and efficiently.% This requires \t
 
 To address these challenges and make example-based
 SQL query synthesis feasible in practice,
-\ourtool focuses on a widely-used SQL subset (Section~\ref{sec:langsubset}),
+\ourtool focuses on a widely-used SQL subset (Section~\ref{sec:langsubset})
 and uses three steps to link a user's intention to
 a SQL query (Section~\ref{sec:approach}):
 
 
 
 \begin{itemize}
+\vspace{-1mm}
 \item \textbf{Skeleton Creation.} \ourtool scans the
 given input-output examples and heuristically
 determines table joins and projection columns in
 the result query. Then, it creates an
-incomplete SQL query (called, a query skeleton) to
+incomplete SQL query (called a query skeleton) to
 capture the basic structure of the result query.
 
 \item \textbf{Query Completion.} \ourtool
@@ -250,7 +245,7 @@ a small subset of the SQL language; and most of them
 can only infer simple select-from-where
 queries on a single table~\cite{Zloof:1975, DasSarma:2010, Tran:2009, DasSarma:2010, abs-1208-2013}. By contrast, 
 \ourtool significantly enriches the supported SQL subset.
-Besides supporting the standard select-from-where
+Besides supporting standard select-from-where
 queries, \ourtool also supports many advanced
 SQL features, such as table joins,
 aggregates (e.g., \CodeIn{MAX}, \CodeIn{MIN}, \CodeIn{SUM},
@@ -277,18 +272,19 @@ in two aspects. First, we used \ourtool to solve
 \exnum SQL exercises from a classic database textbook~\cite{cowbook}. 
 We used textbook exercises because they
 are often designed to cover a wide range of SQL features.
-Some exercises are even designed on purpose to cover some less realistic,
+Some exercises are even designed on purpose
+to be challenging and to cover some less realistic,
 corner cases in using SQL.
 %the most important
 %SQL features that an instructor wishes students to master,
-Second, we evaluated \ourtool on \exnum SQL query related
+Second, we evaluated \ourtool on \pnum SQL query related
 questions collected from popular online help forums, and tested whether
 \ourtool can synthesize correct SQL queries for them.
 
 As a result, \ourtool successfully synthesized queries
 for \solexnum out of \exnum textbook exercises and
 all \pnum forum problems, within a very
-small amount of time (\avgtime minute per exercise or problem, on average).
+small amount of time (\avgsucctime seconds per exercise or problem, on average).
 \ourtool's accuracy and speed make it an attractive
 tool for end-users to use.% write SQL queries.
 
