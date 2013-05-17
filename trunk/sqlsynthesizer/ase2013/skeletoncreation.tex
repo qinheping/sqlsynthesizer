@@ -60,7 +60,7 @@ all possibilities may yield a large number of
 join conditions and is infeasible in practice. 
 To determine the most likely join conditions among them,
 \ourtool uses two rules to repeatedly join
-two different tables in the query tables,
+two different tables in the query tables
 until all tables get joined.
 First, \ourtool seeks to join
 tables on columns with the
@@ -73,15 +73,15 @@ If such columns do not exist,
 \ourtool uses the second rule to
 join tables on columns with the same data type
 (but with different names).
-For example, suppose the column name \CodeIn{student\_id}
+For example, suppose the column \CodeIn{student\_id}
 in the \CodeIn{student} table of Figure~\ref{fig:motivating}(a)
-is changed to \CodeIn{student\_key}, \ourtool will no longer
+is renamed to \CodeIn{student\_key}, \ourtool will no longer
 find a column with the same name and data type in
-table \CodeIn{student} and table \CodeIn{enrolled}. In this case,
+table \CodeIn{student} and table \CodeIn{enrolled}. If so,
 \ourtool will identify three possible join conditions
 by only considering columns with the same data type:
 \CodeIn{student\_key = student\_id}, \CodeIn{student\_key = course\_id},
-and \CodeIn{student\_key = score}; and then creates 
+and \CodeIn{student\_key = score}; and create
 three skeletons, each of which uses one join condition. 
 
 %\item
@@ -89,15 +89,15 @@ three skeletons, each of which uses one join condition.
 %\noindent 
 {\textbf{Determining projection columns.}} \ourtool
 scans each column in the output table, and checks whether
-the column name appears in an input table.
+a column with the same name appears in an input table.
 If so, \ourtool uses the first matched column from the input
 table as the projection column.
-Otherwise, the output column must be created by using an aggregate.
+Otherwise, the column in the output table must be created by using an aggregate.
 Take the output table in Figure~\ref{fig:motivating} as an
 example, \ourtool determines that the \CodeIn{name} column
 is from the \CodeIn{student} table and
 the \CodeIn{max\_score} column is created by using
-an aggregate over some column.
+an aggregate.
 
 
 %Note that, if multiple columns (with the same name and data type)
@@ -136,7 +136,7 @@ Given an example input and output pair,
 depending on the number of join conditions,
 \ourtool may create multiple skeletons,
 which share the same query tables and
-projection columns, but differ in the join condition.
+projection columns, but differ in the join conditions.
 For the example in Figure~\ref{fig:motivating},
 \ourtool creates one query skeleton shown in Figure~\ref{fig:skeleton}.
 

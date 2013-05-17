@@ -19,7 +19,7 @@ usually the correct one, to rank simpler queries higher in
 the output.
 A simpler query is less likely to overfit the given examples
 than a complex one, even when both of them
-can satisfy the example input and output.
+satisfy the example input and output.
 
 
 %We define a comparison scheme between different
@@ -31,8 +31,8 @@ and \CodeIn{WHERE} clauses) or the expressions (including
 aggregates) in each query condition or clause are pairwise simpler.
 For example, expression \CodeIn{COUNT(student\_id)} is simpler than
 \CodeIn{COUNT(DISTINCT student\_id)}.
-Simpler query conditions and expressions often suggest the extraction logics
-are more common and general.
+Simpler query conditions and expressions often suggest the
+logics are more common and general.
 
 \ourtool computes a cost for each
 query, and prefers queries with lower costs. The cost

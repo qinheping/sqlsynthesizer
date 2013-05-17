@@ -38,29 +38,13 @@ examples to describe their intentions
 
 Tran et al.~\cite{Tran:2009} proposed a technique,
 called \textit{Query by Output} (QBO), 
-to find a set of semantically-equivalent SQL queries
-to a given input query. QBO is related to but
-significantly differs from \ourtool in two aspects.
-First, QBO has a rather different goal and requires
-slightly different inputs : it takes as inputs a database,
-an SQL query, and the query's output (on the database); and computes
-one or more equivalent queries that produce the
-same output on the input database.
-Second, QBO can only infer simple select-project-join queries,
+to infer SQL queries from examples.
+As we have discussed thoroughly in Section~\ref{sec:comparison},
+QBO is limited in inferring simple select-project-join queries,
 while excluding many useful SQL features, such as aggregates,
 the \CodeIn{HAVING} clause, and the \CodeIn{GROUP BY}
-clause. As we demonstrated in Section~\ref{sec:evaluation},
-QBO cannot infer queries for many use-case scenarios.
-Its key limitation stems from the fact that it
-only considers existing tuple values
-in the input tables as features when learning
-query conditions. 
-By contrast, as shown in Section~\ref{sec:condition},
-\ourtool addresses this limitation by enhancing
-the existing tuple values with two kinds of
-additional features, and thus is able to learn more
-complex conditions.
-
+clause. Our experiments also confirmed that QBO is not
+sufficient to infer queries for many use-case scenarios.
 
 Recently, Sarma et al.~\cite{DasSarma:2010} studied the \textit{View Definitions Problem} (VDP).
 VDP aims to find the most

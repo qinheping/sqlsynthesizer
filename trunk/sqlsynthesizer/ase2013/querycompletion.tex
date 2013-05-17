@@ -7,8 +7,7 @@
 \vspace{-1mm}
 
 In this step, \ourtool completes the missing parts
-in each query skeleton, and then
-outputs a list of SQL queries
+in each query skeleton and outputs a list of SQL queries
 that satisfy the given example input and output pair.
 
 % query conditions, the
@@ -32,15 +31,16 @@ that satisfy the given example input and output pair.
  \textit{learning appropriate rules} that can perfectly divide a search space
 into a positive part and a negative part. In our context, the search space
 is all tuples from joining query tables; the positive part
-includes all tuples in the output table; and the negative part includes the rest
+includes all tuples containing the output table; and the negative part includes the rest
 tuples.
 
 The standard way for rule learning is using a decision-tree-based
-algorithm. However, the key challenge is how to design a good feature set.
+algorithm. However, the key challenge is how
+to design a good feature set for effective learning.
 Existing approaches~\cite{Tran:2009} simply use
 tuple values in the input table(s) as features, 
-and limit their abilities in inferring non-trivial
-query conditions. In particular,
+and thus limit their abilities in inferring non-trivial
+conditions. In particular,
 merely using tuple values as features can only infer
 conditions comparing a column value with a constant
 (e.g., \CodeIn{student.level = 'senior'}), but
@@ -51,7 +51,7 @@ or conditions comparing values of two table columns
 
 To address this challenge, \ourtool adds two types of
 additional features to each tuple, and uses
-the existing tuple values together with the additional features
+them together with the existing tuple values
 for rule learning.
 
 \begin{itemize}
@@ -61,9 +61,10 @@ column in the joined table, \ourtool
 groups all tuples by \textit{each} tuple's
 value, and then applies every applicable aggregate\footnote{
 \CodeIn{COUNT}, \CodeIn{COUNT DISTINCT}, \CodeIn{MAX},
-\CodeIn{MIN}, \CodeIn{SUM}, and \CodeIn{AVG} for a numeric type column;
+\CodeIn{MIN}, \CodeIn{SUM}, and \CodeIn{AVG} for a
+column of numeric type ;
 and \CodeIn{COUNT}, and \CodeIn{COUNT DISTINCT} for
-a string type column} to each of the
+a column of string type } to each of the
  \textit{remaining} columns to compute the corresponding aggregation result. 
 The ``Aggregation Features'' part in Figure~\ref{fig:features}
 shows an example.
@@ -88,7 +89,7 @@ shows an example.
 %Using both tuple values and the enhanced features,
 \ourtool employs a variant of the decision tree algorithm,
 called PART~\cite{Frank:1998}, to learn a set of rules
-as query conditions. We choose PART
+as query conditions. We chose PART
 because it uses a ``divide-and-conquer'' strategy to 
 build rules incrementally, and thus is faster
 and consumes less memory than
@@ -96,9 +97,10 @@ the original decision tree algorithm~\cite{Quinlan:1986}.
 Using additional features added by \ourtool, the
 PART algorithm is able to discover rules that are
 hard to identify by merely using the original tuple values as features.
-Figure~\ref{fig:fullexample} shows how such additional features
-help in learning rules for the motivating
-example in Figure~\ref{fig:motivating}.
+Figure~\ref{fig:fullexample} shows an example.
+%how such additional features
+%help in learning rules for the motivating
+%example in Figure~\ref{fig:motivating}.
 
 
 %\todo{The incerasing number of features, can be falsified quickly,
@@ -112,25 +114,26 @@ example in Figure~\ref{fig:motivating}.
   \includegraphics[scale=0.65]{fullexample}
   \vspace*{-3.0ex}\caption {{\label{fig:fullexample}
   Illustration of how additional features added by \ourtool
-  helps in inferring query conditions for the example in Figure~\ref{fig:motivating}.
+  help in inferring query conditions for the example in Figure~\ref{fig:motivating}.
   (a) shows \ourtool
   enriches the original tuple values (Left: the
   result of joining table \CodeIn{student} with table
   \CodeIn{enrolled} on the \CodeIn{student\_id} column)
-  with additional features. For brevity, only relevant
+  with additional features (Right). For brevity, only relevant
   aggregation features are shown. Using the added aggregation
   features, \ourtool infers two query conditions that
-  transform the original table into the table show in (b).
-  Without the aggregation features added by
-  \ourtool, a learning algorithm will \textit{fail} to learn the above conditions.
+  transform the original table into the table shown in (b),
+  which contains the output table shown in (c).
+  Without the aggregation features,
+  \ourtool will \textit{fail} to learn the above conditions.
   (c) shows the output table, which is produced by projecting the
-   table in (b)
-  on the \CodeIn{name} column and the \CodeIn{MAX}(\CodeIn{score}) aggregate.}}
+   table in (b) on the \CodeIn{name} column and the
+  \CodeIn{MAX}(\CodeIn{score}) aggregate.}}
 
 \end{figure*}
 
 
-\ourtool next divides the learned conditions into two disjoint parts,
+\ourtool divides the learned conditions into two disjoint parts,
 and places each part to the appropriate clause.
 Specifically, \ourtool places conditions
 using aggregates to the \CodeIn{HAVING}
@@ -142,9 +145,9 @@ and are used in the \CodeIn{HAVING} clause.
 Take the conditions inferred in Figure~\ref{fig:fullexample}
 as an example, \ourtool puts the query
 condition: \CodeIn{student.level =`senior'}
-in the \CodeIn{WHERE} clause,
+to the \CodeIn{WHERE} clause,
 puts condition: \CodeIn{COUNT(enrolled.course\_id) > 2}
-in the \CodeIn{HAVING} clause, and puts 
+to the \CodeIn{HAVING} clause, and puts 
 column \CodeIn{student\_id} to the \CodeIn{GROUP BY} clause.
 
 
@@ -159,8 +162,8 @@ For every column in the output table that has no matched
 column in the input table(s),
 \ourtool searches for the desired aggregate by
 repeatedly applying each aggregate on
-every input table column; and then checking whether
-the aggregate (with the input table column) produces the same output 
+every input table column; and check whether
+the aggregate produces the same output 
 as in the output table. To speed up the exhaustive search,
 \ourtool uses two sound heuristics to filter away infeasible
 combinations.
@@ -171,9 +174,9 @@ combinations.
 to its \textit{type-compatible} table columns. Specifically,
 the value type in an output column must be compatible with an
 aggregate's return type. For instance, if an output column
-contains float values, it cannot be produced by using the \CodeIn{COUNT}
-or \CodeIn{COUNT DISTINCT} aggregates, or 
-using the \CodeIn{MAX} aggregate over a column of integer type.
+contains float values, it cannot be produced by applying the \CodeIn{COUNT}
+or \CodeIn{COUNT DISTINCT} aggregate, or 
+applying the \CodeIn{MAX} aggregate to a column of integer type.
 On the other hand, some aggregates cannot be applied to
 table columns of certain types. For example, the \CodeIn{AVG}
 and \CodeIn{SUM} aggregates cannot be applied to columns of string type.

@@ -5,7 +5,7 @@
 \label{sec:evaluation}
 \vspace{-1mm}
 
-\enlargethispage{5pt}
+%\enlargethispage{5pt}
 
 We evaluated four aspects of \ourtool's effectiveness,
 answering the following research questions:
@@ -51,15 +51,16 @@ We used \textit{all} exercises that can be answered using the standard
 SQL language features without any vendor-specific
 features or user-defined numeric functions.
 As shown in Figure~\ref{tab:results},
-most textbook exercises involve at least 3 tables. It was unintuitive
+many textbook exercises involve at least 3 tables. It was unintuitive
 for us to write the correct query by simply looking at the problem
 description.
 
 \item We searched SQL query related questions raised by real-world
 database users from 3 popular online forums~\cite{stackoverflow,
 tutorialized, dbjournal}.
-We focused on questions about how to use standard SQL features.
-We excluded questions that were vaguely described or obviously
+We focused on questions about how to write queries
+using standard SQL features.
+We excluded questions that were vaguely described or were obviously
 wrong, and discarded questions that had been proved
 to be unsolvable by using SQL (e.g., computing a
 transitive closure).
@@ -85,7 +86,8 @@ we directly applied \ourtool on those examples.
 Otherwise, we manually wrote some example input and output.
 To reduce the bias in writing
 examples, all examples are written by a graduate
-student (whose research field is not database-related) from University of Washington rather than
+student (whose research field is not database-related) at
+University of Washington rather than
 \ourtool's developers.
 
 We checked \ourtool's correctness by comparing its
@@ -94,7 +96,7 @@ For textbook exercises, we compared \ourtool's output with
 their correct answers; for forum questions, we first
 checked \ourtool's output with the confirmed answer
 in the same post, if there is any. Otherwise, we
-manually wrote the correct SQL query and then
+manually wrote the correct SQL query and
 compared it with \ourtool's output.
 %determined
 %whether \ourtool can produce it.
@@ -129,7 +131,7 @@ Figure~\ref{tab:results} summarizes our experimental results.
 
 
 \ourtool synthesized correct SQL queries for \solexnum  out of
-\exnum the textbook exercises, and 
+\exnum textbook exercises, and 
 all \pnum forum questions.
 We did not come across any benchmark
 that can be expressed in our SQL subset,
@@ -141,10 +143,10 @@ using the \CodeIn{IN} and \CodeIn{NOT EXIST} keywords,
 which are not currently supported by \ourtool.
 Compared to the textbook exercises, the \pnum
 forum questions come from more realistic use cases,
-and can be expressed in our SQL subset.
-These questions are non-trivial and
-two of them even did not received any reply on the forum;
-but \ourtool still produced correct answers for them.
+and can be expressed in our SQL subset
+and answered by \ourtool; even 
+two questions did not received any reply on the forum
+%but \ourtool still produced correct answers for them.
 
 
 
@@ -186,17 +188,17 @@ for most practical use-case scenarios.
 
 
 
-\subsubsection{Human Efforts}
+\subsubsection{Human Effort}
 \label{sec:human}
 
-We measured the human efforts taken to use \ourtool in two ways.
+We measured the human effort required to use \ourtool in two ways.
 First, the time cost to write sufficient input-output examples. Second,
 the number of interactive rounds in invoking \ourtool
 to synthesize the correct SQL queries.
 
-The human efforts spent in writing
-input-output examples are reasonable. For
-the 20 succeeded benchmarks, it took a user less than
+The human effort required in writing
+input-output examples is reasonable. For
+the 20 succeeded benchmarks, it took the user less than
 \avgsucchum minutes on average to write sufficient examples
 per benchmark (min: 1, max: 7); and the
 average example size is \avgsucctuple
@@ -205,25 +207,27 @@ To produce the correct SQL query,
 \ourtool requires just \avgsuccround rounds of
 interaction on average (min: 1, max: 5).
 For 19 succeeded benchmarks, the number of interaction
-rounds ranges from 1 to 3.
+rounds is 1 to 3.
 %The maximum number of examples
 %required in any scenario over all possible interactions was 10.
 
 We also observed that,
-for 7 failed benchmarks, the user
+for 6 failed benchmarks, the user
 gave up after 10 minutes and
 10 interaction rounds in adding
 examples and invoking \ourtool, since the synthesized
 SQL queries in each round seemed to get closer to the expected
 query but still differed in certain parts.
-For 1 failed benchmark, the user immediately
+For the rest 2 failed benchmark, the user immediately
 concluded that \ourtool could not produce a correct
-answer after 4 rounds, because the synthesized SQL
+answer after 1 and 4 rounds, respectively;
+because the synthesized SQL
 query is way different than expected.
 Such observation is driving us to improve \ourtool's
 user experience. For example, as our future work,
-we plan to inform users about the solvability of a problem
-\textit{earlier}. 
+we plan to enhance \ourtool to inform users
+about the solvability of a problem
+\textit{earlier}.
 
 %systematically explore the complete space, as described in Section 5
 
@@ -231,11 +235,11 @@ we plan to inform users about the solvability of a problem
 \subsubsection{Comparison with an Existing Technique}
 \label{sec:comparison}
 We compared \ourtool with \textit{Query By Output} (QBO), an
-approach to infer SQL queries~\cite{Tran:2009} from examples.
+existing technique to infer SQL queries~\cite{Tran:2009} from examples.
 We chose QBO because it is the most recent technique and also one
 of the most accurate SQL query inference techniques in
 the literature. QBO requires an example input-output pair, and
-uses the decision tree algorithm to infer a query.
+uses the decision tree algorithm~\cite{Quinlan:1986} to infer a query.
 However, it
 has three limitations. First, 
 it can only join two tables on their key columns (annotated by users), and requires
@@ -253,7 +257,7 @@ on the same benchmarks. The results are shown in Figure~\ref{tab:results}.
 QBO produces correct answers
 for only 2 textbook exercises and none of the forum questions.
 Without surprise, 
-benchmarks solved by QBO can also be solved by \ourtool.
+benchmarks solved by QBO were also solved by \ourtool.
 QBO's poor performance is primarily caused by its
 limited support for learning join conditions,
 query conditions, and many other SQL features.
@@ -265,7 +269,7 @@ those techniques either require different input
 or a snippet of Java code~\cite{abs-1208-2013}), 
 or produce completely different
 output (e.g., an excel macro~\cite{Harris:2011}, or a
-text editing script~\cite{Kandel:2011}) from \ourtool.
+text editing script~\cite{Kandel:2011}) than \ourtool.
 Thus, it is hard to conduct a meaningful comparison.
 
 \vspace{-1mm}
@@ -286,11 +290,11 @@ Second, for some examples, the learned query
 conditions, though correct, are not precise
 enough. It require users to provide more informative examples.
 For example, in Figure~\ref{fig:rank}, \ourtool produces a 
-query \CodeIn{SELECT name FROM student WHERE score > 2}
+query: \CodeIn{SELECT name FROM student WHERE score > 2}
 that satisfies the examples. However, if
 the expected query condition 
 is \CodeIn{score > 3}, users must provide
-one more tuple to the input table, such as "Chris, 3"
+one more tuple to the input table, such as ``Chris, 3"
 (a tuple with ``Chris'' in the name column and ``3''
 in the score column), while keeping the output table
 unchanged, 
@@ -303,7 +307,7 @@ Even in the presence of a small amount of
 noises (e.g., a typo), \ourtool will declare failure.
 %when it fails to infer a valid SQL query.
 To overcome this limitation, we plan to improve \ourtool
-'s algorithm, making it tolerate small user-input noises.
+'s algorithm, making it more robust.
 %, and even suggest a fix
 %to the noisy example.
 
@@ -311,15 +315,15 @@ To overcome this limitation, we plan to improve \ourtool
 \noindent \textbf{\textit{Threats to Validity.}}
 There are two major threats to validity
 in our evaluation. First, the \exnum textbook exercises
-and \pnum forum questions
-may not be representative enough.
+and \pnum forum questions, though covering
+a wide range of SQL features, may not be representative enough.
 Thus, we cannot claim the results can be generalized to an
 arbitrary use-case scenario. Second, our
-experiments focus on evaluating \ourtool's generality 
-and accuracy. Even though all experiments are carried
+experiments focused on evaluating \ourtool's generality 
+and accuracy. Even though all examples were written
 out by a different person rather than \ourtool's developers,
-a user study is needed to investigate
-\ourtool's general usability.
+a user study is needed to further investigate
+\ourtool's usability.
 %A user study is needed to eliminate this threat.
 %To address this issue, we plan to conduct
 %a user study in our future work.
@@ -332,7 +336,7 @@ We have three chief findings: \textbf{(1)}
 from relatively small examples.
 \textbf{(2)} \ourtool is fast enough for practical use;
 and it only needs a small amount of human
-efforts in writing examples;
+effort in writing examples;
 \textbf{(3)} \ourtool produces significantly better results
 than an existing technique~\cite{Tran:2009}.
 
