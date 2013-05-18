@@ -7,7 +7,7 @@ Figure~\ref{fig:workflow} illustrates \ourtool's workflow.
 \ourtool consists of three steps: (1) the ``Skeleton Creation'' step (Section~\ref{sec:skeleton})
 creates a set of query skeletons from the given examples;
 (2) the ``Query Completion'' step (Section~\ref{sec:completion}) 
-infers the missing parts in each query skeleton and outputs
+infers the missing parts in each query skeleton, and outputs
 a list of queries that satisfy
 the provided example input and output; and (3) the ``Candidate Ranking'' step (Section~\ref{sec:ranking}) uses the Occam's razor
 principle to rank simpler queries higher in the output.
@@ -34,7 +34,7 @@ step, in which \ourtool searches for the query conditions (line 4)\footnote{
 Including conditions in the \CodeIn{HAVIGN} clause,
 and columns in the \CodeIn{GROUP BY} clause.},
 aggregates (line 5), and columns in the \CodeIn{ORDER BY} clause (line 6).
-\ourtool then assembles a list of candidate queries (line 7), and
+\ourtool then builds a list of candidate queries (line 7), and
 validates their correctness on the examples (lines 8 -- 11).
 Line 14 corresponds to the ``Query Ranking'' step.
 
@@ -43,7 +43,7 @@ Line 14 corresponds to the ``Query Ranking'' step.
 
 \begin{figure}[t]
 
-\textbf{Input}: example input table(s) $T_I$, example output table $T_O$\\
+\textbf{Input}: example input table(s) $T_I$, an example output table $T_O$\\
 
 \vspace{-4mm}
 \textbf{Output}: a ranked list of SQL queries\\

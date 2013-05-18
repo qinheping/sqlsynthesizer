@@ -184,14 +184,14 @@ as syntactic sugar to make a SQL query easier to write;
 and thus can be safely removed without affecting a language's
 functionality. For example, the \CodeIn{BETWEEN}
 keyword checks whether a given value is within a specific
-range; and can be simply replaced by two query conditions.
+range or not, and can be simply replaced by two query conditions.
 Similarly, the \CodeIn{NOT NULL} keyword is also omitted.
 %and \CodeIn{LIKE} keywords are also discarded.
 Second, some features, such as 
 \CodeIn{FULL JOIN}, \CodeIn{LEFT JOIN}, and \CodeIn{RIGHT JOIN},
 provide special ways to join tables, and are less likely to be
 used by non-expert end-users.
-Third, other features, such as \CodeIn{IN}, \CodeIn{UNION}, and \CodeIn{NOT EXIST},
+Third, other features, such as \CodeIn{IN} and \CodeIn{NOT EXIST},
 are used to write sub-queries or nested queries, which are the major sources
 of the PSPACE-hardness in query inference~\cite{DasSarma:2010}.
 Related, the \CodeIn{LIKE} keyword is designed for string

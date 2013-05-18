@@ -54,14 +54,15 @@ the query table set.
 %\item
 \vspace{1mm}
 %\noindent
-{\textbf{Determining join conditions. }} There
-are many ways to join all query tables; enumerating
-all possibilities may yield a large number of
-join conditions and is infeasible in practice. 
-To determine the most likely join conditions among them,
-\ourtool uses two rules to repeatedly join
-two different tables in the query tables
+{\textbf{Determining join conditions. }} Instead
+of enumerating all possible ways to join query tables,
+which may lead to a large number of join conditions,
+\ourtool uses two rules (below) to identify
+the most likely join conditions.
+\ourtool repeatedly applies these two rules
+to join two different tables from the query tables
 until all tables get joined.
+%, and outputs \textit{all} satisfied join conditions. \todo{xx}
 First, \ourtool seeks to join
 tables on columns with the
 same name and the same data type. For example,
@@ -73,7 +74,7 @@ If such columns do not exist,
 \ourtool uses the second rule to
 join tables on columns with the same data type
 (but with different names).
-For example, suppose the column \CodeIn{student\_id}
+For example, suppose the \CodeIn{student\_id} column 
 in the \CodeIn{student} table of Figure~\ref{fig:motivating}(a)
 is renamed to \CodeIn{student\_key}, \ourtool will no longer
 find a column with the same name and data type in
@@ -89,7 +90,7 @@ three skeletons, each of which uses one join condition.
 %\noindent 
 {\textbf{Determining projection columns.}} \ourtool
 scans each column in the output table, and checks whether
-a column with the same name appears in an input table.
+a column with the same name exists in an input table.
 If so, \ourtool uses the first matched column from the input
 table as the projection column.
 Otherwise, the column in the output table must be created by using an aggregate.
@@ -126,7 +127,7 @@ an aggregate.
 		\includegraphics[width=0.45\textwidth]{sql_skeleton.pdf}
         \vspace{-3mm}
 	\caption{A query skeleton created for the motivating example
-in Figure~\ref{fig:motivating}. The missing parts (in red) will
+in Figure~\ref{fig:motivating}. The missing parts (between $<$ and $>$) will
 be completed in Section~\ref{sec:completion}.}
 	\label{fig:skeleton}
 \end{figure}
@@ -136,7 +137,7 @@ Given an example input and output pair,
 depending on the number of join conditions,
 \ourtool may create multiple skeletons,
 which share the same query tables and
-projection columns, but differ in the join conditions.
+projection columns, but differ in the join condition.
 For the example in Figure~\ref{fig:motivating},
 \ourtool creates one query skeleton shown in Figure~\ref{fig:skeleton}.
 

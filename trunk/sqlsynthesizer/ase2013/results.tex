@@ -33,15 +33,16 @@
  24 &Forum Question 1 & 1 & 11 & 1 & 3 & 2& 2& \no \\
  25 &Forum Question 2 & 1 & 8 & 1 & 2 & 2& 2& \no \\
  26 &Forum Question 3 & 1 & 24 & 1 & 1 &3 & 2& \no \\
- 27 &Forum Question 5 & 4 & 13 & 1 & 120 & 1 & 1 & \no \\
- 28 &Forum Question 4 & 3 & 10 & 1 & 1 &2 & 2& \no \\
+ 27 &Forum Question 4 & 4 & 13 & 1 & 120 & 1 & 1 & \no \\
+ 28 &Forum Question 5 & 3 & 10 & 1 & 1 &2 & 2& \no \\
 \hline
 \end{tabular}
 \Caption{{\label{tab:results} Experimental results.
 Column ``Benchmarks'' describes the characteristics of our benchmarks. Column ``\#Input Tables''
-shows the number of input tables in each benchmark. Column ``\ourtool'' shows
+shows the number of input tables used in each benchmark. Column ``\ourtool'' shows
 \ourtool's results. Column ``Example Size''
-shows the number of tuples (i.e., rows) in all example input and output tables.
+shows the number of tuples (i.e., rows) in all
+user-written example input and output tables.
 Column ``Rank'' shows the absolute
 rank of the correct SQL query in \ourtool's output.
 ``\textbf{X}'' means \ourtool fails to produce a correct answer.
@@ -51,7 +52,7 @@ Column ``Cost in Writing
 Examples (m)'' shows the total time (in minutes)
 used in writing examples by the \ourtool user. 
 Column ``\#Iterations'' shows the number of
-interactive rounds in using \ourtool to obtain the correct query.
+interactive rounds in using \ourtool.
 Column ``Query by Output'' shows the results of the existing
  \textit{Query by Output} (QBO)~\cite{Tran:2009} technique.
 In this column,
