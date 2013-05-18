@@ -37,14 +37,12 @@ examples to describe their intentions
 
 
 Tran et al.~\cite{Tran:2009} proposed a technique,
-called \textit{Query by Output} (QBO), 
-to infer SQL queries from examples.
+called \textit{Query by Output} (QBO), to infer SQL queries from examples.
 As we have discussed thoroughly in Section~\ref{sec:comparison},
-QBO is limited in inferring simple select-project-join queries,
-while excluding many useful SQL features, such as aggregates,
-the \CodeIn{HAVING} clause, and the \CodeIn{GROUP BY}
-clause. Our experiments also confirmed that QBO is not
-sufficient to infer queries for many use-case scenarios.
+QBO excludes many useful SQL features and can only
+infer simple select-project-join queries.
+Our experiments demonstrated that QBO failed
+to infer queries for many use-case scenarios.
 
 Recently, Sarma et al.~\cite{DasSarma:2010} studied the \textit{View Definitions Problem} (VDP).
 VDP aims to find the most
@@ -97,13 +95,13 @@ The PADS~\cite{Fisher:2008} system takes a large sample
 of unstructured data and infers a
 format that describes the data. Related,
 the Wrangler tool, developed in the HCI community,
-provides a visual interface for table transformations
+provides a visual interface for table transformation
 and data cleaning~\cite{Kandel:2011}.
 These two techniques, though well-suited for tasks
 like text extraction, cannot be used to 
 synthesize a database query.
 This is because text extraction tasks
-use completely different abstractions than a database query task,
+use completely different abstractions than a database query task;
 and the existing tools like PADS and Wrangler lack the support for many database operations
 such as joins and aggregation.
 
@@ -125,7 +123,7 @@ table, their system can infer an excel macro that filters,
 duplicates, and/or re-organizes table cells to generate the output table.
 \ourtool differs in multiple respects.
 First, excel macros have significantly different
-semantics than the SQL language.
+semantics than SQL queries.
 An excel macro can express a variety of table transformation operations
 (e.g., table re-shaping), but are not capable to formulate database queries.
 Second, Harris and Gulwani's approach treats table cells
@@ -133,6 +131,9 @@ as atomic units, and thus has different expressiveness
 than \ourtool. For instance, their technique can generate macros to
 transform one table to another, but cannot join multiple
 tables or aggregate query results by certain table columns. 
+In fact, none of the textbook exercises or forum questions
+in Figure~\ref{tab:results} can be solved by
+Harris and Gulwani's technique~\cite{Harris:2011}.
 %does not support queries
 %involving conditions table joining, aggregation, or even column projection.
 %\todo{examples}
@@ -159,7 +160,7 @@ existence of a comprehensive query log
 that contains valuable information.
 %as a user articulates an increasingly larger fragment of a query.
 However, such assumption often does not hold for
-many database users in practice.
+many database end-users in practice.
 \ourtool eliminates this assumption and infers 
 SQL queries using user-provided examples.
 
@@ -175,8 +176,8 @@ write correct SQL queries from scratch.
 If an end-user wishes to use their technique to 
 synthesize a SQL query, she must write a snippet of
 imperative code to describe the query task.
-Comparing to providing example input
-and output, writing correct imperative code is too challenging
+Comparing to providing examples,
+writing correct imperative code is too challenging
 for a typical end-user, and thus would
 inevitably degrade the technique's usability.
 

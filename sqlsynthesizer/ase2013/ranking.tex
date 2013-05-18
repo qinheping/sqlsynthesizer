@@ -27,7 +27,7 @@ satisfy the example input and output.
 %these choices are subjective, but have been observed to work well.
 A SQL query is simpler than another one if it uses
 fewer query conditions (including conditions in the \CodeIn{HAVING}
-and \CodeIn{WHERE} clauses) or the expressions (including
+and \CodeIn{WHERE} clauses), or the expressions (including
 aggregates) in each query condition or clause are pairwise simpler.
 For example, expression \CodeIn{COUNT(student\_id)} is simpler than
 \CodeIn{COUNT(DISTINCT student\_id)}.
