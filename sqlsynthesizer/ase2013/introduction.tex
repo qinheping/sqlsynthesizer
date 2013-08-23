@@ -22,12 +22,12 @@ analysis on their databases, but have limited programming knowledge.
 %\subsection{End-users' Difficulties in Writing SQL Queries}
 %\vspace{1mm}
 %\noindent \textbf{\textit{Motivation.}}
-Although the relational database management system (RDBMS) and the
-de facto query language (SQL) are perfectly adequate for most end-users'
+Although relational database management systems (RDBMS) and the
+de facto standard query language (SQL) are perfectly adequate for most end-users'
 needs, 
 the costs associated with use of database and SQL are non-trivial~\cite{Howe:2011}. 
-The problem is exacerbated by the fact that many end-users
-have myriad diverse backgrounds and include
+The problem is exacerbated by the fact that end-users
+have diverse backgrounds and include
 business analysts, commodity traders, 
 finance professionals, and marketing managers. 
 They are not professional programmers.
@@ -117,7 +117,7 @@ and should not be expected, to invest.
 %express their intents is using input-output examples. 
 
 \vspace{1mm}
-\noindent \textbf{\textit{Our solution: synthesizing SQL queries from input-output examples}}
+\noindent \textbf{\textit{Our solution: synthesizing SQL queries from input-output examples.}}
 This paper presents a technique (and its tool
 implementation, called \ourtool) to automatically
 synthesize SQL queries\footnote{
@@ -243,7 +243,7 @@ query synthesis from imperative code~\cite{abs-1208-2013}.
 Similar approaches in the literature support
 a small subset of the SQL language; and most of them
 can only infer simple select-from-where
-queries on a single table~\cite{Zloof:1975, DasSarma:2010, Tran:2009, DasSarma:2010, abs-1208-2013}. By contrast, 
+queries on a single table~\cite{Zloof:1975, Tran:2009, DasSarma:2010, abs-1208-2013}. By contrast, 
 \ourtool significantly enriches the supported SQL subset.
 Besides supporting standard select-from-where
 queries, \ourtool also supports many advanced

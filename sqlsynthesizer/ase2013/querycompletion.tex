@@ -31,8 +31,7 @@ that satisfy the given input-output examples.
  \textit{learning appropriate rules} that can perfectly divide a search space
 into a positive part and a negative part. In our context, the search space
 is all result tuples created by joining query tables; the positive part
-includes all result tuples that contain the output table; and the negative part includes the rest
-tuples.
+includes all result tuples that contain the output table; and the negative part includes the remaining tuples.
 
 The standard way for rule learning is using a decision-tree-based
 algorithm. However, a key challenge is how
@@ -139,7 +138,7 @@ Figure~\ref{fig:fullexample} shows an example.
   (c) shows the output table, which is produced by projecting the
    table in (b) on the \CodeIn{name} column and the
   \CodeIn{MAX}(\CodeIn{score}) aggregate.}}
-
+  \vspace{-1mm}
 \end{figure*}
 
 
