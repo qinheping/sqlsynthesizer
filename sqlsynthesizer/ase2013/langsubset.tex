@@ -91,7 +91,7 @@ SQL features in writing database queries (Section~\ref{sec:survey}).
 Then, based on the survey results, we designed
 a SQL subset (Section~\ref{sec:syntax}).  
 Later, we sent the designed SQL subset to the survey participants
-and conducted a series of follow-up email interviews
+and conducted a series of follow-up interviews
 to confirm whether our design would be sufficient in practice.
 
 
@@ -116,7 +116,7 @@ In the second part, participants were asked to select
 the 10 most widely-used SQL features in their minds.
 Instead of directly asking participants about the SQL
 features, which might be vague and difficult to respond,
-we present them a list of \textit{all} standard
+we present them a list of standard
 SQL features in writing a query.
 
 %Before distributing our survey, we conducted pilot
@@ -127,10 +127,9 @@ SQL features in writing a query.
 %make sure that the questions are relevant and clear.
 
 
-We posted our survey on
-professional online forums (e.g., StackOverflow)
+We posted our survey on professional online forums (e.g., StackOverflow)
 and sent to graduate students at the University of Washington.
-As of April 2013, we received \respnum responses.
+We received \respnum responses.
 On average, the respondents had 9.5 years of experience
 in software development (max: 15, min: 5),
 and 5.5 years of experience in
@@ -182,7 +181,7 @@ We discarded some standard SQL features, primarily for
 three reasons. First, some features are designed
 as syntactic sugar to make a SQL query easier to write;
 and thus can be safely removed without affecting a language's
-functionality. For example, the \CodeIn{BETWEEN}
+expressiveness. For example, the \CodeIn{BETWEEN}
 keyword checks whether a given value is within a specific
 range or not, and can be simply replaced by two query conditions.
 Similarly, the \CodeIn{NOT NULL} keyword is also omitted.
@@ -192,8 +191,8 @@ Second, some features, such as
 provide special ways to join tables, and are less likely to be
 used by non-expert end-users.
 Third, other features, such as \CodeIn{IN} and \CodeIn{NOT EXIST},
-are used to write sub-queries or nested queries, which are the major sources
-of the PSPACE-hardness in query inference~\cite{DasSarma:2010}.
+are used to write sub-queries or nested queries, 
+which can significantly increase the complexity in query inference~\cite{DasSarma:2010}.
 Related, the \CodeIn{LIKE} keyword is designed for string
 wildcard matching; determining its matching
 patterns requires systematic search and can be

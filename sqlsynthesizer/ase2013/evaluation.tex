@@ -47,7 +47,7 @@ are even designed on purpose to be challenging and to cover some less realistic,
 corner cases in using SQL. 
 %all exercises are about
 %writing a SQL query that retrieve data from a database.
-We used \textit{all} exercises that can be answered using standard
+We used \allex exercises that can be answered using standard
 SQL language features without any vendor-specific
 features or user-defined numeric functions.
 As shown in Figure~\ref{tab:results},
@@ -85,11 +85,17 @@ question. If an exercise or problem
 was associated with example input and output,
 we directly applied \ourtool on those examples.
 Otherwise, we manually wrote some examples.
-To reduce the bias in writing
-examples, all examples are written by a graduate
-student (whose research field is not database-related) at the
-University of Washington rather than
-\ourtool's developers.
+All examples are written by the second author
+of this paper, who is not \ourtool's major developer.
+%of a graduate
+%student (whose research field is not database-related) at the
+%University of Washington rather than
+%\ourtool's developers.
+
+In the evaluation, the \ourtool user wrote examples in
+plain text files using CSV format. \ourtool parses the
+files, and automatically infers the data type
+of each column based on the provided values.
 
 We checked \ourtool's correctness by comparing its
 output with the expected SQL queries.
@@ -105,9 +111,9 @@ compared it with \ourtool's output.
 %the query task or not.
 
 For some textbook exercises and forum questions,
-\ourtool inferred a SQL query that satisfied the input-output
-examples, but did not behave as expected.
-We manually found an input on which the
+if \ourtool inferred a SQL query that satisfied the input-output
+examples but did not behave as expected,
+we manually found an input on which the
 SQL query mis-behaved and re-applied \ourtool to the new input. We
 repeated this process and recorded the total number of
 interactions.
@@ -137,8 +143,8 @@ all \pnum forum questions.
 We did not come across any benchmark
 that can be expressed in our SQL subset,
 but our algorithm failed to infer the correct query.
-The 20 successful benchmarks covered each
-supported SQL feature (Figure~\ref{fig:syntax}) at least once.
+%The 20 successful benchmarks covered each
+%supported SQL feature (Figure~\ref{fig:syntax}) at least once.
 \ourtool failed to solve 8 textbook exercises,
 because these exercises required to write
 complex existential sub-queries in the join conditions
@@ -284,35 +290,22 @@ Thus, it is hard to conduct a meaningful comparison.
 \enlargethispage{5pt}
 
 \noindent \textbf{\textit{Limitations.}}
-The experiments indicate three limitations
+The experiments indicate three major limitations
 of \ourtool. First, some queries
 cannot be formulated by our SQL subset
 due to unsupported features. This limitation is expected.
 Our future work
 should address it by including more SQL
-features in \ourtool.
-Second, for some examples, the learned query
-conditions, though correct, are not precise
-enough. It requires users to provide more informative examples.
-For example, in Figure~\ref{fig:rank}, \ourtool produces a 
-query: \CodeIn{SELECT name FROM student WHERE score > 2}
-that satisfies the examples. However, if
-the expected query condition 
-is \CodeIn{score > 3}, users must provide
-one more tuple to the input table, such as ``Chris, 3"
-(a tuple with ``Chris'' in the name column and ``3''
-in the score column) and keep the output table
-unchanged, 
-to guide \ourtool to learn the desired condition.
-%Such imprecision is not caused by the limitation of
-%\ourtool; rather, it reflects.
-Third, \ourtool requires
+features in \ourtool. Second, \ourtool requires
 users to provide noise-free input-output examples.
 Even in the presence of a small amount of 
 noises (e.g., a typo), \ourtool will declare failure.
 %when it fails to infer a valid SQL query.
 To overcome this limitation, we plan to improve \ourtool
-'s algorithm, making it more robust.
+'s algorithm, making it more robust. Third,
+\ourtool does not provide any guidance regarding
+when the user should give up on \ourtool and assume
+the SQL can not be synthesized by \ourtool.
 %, and even suggest a fix
 %to the noisy example.
 
@@ -325,10 +318,8 @@ a wide range of SQL features, may not be representative enough.
 Thus, we cannot claim the results can be generalized to an
 arbitrary use-case scenario. Second, our
 experiments focused on evaluating \ourtool's generality 
-and accuracy. Although all examples were written
-by a different person rather than \ourtool's developers,
-a user study is needed to further investigate
-\ourtool's usability.
+and accuracy. A user study is needed to further investigate
+\ourtool's usefulness.
 %A user study is needed to eliminate this threat.
 %To address this issue, we plan to conduct
 %a user study in our future work.
