@@ -26,7 +26,7 @@ formulate a query with the language, and fill in
 the appropriate skeleton tables on the GUI.
 By contrast, \ourtool mitigates such learning curves
 by only requiring users to provide some representative
-examples to describe their intentions
+examples to describe their intentions.
 
   %In other words, to derive a SQL query with the QBE system,
 %end-users must learn a new query formulation language
@@ -125,15 +125,16 @@ duplicates, and/or re-organizes table cells to generate the output table.
 First, excel macros have significantly different
 semantics than SQL queries.
 An excel macro can express a variety of table transformation operations
-(e.g., table re-shaping), but are not capable to formulate database queries.
+(e.g., table re-shaping), but may not be able
+to formulate database queries.
 Second, Harris and Gulwani's approach treats table cells
 as atomic units, and thus has different expressiveness
 than \ourtool. For instance, their technique can generate macros to
 transform one table to another, but cannot join multiple
 tables or aggregate query results by certain table columns. 
-In fact, none of the textbook exercises or forum questions
-in Figure~\ref{tab:results} can be solved by
-Harris and Gulwani's technique~\cite{Harris:2011}.
+%In fact, none of the textbook exercises or forum questions
+%in Figure~\ref{tab:results} can be solved by
+%Harris and Gulwani's technique~\cite{Harris:2011}.
 %does not support queries
 %involving conditions table joining, aggregation, or even column projection.
 %\todo{examples}
@@ -156,7 +157,7 @@ logs to recommend relevant clauses or SQL snippets (e.g., the table
 names for the \CodeIn{FROM} clause) based on the partial query that
 the user has typed so far.
 Compared to \ourtool, both SQLShare and SnipSuggest assume the
-existence of a comprehensive query log
+existence of a query log
 that contains valuable information.
 %as a user articulates an increasingly larger fragment of a query.
 However, such assumption often does not hold for
@@ -176,10 +177,10 @@ write correct SQL queries from scratch.
 If an end-user wishes to use their technique to 
 synthesize a SQL query, she must write a snippet of
 imperative code to describe the query task.
-Comparing to providing examples,
-writing correct imperative code is too challenging
-for a typical end-user, and thus would
-inevitably degrade the technique's usability.
+Compared to providing examples,
+writing correct imperative code is challenging
+for a typical end-user, and thus may
+degrade the technique's usability.
 
 
 %also cite this~\cite{Cheung:2012:UPS}, combining machine learning with program synthesis.

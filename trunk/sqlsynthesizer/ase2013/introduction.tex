@@ -104,8 +104,7 @@ communicating a user's intention to a database. However,
 general programming languages have never been easy for
 end-users who are not professional programmers.  Learning
 a practical programming language (even a simplified domain-specific language, such as MDX~\cite{mdx}) often requires a substantial amount
-of time and energy that a typical end-user would not prefer,
-and should not be expected, to invest. 
+of time and energy that a typical end-user would not prefer to invest. 
 
 
 
@@ -123,7 +122,7 @@ implementation, called \ourtool) to automatically
 synthesize SQL queries\footnote{
 All queries mentioned in this paper refer to SQL queries
 that retrieve data from a database but
-do not update its content.}
+do not update the database.}
 from input-output examples.
 Although input-output examples may lead to
 underspecification, writing them, as opposed to writing
@@ -137,7 +136,7 @@ for end-users to describe \textit{what} the task is.
 If the synthesized SQL query is applied
 to the example input, then it produces the example output; and if the
 synthesized SQL query is applied to other
-similar input (potentially much larger tables),
+similar input (potentially much larger database tables),
 then it produces a corresponding output.
 
 
@@ -246,7 +245,7 @@ can only infer simple select-from-where
 queries on a single table~\cite{Zloof:1975, Tran:2009, DasSarma:2010, abs-1208-2013}. By contrast, 
 \ourtool significantly enriches the supported SQL subset.
 Besides supporting standard select-from-where
-queries, \ourtool also supports many advanced
+queries, \ourtool also supports many useful
 SQL features, such as table joins,
 aggregates (e.g., \CodeIn{MAX}, \CodeIn{MIN}, \CodeIn{SUM},
 and \CodeIn{COUNT}), the \CodeIn{GROUP BY} clause,
