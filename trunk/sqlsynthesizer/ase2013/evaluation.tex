@@ -86,9 +86,8 @@ was associated with example input and output,
 we directly applied \ourtool on those examples.
 Otherwise, we manually wrote some examples.
 To reduce the bias in writing
-examples, 
-All examples are written by a graduate
-student (whose research field is not database-related) at
+examples, all examples are written by a graduate
+student (whose research field is not database-related) at the
 University of Washington rather than
 \ourtool's developers.
 
@@ -133,11 +132,13 @@ Figure~\ref{tab:results} summarizes our experimental results.
 
 
 \ourtool synthesized correct SQL queries for \solexnum  out of
-\exnum textbook exercises and 
+the \exnum textbook exercises and 
 all \pnum forum questions.
 We did not come across any benchmark
 that can be expressed in our SQL subset,
 but our algorithm failed to infer the correct query.
+The 20 successful benchmarks covered each
+supported SQL feature (Figure~\ref{fig:syntax}) at least once.
 \ourtool failed to solve 8 textbook exercises,
 because these exercises required to write
 complex existential sub-queries in the join conditions
@@ -154,7 +155,7 @@ and answered by \ourtool.
 
 
 We also observed that our ranking strategy (Section~\ref{sec:ranking})
-was surprisingly effective: for all benchmarks that
+was surprisingly effective: for all benchmarks where
 \ourtool produced a correct answer, it always ranked the correct
 SQL query as the first suggestion.
 
@@ -201,31 +202,33 @@ to synthesize the correct SQL queries.
 
 The human effort required in writing
 input-output examples is reasonable. For
-the 20 succeeded benchmarks, it took the user less than
+the 20 successful benchmarks, it took the user less than
 \avgsucchum minutes on average to write sufficient examples
 per benchmark (min: 1, max: 7). The
 average example size is \avgsucctuple
-(min: 8, man: 52).
+(min: 8, max: 52).
 To produce the correct SQL query,
 \ourtool requires just \avgsuccround rounds of
 interaction on average (min: 1, max: 5).
-For 19 succeeded benchmarks, the number of interaction
-rounds is 1 to 3.
+For 19 successful benchmarks, the number of interaction
+rounds is 1 to 3. In general, the user
+spent slightly more time on benchmarks involving
+more tables or requiring more complex query conditions.
 %The maximum number of examples
 %required in any scenario over all possible interactions was 10.
 
 We also observed that,
-for 6 failed benchmarks, the user
+for 6 of the failed benchmarks, the user
 gave up after spending 10 minutes adding
 examples and
 10 interaction rounds invoking \ourtool, since the synthesized
 SQL queries in each round seemed to get closer to the expected
 query but still differed in some parts.
-For the rest 2 failed benchmarks, the user immediately
+For the remaining 2 failed benchmarks, the user immediately
 concluded that \ourtool could not produce a correct
 answer after 1 and 4 rounds, respectively;
 because the synthesized SQL
-query is way different than expected.
+query is significantly different than expected.
 Such observation is driving us to improve \ourtool's
 user experience. For example, as our future work,
 we plan to enhance \ourtool to inform users
@@ -237,8 +240,9 @@ about the solvability of a problem
 
 \subsubsection{Comparison with an Existing Technique}
 \label{sec:comparison}
-We compared \ourtool with \textit{Query By Output} (QBO), an
-existing technique to infer SQL queries~\cite{Tran:2009} from examples.
+We compared \ourtool with \textit{Query By Output} (QBO),
+a technique to infer SQL
+queries~\cite{Tran:2009} from query output.
 We chose QBO because it is the most recent technique and also one
 of the most accurate SQL query inference techniques in
 the literature. QBO requires an example input-output pair, and
@@ -254,12 +258,11 @@ many useful SQL features, such as aggregates, the \CodeIn{GROUP BY}
 clause, and the \CodeIn{HAVING} clause.
 
 We implemented QBO, annotated
-each example table as it required, and run it
+each example table as it required, and ran it
 on the same benchmarks. The results are shown in Figure~\ref{tab:results}.
 QBO produced correct answers
 for only 2 textbook exercises and none of the forum questions.
-Without surprise, 
-benchmarks solved by QBO were also solved by \ourtool.
+Benchmarks solved by QBO were also solved by \ourtool.
 QBO's poor performance is primarily caused by its
 limited support for learning join conditions,
 query conditions, and many other SQL features.
@@ -322,7 +325,7 @@ a wide range of SQL features, may not be representative enough.
 Thus, we cannot claim the results can be generalized to an
 arbitrary use-case scenario. Second, our
 experiments focused on evaluating \ourtool's generality 
-and accuracy. Even though all examples were written
+and accuracy. Although all examples were written
 by a different person rather than \ourtool's developers,
 a user study is needed to further investigate
 \ourtool's usability.

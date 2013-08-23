@@ -15,7 +15,7 @@ Users can inspect \ourtool's output to select a desired query.
 If the synthesized SQL queries satisfy the example input and
 output, but do not address the user's intention,
 the user can provide \ourtool with more informative examples
-and re-applied \ourtool to the new examples.
+and re-apply \ourtool to the new examples.
 %\ourtool can be used interactively by requesting more
 %informative examples from the end-user and then
 %update the result queries.\todo{xx}
@@ -31,7 +31,7 @@ Figure~\ref{fig:algorithm} sketches \ourtool's high-level algorithm.
 Line 2 corresponds to the first ``Query Skeleton
 Creation'' step. Lines 3 -- 13 correspond to the second ``Query Completion''
 step, in which \ourtool searches for the query conditions (line 4)\footnote{
-Including conditions in the \CodeIn{HAVIGN} clause,
+Including conditions in the \CodeIn{HAVING} clause,
 and columns in the \CodeIn{GROUP BY} clause.},
 aggregates (line 5), and columns in the \CodeIn{ORDER BY} clause (line 6).
 \ourtool then builds a list of candidate queries (line 7), and
