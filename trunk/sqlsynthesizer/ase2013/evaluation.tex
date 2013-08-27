@@ -290,22 +290,22 @@ Thus, it is hard to conduct a meaningful comparison.
 \enlargethispage{5pt}
 
 \noindent \textbf{\textit{Limitations.}}
-The experiments indicate three major limitations
+The experiments indicate four major limitations
 of \ourtool. First, some queries
 cannot be formulated by our SQL subset
 due to unsupported features. This limitation is expected.
-Our future work
-should address it by including more SQL
+Our future work should address it by including more SQL
 features in \ourtool. Second, \ourtool requires
 users to provide noise-free input-output examples.
 Even in the presence of a small amount of 
 noises (e.g., a typo), \ourtool will declare failure.
-%when it fails to infer a valid SQL query.
-To overcome this limitation, we plan to improve \ourtool
-'s algorithm, making it more robust. Third,
-\ourtool does not provide any guidance regarding
+Third, \ourtool does not provide any guidance regarding
 when the user should give up on \ourtool and assume
-the SQL can not be synthesized by \ourtool.
+the SQL cannot be synthesized by \ourtool.
+Fourth, \ourtool assumes the database schema is
+known by the user. \ourtool may not be helpful to infer
+SQL queries for a complex database whose schema is
+unclear to its users.
 %, and even suggest a fix
 %to the noisy example.
 
